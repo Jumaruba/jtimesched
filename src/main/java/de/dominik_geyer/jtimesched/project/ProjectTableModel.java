@@ -72,7 +72,7 @@ public class ProjectTableModel extends AbstractTableModel {
 			o = prj.getTitle();
 			break;
 		case ProjectTableModel.COLUMN_CHECK:
-			o = (prj.isChecked()) ? new Boolean(true) : new Boolean(false);
+			o = (prj.isChecked()) ? Boolean.valueOf(true) : Boolean.valueOf(false);
 			break;
 		case ProjectTableModel.COLUMN_COLOR:
 			o = prj.getColor();
@@ -81,14 +81,14 @@ public class ProjectTableModel extends AbstractTableModel {
 			o = prj.getTimeCreated();
 			break;
 		case ProjectTableModel.COLUMN_TIMEOVERALL:
-			o = new Integer(prj.getSecondsOverall());
+			o = Integer.valueOf(prj.getSecondsOverall());
 			break;
 		case ProjectTableModel.COLUMN_TIMETODAY:
-			o = new Integer(prj.getSecondsToday());
+			o = Integer.valueOf(prj.getSecondsToday());
 			break;
 		case ProjectTableModel.COLUMN_ACTION_DELETE:
 		case ProjectTableModel.COLUMN_ACTION_STARTPAUSE:
-			o = (prj.isRunning()) ? new Boolean(true) : new Boolean(false);
+			o = (prj.isRunning()) ? Boolean.valueOf(true) : Boolean.valueOf(false);
 			break;
 		default:
 			o = "wtf?";

@@ -63,7 +63,7 @@ public class ProjectSerializer {
 		SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
 		
 		// http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6296446
-		tf.setAttribute("indent-number", new Integer(4));
+		tf.setAttribute("indent-number",  Integer.valueOf(4));
 
 		TransformerHandler hd = tf.newTransformerHandler();
 		Transformer serializer = hd.getTransformer();
@@ -83,28 +83,28 @@ public class ProjectSerializer {
 		  
 		  addXmlElement(hd, "title", null, p.getTitle());
 		  addXmlElement(hd, "notes", null, p.getNotes());
-		  addXmlElement(hd, "created", null, new Long(p.getTimeCreated().getTime()));
-		  addXmlElement(hd, "started", null, new Long(p.getTimeStart().getTime()));
+		  addXmlElement(hd, "created", null, Long.valueOf(p.getTimeCreated().getTime()));
+		  addXmlElement(hd, "started", null, Long.valueOf(p.getTimeStart().getTime()));
 		  addXmlElement(hd, "running", null, "no" /*p.isRunning() ? "yes" : "no"*/);
 		  addXmlElement(hd, "checked", null, p.isChecked() ? "yes" : "no");
 		  
 		  atts.clear();
-		  addXmlAttribute(atts, "overall", new Integer(p.getSecondsOverall()));
-		  addXmlAttribute(atts, "today", new Integer(p.getSecondsToday()));
+		  addXmlAttribute(atts, "overall", Integer.valueOf(p.getSecondsOverall()));
+		  addXmlAttribute(atts, "today", Integer.valueOf(p.getSecondsToday()));
 		  addXmlElement(hd, "time", atts, null);
 		  
 		  atts.clear();
-		  addXmlAttribute(atts, "overall", new Integer(p.getQuotaOverall()));
-		  addXmlAttribute(atts, "today", new Integer(p.getQuotaToday()));
+		  addXmlAttribute(atts, "overall", Integer.valueOf(p.getQuotaOverall()));
+		  addXmlAttribute(atts, "today", Integer.valueOf(p.getQuotaToday()));
 		  addXmlElement(hd, "quota", atts, null);
 		  
 		  Color color = p.getColor();
 		  if (color != null) {
 			  atts.clear();
-			  addXmlAttribute(atts, "red", new Integer(color.getRed()));
-			  addXmlAttribute(atts, "green", new Integer(color.getGreen()));
-			  addXmlAttribute(atts, "blue", new Integer(color.getBlue()));
-			  addXmlAttribute(atts, "alpha", new Integer(color.getAlpha()));
+			  addXmlAttribute(atts, "red", Integer.valueOf(color.getRed()));
+			  addXmlAttribute(atts, "green", Integer.valueOf(color.getGreen()));
+			  addXmlAttribute(atts, "blue", Integer.valueOf(color.getBlue()));
+			  addXmlAttribute(atts, "alpha", Integer.valueOf(color.getAlpha()));
 			  addXmlElement(hd, "color", atts, null);
 		  }
 		  

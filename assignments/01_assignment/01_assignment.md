@@ -56,7 +56,7 @@ To sum up, the static testing can be categorized in **manual examination** and *
 
 > Brief description of the static testing tool used in this assignment and how was it configured for your project. Your description must explain, e.g., why did you enabled or disabled any default configuration or bug pattern.
 
-### Checkstyle
+### BugSpot
 
 "Checkstyle is a static code analysis tool used in software development for checking if Java source code is compliant with specified coding rules."
 TODO
@@ -64,11 +64,77 @@ TODO
 #### Description
 
 
+
+
 #### Report produced 
 
 > Brief description of the report produced by the static testing tool. 
 
-#### Bugs found 
+**=== BUGS FOUND ===**
+
+**1) BAD_PRACTICE :: RV_RETURN_VALUE_IGNORED_BAD_PRACTICE**
+
+Originally the code was written as follows: 
+```java
+    if (!dirConf.isDirectory()) 
+        dirConf.mkdir();
+```
+
+The code was modified to use the returned value and exit the program in case it isn't possible to initialize the folder, since it is necessary to store information. 
+```java
+Boolean directoryCreated = false; 
+if (!dirConf.isDirectory()) {
+    directoryCreated = dirConf.mkdir();
+}
+if (!directoryCreated){
+    System.err.println("Not able to create directory");
+    System.exit(1); 
+}
+```
+
+**2) STYLE :: SF_SWITCH_NO_DEFAULT**
+
+The code was written as follows: 
+```java
+switch (column) {
+    case ProjectTableModel.COLUMN_ACTION_DELETE:
+        if (e.getClickCount() == 2)
+            handleDelete(tstm, prj, row);
+        break;
+    case ProjectTableModel.COLUMN_ACTION_STARTPAUSE:
+        handleStartPause(prj);
+        break;
+    }
+```
+
+The `SF_SWITCH_NO_DEFAULT` complains about the missing default condition in the code. The code was modified to satisfy this conditions: 
+```java
+switch (column) {
+    case ProjectTableModel.COLUMN_ACTION_DELETE:
+        if (e.getClickCount() == 2)
+            handleDelete(tstm, prj, row);
+        break;
+    case ProjectTableModel.COLUMN_ACTION_STARTPAUSE:
+        handleStartPause(prj);
+        break;
+    default: 
+        System.err.println("Unknown option for mouse event");
+        break;
+}
+```
+
+**3) PERFORMANCE :: DM_NUMBER_CTOR**
+
+The code was written as follows:
+```java
+tf.setAttribute("indent-number", Integer.valueOf(4));
+```
+
+The code was modified in order to get a better performance. The constructor has actually been deprecated given that it is rarely appropriate to use it. As suggested in the documentation: ["The static factory valueOf(int) is generally a better choice, as it is likely to yield significantly better space and time performance"](https://docs.oracle.com/javase/9/docs/api/java/lang/Integer.html#Integer-int-); and that's the reason why we decided to use `Integer.valueOf()` instead:
+```java
+tf.setAttribute("indent-number", Integer.valueOf(4));
+```
+Similar modifications were performed for all the cases where the Integer, Long or Boolean constructors were used.
 
 > Brief description of the 5x2 randomly selected bugs.
 

@@ -809,7 +809,11 @@ public class JTimeSchedFrame extends JFrame {
 				case ProjectTableModel.COLUMN_ACTION_STARTPAUSE:
 					handleStartPause(prj);
 					break;
+				default: 
+					System.err.println("Unknown option for mouse event");
+					break;
 				}
+				
 			} else if (button == MouseEvent.BUTTON2) {	// middle button
 				handleStartPause(prj);
 			} else if (button == MouseEvent.BUTTON3) {	// right button
