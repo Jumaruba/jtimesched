@@ -19,7 +19,7 @@
 package de.dominik_geyer.jtimesched.project;
 
 import java.awt.Color;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Date;
 
 import javax.swing.table.AbstractTableModel;
@@ -45,9 +45,9 @@ public class ProjectTableModel extends AbstractTableModel {
 	};
 	
 	
-	private ArrayList<Project> arPrj;
+	private List<Project> arPrj;
 	
-	public ProjectTableModel(ArrayList<Project> arPrj) {
+	public ProjectTableModel(List<Project> arPrj) {
 		this.arPrj = arPrj;
 	}
 	

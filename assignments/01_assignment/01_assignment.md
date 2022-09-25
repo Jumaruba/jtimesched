@@ -237,7 +237,7 @@ PMD is a static source code analyzer that detects common programming flaws. It i
 
 **=== BUGS FOUND ===**
 
-**1) ClassWithOnlyPrivateConstructorsShouldBeFinal**
+**1) Design - [ClassWithOnlyPrivateConstructorsShouldBeFinal](https://pmd.sourceforge.io/pmd-6.49.0/pmd_rules_java_design.html#classwithonlyprivateconstructorsshouldbefinal)**
 
 `ProjectTime` is a class that is only used to format and parse the time, and therefore it only uses private constructors and static methods. For this reason, it should be final.
 
@@ -269,7 +269,7 @@ public final class ProjectTime {
 }
 ```
 
-**2) UseEqualsToCompareStrings**
+**2) Error Prone - [UseEqualsToCompareStrings](https://pmd.sourceforge.io/pmd-6.49.0/pmd_rules_java_errorprone.html#useequalstocomparestrings)**
 
 In Java, Strings are actually Objects and, therefore, should be compared with the `equals()` method. While `equals()`compares the actual values of the Strings, the `==` operator only compares the references. For this reason, the `==` int he original code snippet shown bellow was replace with the use of `equals()` method.
 
@@ -352,7 +352,43 @@ For this reason, we changed the code to the following:
 	}
 ```
 
-**3) UseEqualsToCompareStrings**
+**3) Best Practice - [LooseCoupling](https://pmd.sourceforge.io/pmd-6.49.0/pmd_rules_java_bestpractices.html#loosecoupling)**
+
+Components are loosely coupled if they are weakly associated, have little knowledge of each other and can easily be replaces with similar implementations.
+In this specific case, using interface types, particularly the `List` interface, is recommended instead of using the implementation type, `ArrayList`, because that limits the possibility to use other implementations i.e. `LinkedList`. 
+To fix this, we needed to change the type of the array of projects, `arPrj`, in the `JTimeSchedFrame` class and, given that this variable is used as a parameter of the `ProjectTableModel` constructor, we also changed the type of the argument of this constructor and the type of the attribute `arPrj` that this constructor initializes.
+
+In the `JTimeSchedFrame` class, the original code was the following:
+```java
+private ArrayList<Project> arPrj = new ArrayList<Project>();
+```
+
+The code that resulted from the changes was the one below:
+```java
+private List<Project> arPrj = new ArrayList<Project>();
+```
+
+In the `ProjectTableModel` class the original code was this:
+```java
+	private ArrayList<Project> arPrj;
+	
+	public ProjectTableModel(ArrayList<Project> arPrj) {
+		this.arPrj = arPrj;
+	}
+```
+
+And we made the following changes:
+```java
+	private List<Project> arPrj;
+	
+	public ProjectTableModel(List<Project> arPrj) {
+		this.arPrj = arPrj;
+	}
+```
+
+**4) EmptyCatchBlock**
+
+**5) TODO**
 
 ## Components 
 

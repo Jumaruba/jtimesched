@@ -98,7 +98,7 @@ public class JTimeSchedFrame extends JFrame {
 	private JTextArea tfLog = new JTextArea();
 	private JToggleButton btnLogToggle;
 	
-	private ArrayList<Project> arPrj = new ArrayList<Project>();
+	private List<Project> arPrj = new ArrayList<Project>();
 	private Project currentProject;
 	
 	private Timer saveTimer;
@@ -802,16 +802,16 @@ public class JTimeSchedFrame extends JFrame {
 			int button = e.getButton();
 			if (button == MouseEvent.BUTTON1) {	// left button
 				switch (column) {
-				case ProjectTableModel.COLUMN_ACTION_DELETE:
-					if (e.getClickCount() == 2)
-						handleDelete(tstm, prj, row);
-					break;
-				case ProjectTableModel.COLUMN_ACTION_STARTPAUSE:
-					handleStartPause(prj);
-					break;
-				default: 
-					System.err.println("Unknown option for mouse event");
-					break;
+					case ProjectTableModel.COLUMN_ACTION_DELETE:
+						if (e.getClickCount() == 2)
+							handleDelete(tstm, prj, row);
+						break;
+					case ProjectTableModel.COLUMN_ACTION_STARTPAUSE:
+						handleStartPause(prj);
+						break;
+					default: 
+						System.err.println("Unknown option for mouse event");
+						break;
 				}
 				
 			} else if (button == MouseEvent.BUTTON2) {	// middle button
