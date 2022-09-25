@@ -226,12 +226,12 @@ try {
 
 This way, the program will finish with an Exception. 
 
-### PMD
+### [PMD](https://pmd.github.io/)
 
 #### Description
-TODO
+PMD is a static source code analyzer that detects common programming flaws. It includes many built-in rules for different languages, such as [Java](https://pmd.sourceforge.io/pmd-6.49.0/pmd_rules_java.html) and also supports the creation of new rules. It is normally integrated in the build process and provides a tool to detect duplicated code - the CPD or "copy-paste-detector".
 
-#### Report produced 
+#### Report 
 
 > Brief description of the report produced by the static testing tool. 
 
