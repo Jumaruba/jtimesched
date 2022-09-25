@@ -130,7 +130,8 @@ The code was modified in order to get a better performance. The constructor has 
 ```java
 tf.setAttribute("indent-number", Integer.valueOf(4));
 ```
-Similar modifications were performed for all the cases where the Integer, Long or Boolean constructors were used.
+Similar modifications were performed for all the cases where the Integer or Long constructors were used.
+For the same reason, when the Boolean constructor was used it was modified from `new Boolean(true)` to `Boolean.TRUE` and from `new Boolean(false)` to `Boolean.FALSE`.
 
 **4) MALICIOUS_CODE :: EI_EXPOSE_REP2** 
 
@@ -171,13 +172,61 @@ public Component getTfEditCopy(){
 }
 ```
 
-**5) STYLE :: DLS_DEAD_LOCAL_STORE** 
+**5) BAD_PRACTICE :: DM_EXIT** 
 
 Previously the code was written as such: 
 ```java 
-
-
+// load project-file
+try {
+    this.loadProjects();
+} catch (FileNotFoundException e) {
+    JTimeSchedApp.getLogger().info("Projects file does not exist, starting with empty projects file.");
+} catch (Exception e) {
+    e.printStackTrace();
+    JTimeSchedApp.getLogger().severe("Error loading projects file: " + e.getMessage());
+    
+    JOptionPane.showMessageDialog(this,
+            "An error occurred while loading the projects file.\n" +
+            "Details: \"" + e.getMessage() + "\"\n\n" +
+            "Please correct or remove the file '" + JTimeSchedApp.PRJ_FILE + "' " +
+            "(or replace it with the backup file '" + JTimeSchedApp.PRJ_FILE_BACKUP + "', if present).\n\n" +
+            "JTimeSched will quit now to avoid data corruption.",
+            "Error loading projects file",
+            JOptionPane.ERROR_MESSAGE);
+    System.exit(1);
+}
 ```
+
+This code contains a line with `System.exit(1)`. This is considered bad practice by the SpotBugs, since it shuts down the entire machine code. And this makes impossible for the code being called by another. 
+
+
+The code was rewritten to throw an exception: 
+
+```java
+// load project-file
+try {
+    this.loadProjects();
+} catch (FileNotFoundException e) {
+    JTimeSchedApp.getLogger().info("Projects file does not exist, starting with empty projects file.");
+} catch (Exception e) {
+    e.printStackTrace();
+    JTimeSchedApp.getLogger().severe("Error loading projects file: " + e.getMessage());
+    
+    JOptionPane.showMessageDialog(this,
+            "An error occurred while loading the projects file.\n" +
+            "Details: \"" + e.getMessage() + "\"\n\n" +
+            "Please correct or remove the file '" + JTimeSchedApp.PRJ_FILE + "' " +
+            "(or replace it with the backup file '" + JTimeSchedApp.PRJ_FILE_BACKUP + "', if present).\n\n" +
+            "JTimeSched will quit now to avoid data corruption.",
+            "Error loading projects file",
+            JOptionPane.ERROR_MESSAGE);
+    
+    throw new RuntimeException("Error loading projects file: " + e.getMessage()); 
+}
+```
+
+On this way, the program will finish with an Exception. 
+
 
 > Brief description of the 5x2 randomly selected bugs.
 
@@ -199,6 +248,116 @@ TODO
 
 **1) ClassWithOnlyPrivateConstructorsShouldBeFinal**
 
+`ProjectTime` is a class that is only used to format and parse the time, and therefore it only uses private constructors and static methods. For this reason, it should be final.
+
+The original code was the following:
+```java
+public class ProjectTime {
+	private static final String fmtDate = "yyyy-MM-dd";
+	
+	private ProjectTime() {}
+	
+	public static String formatSeconds(int s) {
+		return String.format("%d:%02d:%02d", s/3600, (s%3600)/60, (s%60));
+	}
+    ...
+}
+```
+
+And we made the class final:
+```java
+public final class ProjectTime {
+	private static final String fmtDate = "yyyy-MM-dd";
+	
+	private ProjectTime() {}
+	
+	public static String formatSeconds(int s) {
+		return String.format("%d:%02d:%02d", s/3600, (s%3600)/60, (s%60));
+	}
+    ...
+}
+```
+
+**2) UseEqualsToCompareStrings**
+
+To compare strings ...
+```java
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		JButton btn = (JButton) e.getSource();
+		
+		if (e.getActionCommand() == NOCOLOR) {
+			this.selectedColor = null;
+		} else if (e.getActionCommand() == CHOOSER) {
+			Color chosenColor = JColorChooser.showDialog(ColorDialog.this,
+					"Choose a custom color",
+					ColorDialog.this.currentColor);
+			
+			if (chosenColor != null)
+				this.selectedColor = chosenColor;
+			else
+				this.selectedColor = this.currentColor;
+		} else {
+			this.selectedColor = btn.getBackground();
+		}
+		
+		this.setVisible(false);
+		this.dispose();
+	}
+```
+
+Which was fixed by replacing the `==` with the use of `equals()`:
+```java
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		JButton btn = (JButton) e.getSource();
+		
+		if (e.getActionCommand().equals(NOCOLOR)) {
+			this.selectedColor = null;
+		} else if (e.getActionCommand().equals(CHOOSER)) {
+			Color chosenColor = JColorChooser.showDialog(ColorDialog.this,
+					"Choose a custom color",
+					ColorDialog.this.currentColor);
+			
+			if (chosenColor != null)
+				this.selectedColor = chosenColor;
+			else
+				this.selectedColor = this.currentColor;
+		} else {
+			this.selectedColor = btn.getBackground();
+		}
+		
+		this.setVisible(false);
+		this.dispose();
+	}
+```
+
+When fixing this error, a new bug was reported: `LiteralsFirstInComparisons`; because literals should come first in all String comparisons, avoiding the possibility of NullPointerExceptions. If the object that may be null is instead used as the parameter, no exception will occur if it is null, it will just return false.
+For this reason, to fix the new bugs, we changed the code to the following:
+```java
+@Override
+	public void actionPerformed(ActionEvent e) {
+		JButton btn = (JButton) e.getSource();
+		
+		if (NOCOLOR.equals(e.getActionCommand())) {
+			this.selectedColor = null;
+		} else if (CHOOSER.equals(e.getActionCommand())) {
+			Color chosenColor = JColorChooser.showDialog(ColorDialog.this,
+					"Choose a custom color",
+					ColorDialog.this.currentColor);
+			
+			if (chosenColor != null)
+				this.selectedColor = chosenColor;
+			else
+				this.selectedColor = this.currentColor;
+		} else {
+			this.selectedColor = btn.getBackground();
+		}
+		
+		this.setVisible(false);
+		this.dispose();
+	}
+```
 
 ## Components 
 

@@ -154,7 +154,7 @@ public class JTimeSchedFrame extends JFrame {
 					"Error loading projects file",
 					JOptionPane.ERROR_MESSAGE);
 			
-			System.exit(1);
+			throw new RuntimeException("Error loading projects file: " + e.getMessage()); 
 		}
 		
 		// check all projects for a today-time reset
