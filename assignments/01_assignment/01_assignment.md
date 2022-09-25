@@ -352,6 +352,8 @@ For this reason, we changed the code to the following:
 	}
 ```
 
+**3) UseEqualsToCompareStrings**
+
 ## Components 
 
 - Diana Freitas :: up201806230
