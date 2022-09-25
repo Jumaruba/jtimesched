@@ -2,8 +2,7 @@
 
 ## Description 
 
-> Brief description of your project. For example, What is it? How is the source-code organized?
-
+> Brief description of your project. What is it? How is the source-code organized?
 
 JTimeSched is a lightweight time tracking tool, which allows the user to track the time of tasks and projects.
 With its simple GUI, JTimeSched only provides the essential features for tracking the time spent on specific tasks, including the ability to create and delete tasks and to track the elapsed time on the current day and the overall elapsed time. Additionally, it allows the user to categorize the tasks and sort them by title, category, date created, time overall, time today, or current state.
@@ -56,13 +55,13 @@ To sum up, the static testing can be categorized in **manual examination** and *
 
 > Brief description of the static testing tool used in this assignment and how was it configured for your project. Your description must explain, e.g., why did you enabled or disabled any default configuration or bug pattern.
 
-### BugSpot
+### [SpotBugs](https://spotbugs.github.io/)
 
 #### Description
 
-TODO
+SpotBugs is a static testing tool that can be used to find bugs in Java programs. It is able to detect multiple [bug patterns](https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html), from bad coding practices to performance or security problems.
 
-#### Report produced 
+#### Report
 
 > Brief description of the report produced by the static testing tool. 
 
@@ -225,15 +224,7 @@ try {
 }
 ```
 
-On this way, the program will finish with an Exception. 
-
-
-> Brief description of the 5x2 randomly selected bugs.
-
-#### Bug fixing 
-
-> Brief description of how those 5x2 bugs were addressed/fixed. Tip: provide examples before and after fixing those bugs.
-
+This way, the program will finish with an Exception. 
 
 ### PMD
 
@@ -363,12 +354,3 @@ For this reason, to fix the new bugs, we changed the code to the following:
 
 - Diana Freitas :: up201806230
 - Juliane Marubayashi :: up201800175 
-
-
---- 
-To bundle the project’s source code and all its dependencies, you must run mvn package.
-This command should create the
-    target/jtimesched-1.2-SNAPSHOT-jar-with-dependencies.jar
-
-which could then be executed as
-    java -jar target/jtimesched-1.2-SNAPSHOT-jar-with-dependencies.jar
