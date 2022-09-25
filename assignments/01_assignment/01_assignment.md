@@ -255,7 +255,7 @@ public class ProjectTime {
 }
 ```
 
-And we made the class final:
+And we made the class final, which resulted in the following code:
 ```java
 public final class ProjectTime {
 	private static final String fmtDate = "yyyy-MM-dd";
@@ -271,7 +271,9 @@ public final class ProjectTime {
 
 **2) UseEqualsToCompareStrings**
 
-To compare strings ...
+In Java, Strings are actually Objects and, therefore, should be compared with the `equals()` method. While `equals()`compares the actual values of the Strings, the `==` operator only compares the references. For this reason, the `==` int he original code snippet shown bellow was replace with the use of `equals()` method.
+
+The original code was the following:
 ```java
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -323,8 +325,8 @@ Which was fixed by replacing the `==` with the use of `equals()`:
 	}
 ```
 
-When fixing this error, a new bug was reported: `LiteralsFirstInComparisons`; because literals should come first in all String comparisons, avoiding the possibility of NullPointerExceptions. If the object that may be null is instead used as the parameter, no exception will occur if it is null, it will just return false.
-For this reason, to fix the new bugs, we changed the code to the following:
+When fixing this error, a new bug was reported: `LiteralsFirstInComparisons`; because literals should come first in all String comparisons, avoiding the possibility of `NullPointerExceptions`. If the object that may be null is instead used as the parameter and the `equals()` is called in the literal, no exception will occur if the parameter is null, the method will just return false.
+For this reason, we changed the code to the following:
 ```java
 @Override
 	public void actionPerformed(ActionEvent e) {
