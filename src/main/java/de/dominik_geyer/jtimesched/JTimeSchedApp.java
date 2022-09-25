@@ -57,10 +57,10 @@ public class JTimeSchedApp {
 		Boolean directoryCreated = false; 
 		if (!dirConf.isDirectory()) {
 			directoryCreated = dirConf.mkdir();
-		}
-		if (!directoryCreated){
-			System.err.println("Not able to create directory");
-			System.exit(1); 
+			if (!directoryCreated){
+				System.err.println("Not able to create directory");
+				System.exit(1); 
+			}
 		}
 		
 		// request lock

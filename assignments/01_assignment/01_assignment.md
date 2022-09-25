@@ -58,13 +58,9 @@ To sum up, the static testing can be categorized in **manual examination** and *
 
 ### BugSpot
 
-"Checkstyle is a static code analysis tool used in software development for checking if Java source code is compliant with specified coding rules."
-TODO
-
 #### Description
 
-
-
+TODO
 
 #### Report produced 
 
@@ -85,10 +81,10 @@ The code was modified to use the returned value and exit the program in case it 
 Boolean directoryCreated = false; 
 if (!dirConf.isDirectory()) {
     directoryCreated = dirConf.mkdir();
-}
-if (!directoryCreated){
-    System.err.println("Not able to create directory");
-    System.exit(1); 
+    if (!directoryCreated){
+        System.err.println("Not able to create directory");
+        System.exit(1); 
+    }
 }
 ```
 
@@ -136,11 +132,73 @@ tf.setAttribute("indent-number", Integer.valueOf(4));
 ```
 Similar modifications were performed for all the cases where the Integer, Long or Boolean constructors were used.
 
+**4) MALICIOUS_CODE :: EI_EXPOSE_REP2** 
+
+The code was written as follows: 
+```java 
+@Override
+public Component getTableCellEditorComponent(JTable table,
+        Object value, boolean isSelected, int row, int column) {
+    this.oldDate = (Date)value;
+    String strDate = ProjectTime.formatDate(this.oldDate);
+    this.tfEdit.setText(strDate);
+    
+    return this.tfEdit;
+}
+```
+
+The value returned is a reference to a mutable object. According to the [documentation](https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#EI_EXPOSE_REP2): 
+> Returning a reference to a mutable object value stored in one of the object's fields exposes the internal representation of the object.  
+
+The code was modified so that a copy of the `tfEdit` is returned. The field is copied by a new function called : 
+```java
+@Override
+public Component getTableCellEditorComponent(JTable table,
+        Object value, boolean isSelected, int row, int column) {
+    this.oldDate = (Date)value;
+    String strDate = ProjectTime.formatDate(this.oldDate);
+    this.tfEdit.setText(strDate);
+
+    return this.getTfEditCopy();
+}
+
+public Component getTfEditCopy(){
+    // Returns a copy of the object, to not expose data. 
+    JTextField tfEditCopy = (JTextField) this.getComponent();
+    tfEditCopy.setHorizontalAlignment(SwingConstants.CENTER);
+    tfEditCopy.setText(this.tfEdit.getText());
+    return tfEditCopy;
+}
+```
+
+**5) STYLE :: DLS_DEAD_LOCAL_STORE** 
+
+Previously the code was written as such: 
+```java 
+
+
+```
+
 > Brief description of the 5x2 randomly selected bugs.
 
 #### Bug fixing 
 
 > Brief description of how those 5x2 bugs were addressed/fixed. Tip: provide examples before and after fixing those bugs.
+
+
+### PMD
+
+#### Description
+TODO
+
+#### Report produced 
+
+> Brief description of the report produced by the static testing tool. 
+
+**=== BUGS FOUND ===**
+
+**1) ClassWithOnlyPrivateConstructorsShouldBeFinal**
+
 
 ## Components 
 

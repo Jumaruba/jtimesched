@@ -65,7 +65,15 @@ public class DateCellEditor extends DefaultCellEditor {
 		this.oldDate = (Date)value;
 		String strDate = ProjectTime.formatDate(this.oldDate);
 		this.tfEdit.setText(strDate);
-		
-		return this.tfEdit;
+
+		return this.getTfEditCopy();
+	}
+
+	public Component getTfEditCopy(){
+		// Returns a copy of the object, to not expose data. 
+		JTextField tfEditCopy = (JTextField) this.getComponent();
+		tfEditCopy.setHorizontalAlignment(SwingConstants.CENTER);
+		tfEditCopy.setText(this.tfEdit.getText());
+		return tfEditCopy;
 	}
 }
