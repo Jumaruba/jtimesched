@@ -269,9 +269,10 @@ PMD is a static source code analyzer that detects common programming flaws. It i
 
 #### Report 
 
-The [initial PMD report](reports/pmd/pmd_01.pdf) identifies many violations, mainly with priority 3 and 4, and one with priority 1.
+The [initial PMD report](reports/pmd/pmd_01.pdf) identifies many violations, mainly with priority 3 and 4, and one with priority 1. 
 
 > TODO: continue with types of violations? Do you think those are true violations that need to be addressed, or are just false-positives?
+> Secalhar dizer que notamos que algumas eram de ControlStatementBraces e que por isso nao eram relevantes? Nao sei se conseguimos excluir nas configuraçoes esta violação, imepdindo que apareçam nos reports
 
 #### Bugs Found
 
