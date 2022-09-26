@@ -49,7 +49,7 @@ The static verification, by itself, provides the following advantages:
 - Improves the maintainability of the code. Some tools, such as `Checkstyle` improve the maintainability, by standardizing the style of the code;
 - Detect dependencies and some inconsistencies. 
 
-## Testing tools
+## Static Testing tools, reports and bugs addressed
 
 > Brief description of the static testing tool used in this assignment and how was it configured for your project. Your description must explain, e.g., why did you enabled or disabled any default configuration or bug pattern.
 
@@ -58,6 +58,8 @@ The static verification, by itself, provides the following advantages:
 #### Description
 
 SpotBugs is a static testing tool that can be used to find bugs in Java programs. It is able to detect multiple [bug patterns](https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html), from bad coding practices to performance or security problems.
+
+#### Configuration
 
 #### Report
 
@@ -236,6 +238,9 @@ This way, the program will finish with an Exception.
 
 #### Description
 PMD is a static source code analyzer that detects common programming flaws. It includes many built-in rules for different languages, such as [Java](https://pmd.sourceforge.io/pmd-6.49.0/pmd_rules_java.html) and also supports the creation of new rules. It is normally integrated in the build process and provides a tool to detect duplicated code - the CPD or "copy-paste-detector".
+
+#### Configuration
+
 
 #### Report 
 
