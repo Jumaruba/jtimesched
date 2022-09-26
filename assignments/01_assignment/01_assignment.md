@@ -51,8 +51,6 @@ The static verification, by itself, provides the following advantages:
 
 ## Static Testing tools, reports and bugs addressed
 
-> Brief description of the static testing tool used in this assignment and how was it configured for your project. Your description must explain, e.g., why did you enabled or disabled any default configuration or bug pattern.
-
 ### [SpotBugs](https://spotbugs.github.io/)
 
 #### Description
@@ -61,7 +59,14 @@ SpotBugs is a static testing tool that can be used to find bugs in Java programs
 
 #### Configuration
 
+> TODO: should we disable the EXPERIMENTAL warnings?
+
 #### Report
+
+The [initial report](reports/spotbugs/spotbugs_01.pdf) produced by SpotBugs identifies 32 bugs and 0 errors. We can also verify that all the bugs reported belong to the classes of the project and gui directories or to the main class of the application. All the reported bugs have medium priority. We can verify that the bugs have different categories: `MALICIOUS_CODE`, `BAD_PRACTICE`, `EXPERIMENTAL`, `PERFORMANCE`, `STYLE` and `CORRECTNESS`.
+
+Most of them are true bugs that should be addressed, even though they are only of medium priority. 
+> Are they ??
 
 #### Bugs Found
 
