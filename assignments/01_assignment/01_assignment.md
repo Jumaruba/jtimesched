@@ -59,7 +59,7 @@ SpotBugs is a static testing tool that can be used to find bugs in Java programs
 
 #### Configuration
 
-> TODO: should we disable the EXPERIMENTAL warnings?
+> TODO: Maybe just say that we didn't change anything?
 
 #### Report
 
@@ -265,10 +265,13 @@ PMD is a static source code analyzer that detects common programming flaws. It i
 
 #### Configuration
 
+> TODO: dizer porque razão usamos aqueles rulesets
 
 #### Report 
 
-> Brief description of the report produced by the static testing tool. 
+The [initial PMD report](reports/pmd/pmd_01.pdf) identifies many violations, mainly with priority 3 and 4, and one with priority 1.
+
+> TODO: continue with types of violations? Do you think those are true violations that need to be addressed, or are just false-positives?
 
 #### Bugs Found
 
@@ -305,6 +308,8 @@ public final class ProjectTime {
     ...
 }
 ```
+
+By doing this the [new report](reports/pmd/pmd_02.pdf) no longer shows violations with priority 1.
 
 **2) Error Prone - [UseEqualsToCompareStrings](https://pmd.sourceforge.io/pmd-6.49.0/pmd_rules_java_errorprone.html#useequalstocomparestrings)**
 
