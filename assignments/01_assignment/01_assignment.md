@@ -132,24 +132,28 @@ switch (column) {
 }
 ```
 
-This resulted in a new report but the number of reported bugs kept the same because new similar bugs were reported in the same file. As we can see below, the bug no longer shows in the report, but another bug in a switch case of the same file is reported.
+This resulted in a [new report](reports/spotbugs/spotbugs_03.pdf) but the number of reported bugs kept the same because new similar bugs were reported in the same file. As we can see below, the bug no longer shows in the report, but another bug in a switch case of the same file is reported.
 ![](../images/spotbugs02_fix.png)
 
 **3) PERFORMANCE :: DM_NUMBER_CTOR**
 
+Another bug detected by this tool was related to `PERFORMANCE`. It indicated that in the `ProjectSerializer` an inefficient Integer constructor was being used, as we can see below:
+
 ![](../images/spotbugs03_bug.png)
 
-The code was written as follows:
+The code that led to this bug was written as follows:
 ```java
-tf.setAttribute("indent-number", Integer.valueOf(4));
+tf.setAttribute("indent-number", new Integer(4));
 ```
 
-The code was modified in order to get a better performance. The constructor has actually been deprecated given that it is rarely appropriate to use it. As suggested in the documentation: ["The static factory valueOf(int) is generally a better choice, as it is likely to yield significantly better space and time performance"](https://docs.oracle.com/javase/9/docs/api/java/lang/Integer.html#Integer-int-); and that's the reason why we decided to use `Integer.valueOf()` instead:
+This code was modified in order to get a better performance. The constructor has actually been deprecated given that it is rarely appropriate to use it. As suggested in the documentation: ["The static factory valueOf(int) is generally a better choice, as it is likely to yield significantly better space and time performance"](https://docs.oracle.com/javase/9/docs/api/java/lang/Integer.html#Integer-int-); and that's the reason why we decided to use `Integer.valueOf()` instead:
 ```java
 tf.setAttribute("indent-number", Integer.valueOf(4));
 ```
 Similar modifications were performed for all the cases where the Integer or Long constructors were used.
-For the same reason, when the Boolean constructor was used it was modified from `new Boolean(true)` to `Boolean.TRUE` and from `new Boolean(false)` to `Boolean.FALSE`.
+For the same reason, when the Boolean constructor was used, it was modified from `new Boolean(true)` to `Boolean.TRUE` and from `new Boolean(false)` to `Boolean.FALSE`.
+
+The [new report]() shows that the number of reported bugs was reduced to 27. Also, the bug reported was successfully fixed.
 
 **4) MALICIOUS_CODE :: EI_EXPOSE_REP2** 
 
