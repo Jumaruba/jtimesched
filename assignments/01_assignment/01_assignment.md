@@ -2,12 +2,10 @@
 
 ## Description 
 
-> Brief description of your project. What is it? How is the source-code organized?
+JTimeSched is a lightweight time tracking tool which allows the user to track the time of tasks and projects.
+With its simple GUI, JTimeSched only provides the essential features for tracking the time spent on specific tasks, including the ability to create and delete tasks and to track the elapsed time on the current day and the overall elapsed time. Additionally, it allows the user to categorize the tasks and sort them by title, category, date created, time overall, time today, or current state and to add a description to each task.
 
-JTimeSched is a lightweight time tracking tool, which allows the user to track the time of tasks and projects.
-With its simple GUI, JTimeSched only provides the essential features for tracking the time spent on specific tasks, including the ability to create and delete tasks and to track the elapsed time on the current day and the overall elapsed time. Additionally, it allows the user to categorize the tasks and sort them by title, category, date created, time overall, time today, or current state.
-
-The project is organized in the following structure: 
+This open-source maven-based project has the following structure: 
 ```
 .
 ├── assets
@@ -19,12 +17,12 @@ The project is organized in the following structure:
 └── target
 ```
 
-- The `launcher` contains the files to execute the program; 
-- The `src` contains the source code of the application, which will be explained in more details next; 
+- The `launcher` folder contains the files to execute the program; 
+- The `src` folder contains the source code of the application, which will be explained in more detail next; 
 - The `dist` folder contains a script to generate the project distribution; 
 - The `conf` folder is generated upon build and stores the serialized tasks and data of the application.
 
-### The source code 
+### Source code 
 The source code is organized in three main folders: 
 
 - `gui`: responsible for rendering the application; 
@@ -33,23 +31,23 @@ The source code is organized in three main folders:
 
 It also includes the application's entry class: `JTimeSchedApp`.
 
-## What is static testing? And why is important and relevant? 
+## What is static testing and why is it relevant? 
 
-Static testing is a type of verification, in other words, it checks if the software works correctly, by verifying if the systems contains faults (bugs). 
+Static testing is a type of verification, in other words, it is used to detect if a software has faults by analyzing the static system representation e.g. the source code; without actually executing it.
 
-There're four main reasons for testing an application: 
-- Improves the client satisfaction; 
-- Increases the software quality; 
-- Improves the security;
-- There's a certain cost-benefit, since fixing faults (bugs) in early project costs less than finding it later. 
+Static testing can be categorized in **manual examination** and **automated analysis**. The manual examination consists in analyzing the code manually by doing reviews, while the automated analysis uses tools to automate the process. 
 
-The static verification, by it self, provides the following advantages:
-- Detect early warnings, which might prevent some faults;  
-- Detect faults early; 
-- Improves the maintainability of the code. Some tools, such as the `checkstyle` improve the maintainability, by standardizing the style of the code;
+There are four main reasons for testing an application: 
+- To improve the client satisfaction;
+- To increase the software quality; 
+- To improve the security;
+- There's a certain cost-benefit, since fixing faults earlier costs less than finding them later. 
+
+The static verification, by itself, provides the following advantages:
+- Detect warnings early, which might prevent some faults;  
+- Detect faults before executing; 
+- Improves the maintainability of the code. Some tools, such as `Checkstyle` improve the maintainability, by standardizing the style of the code;
 - Detect dependencies and some inconsistencies. 
-
-To sum up, the static testing can be categorized in **manual examination** and **automated analysis**. The manual examination consists in analysing the code manually by doing reviews, while the automated analysis uses tools to automate the process. 
 
 ## Testing tools
 
