@@ -196,7 +196,7 @@ try {
 }
 ```
 
-This code contains a line with `System.exit(1)`. This is considered bad practice by the SpotBugs, since it shuts down the entire machine code. And this makes impossible for the code being called by another. 
+This code contains a line with `System.exit(1)`. This is considered bad practice by the SpotBugs, since it shuts down the entire machine code and not only the application. In an application with a server side, it will shut down the whole server, which might be hosting other critical Java applications. In web applications it might cause memory leaks.  
 
 
 The code was rewritten to throw an exception: 
@@ -386,7 +386,35 @@ And we made the following changes:
 	}
 ```
 
-**4) EmptyCatchBlock**
+**4) [EmptyCatchBlock](https://metapx.org/java-ignore-exception/)**
+
+In order to ignore a specific exception, there was an empty catch block in the code: 
+
+```java
+// backup project-file
+try {
+	this.backupProjects();
+} catch (FileNotFoundException e) {
+	// ignore this exception: no project file -> no backup
+} catch (Exception e) {
+	e.printStackTrace();
+	JTimeSchedApp.getLogger().warning("Unable to create backup of project file: " + e.getMessage());
+}
+```
+
+In Java there isn't a particular syntax to ignore exception as Python, the way around is indeed use empty catch blocks. However, to the `pmm` understand that this exception is an ignored one, the exception variable name must be `ignored`. The rewritten code as it follows: 
+
+```java
+// backup project-file
+try {
+	this.backupProjects();
+} catch (FileNotFoundException ignored) {
+	// ignore this exception: no project file -> no backup
+} catch (Exception e) {
+	e.printStackTrace();
+	JTimeSchedApp.getLogger().warning("Unable to create backup of project file: " + e.getMessage());
+}
+```
 
 **5) TODO**
 
@@ -394,3 +422,6 @@ And we made the following changes:
 
 - Diana Freitas :: up201806230
 - Juliane Marubayashi :: up201800175 
+
+## Resources 
+- [Don't use system.exit](https://javarevisited.blogspot.com/2014/11/dont-use-systemexit-on-java-web-application.html#axzz7fypT4cYu)

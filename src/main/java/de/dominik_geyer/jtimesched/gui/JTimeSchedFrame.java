@@ -129,7 +129,7 @@ public class JTimeSchedFrame extends JFrame {
 		// backup project-file
 		try {
 			this.backupProjects();
-		} catch (FileNotFoundException e) {
+		} catch (FileNotFoundException ignored) {
 			// ignore this exception: no project file -> no backup
 		} catch (Exception e) {
 			e.printStackTrace();
