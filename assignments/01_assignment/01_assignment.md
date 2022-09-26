@@ -74,13 +74,16 @@ Most of them are true bugs that should be addressed, even though they are only o
 
 ![](../images/spotbugs01_bug.png)
 
-Originally the code was written as follows: 
+A `BAD_PRACTICE` was reported in the main method of the `JTimeSchedApp` class, suggesting that the method returns a value that is not checked.
+
+Originally, the return value of the `mkDir()` call that creates the `conf` folder was not verified, as we can see in the following code snippet: 
 ```java
     if (!dirConf.isDirectory()) 
         dirConf.mkdir();
 ```
 
-The code was modified to use the returned value and exit the program in case it isn't possible to initialize the folder, since it is necessary to store information. 
+The code was modified so that the returned value, which indicates if the directory was successfully created or not, was checked and handled correctly. Now, if it isn't possible to create the `conf` folder, we exit the program, since it is necessary to persist the application's data and the failure to create the directory limits that requirement. 
+
 ```java
 Boolean directoryCreated = false; 
 if (!dirConf.isDirectory()) {
@@ -91,6 +94,9 @@ if (!dirConf.isDirectory()) {
     }
 }
 ```
+
+By changing the code has indicated above, the bug was fixed and, as we can see in the [new SpotBugs report](reports/spotbugs/spotbugs_02.pdf) the number of reported bugs changed from 32 to 31.
+![](../images/spotbugs01_fix.png)
 
 **2) STYLE :: SF_SWITCH_NO_DEFAULT**
 
