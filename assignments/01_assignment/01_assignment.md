@@ -100,7 +100,9 @@ By changing the code has indicated above, the bug was fixed and, as we can see i
 
 **2) STYLE :: SF_SWITCH_NO_DEFAULT**
 
-![](../images/spotbugs02_bug.png)
+A `STYLE` bug was reported in a switch case of the `TimeSchedTableMouseListener` inner class of the `JTimeSchedFrame` class, as we can see below:
+
+![](../images/spotbugs02_bug.png) TODO:Change
 
 The code was written as follows: 
 ```java
@@ -115,7 +117,7 @@ switch (column) {
     }
 ```
 
-The `SF_SWITCH_NO_DEFAULT` complains about the missing default condition in the code. The code was modified to satisfy this conditions: 
+The `SF_SWITCH_NO_DEFAULT` complains about the missing default condition in the code. The code was modified to satisfy this condition: 
 ```java
 switch (column) {
     case ProjectTableModel.COLUMN_ACTION_DELETE:
@@ -126,10 +128,12 @@ switch (column) {
         handleStartPause(prj);
         break;
     default: 
-        System.err.println("Unknown option for mouse event");
         break;
 }
 ```
+
+This resulted in a new report but the number of reported bugs kept the same because new similar bugs were reported in the same file. As we can see below, the bug no longer shows in the report, but another bug in a switch case of the same file is reported.
+![](../images/spotbugs02_fix.png)
 
 **3) PERFORMANCE :: DM_NUMBER_CTOR**
 

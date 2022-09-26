@@ -810,7 +810,6 @@ public class JTimeSchedFrame extends JFrame {
 						handleStartPause(prj);
 						break;
 					default: 
-						System.err.println("Unknown option for mouse event");
 						break;
 				}
 				
