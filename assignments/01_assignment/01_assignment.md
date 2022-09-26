@@ -153,7 +153,7 @@ tf.setAttribute("indent-number", Integer.valueOf(4));
 Similar modifications were performed for all the cases where the Integer or Long constructors were used.
 For the same reason, when the Boolean constructor was used, it was modified from `new Boolean(true)` to `Boolean.TRUE` and from `new Boolean(false)` to `Boolean.FALSE`.
 
-The [new report]() shows that the number of reported bugs was reduced to 27. Also, the bug reported was successfully fixed.
+The [new report](reports/spotbugs/spotbugs_04.pdf) shows that the number of reported bugs was reduced to 27. Also, the bug reported was successfully fixed.
 
 **4) MALICIOUS_CODE :: EI_EXPOSE_REP2** 
 
@@ -195,6 +195,9 @@ public Component getTfEditCopy(){
     return tfEditCopy;
 }
 ```
+
+As a result, the number of bugs reported was reduced to 26, as we can see in the [new report](reports/spotbugs/spotbugs_05.pdf), and the bug no longer shows on the report:
+![](../images/spotbugs04_fix.png)
 
 **5) BAD_PRACTICE :: DM_EXIT** 
 
@@ -251,7 +254,9 @@ try {
 }
 ```
 
-This way, the program will finish with an Exception. 
+This way, the program will finish with an Exception and, consequently, the bug no longer shows in the [new SpotBugs report](reports/spotbugs/spotbugs_06.pdf), which now only identifies 25 bugs.
+
+![](../images/spotbugs05_fix.png)
 
 ### [PMD](https://pmd.github.io/)
 
