@@ -279,7 +279,7 @@ The [initial PMD report](reports/pmd/pmd_01.pdf) identifies many violations, mai
 
 ![](../images/pmd01_bug.png)
 
-`ProjectTime` is a class that is only used to format and parse the time, and therefore it only uses private constructors and static methods. For this reason, it should be final.
+`ProjectTime` is a class that is only used to format and parse the time, therefore it only uses private constructors and static methods. For this reason, it should be final.
 
 The original code was the following:
 ```java
@@ -313,11 +313,11 @@ By doing this the [new report](reports/pmd/pmd_02.pdf) no longer shows violation
 
 **2) Error Prone - [UseEqualsToCompareStrings](https://pmd.sourceforge.io/pmd-6.49.0/pmd_rules_java_errorprone.html#useequalstocomparestrings)**
 
+In Java, Strings are actually Objects and, therefore, should be compared with the `equals()` method. While `equals()`compares the actual values of the Strings, the `==` operator only compares the references. For this reason, PMD reports the violation "Use equals() to compare Strings instead of '=='" that is shown below.
+
 ![](../images/pmd02_bug1.png)
 
-![](../images/pmd02_bug2.png)
-
-In Java, Strings are actually Objects and, therefore, should be compared with the `equals()` method. While `equals()`compares the actual values of the Strings, the `==` operator only compares the references. For this reason, the `==` int he original code snippet shown bellow was replace with the use of `equals()` method.
+To fix it, the `==` in the original code snippet was replaced with the use of `equals()`.
 
 The original code was the following:
 ```java
@@ -371,7 +371,11 @@ Which was fixed by replacing the `==` with the use of `equals()`:
 	}
 ```
 
-When fixing this error, a new bug was reported: `LiteralsFirstInComparisons`; because literals should come first in all String comparisons, avoiding the possibility of `NullPointerExceptions`. If the object that may be null is instead used as the parameter and the `equals()` is called in the literal, no exception will occur if the parameter is null, the method will just return false.
+When fixing this error, a new violation was reported: `LiteralsFirstInComparisons`.
+![](../images/pmd02_bug2.png)
+
+Literals should come first in all String comparisons to avoid the possibility of `NullPointerExceptions`. If the object that may be null is instead used as the parameter and the `equals()` is called in the literal, no exception will occur if the parameter is null, the method will just return false.
+
 For this reason, we changed the code to the following:
 ```java
 @Override
@@ -398,11 +402,15 @@ For this reason, we changed the code to the following:
 	}
 ```
 
+By doing this, we were able to successfully address the violation, as we can see in the [new PMD report](reports/pmd/pmd_03.pdf) and in the image below, where the `ColorDialog.java` file was reduced from 6 to 4. 
+
+![](../images/pmd02_fix.png)
+
 **3) Best Practice - [LooseCoupling](https://pmd.sourceforge.io/pmd-6.49.0/pmd_rules_java_bestpractices.html#loosecoupling)**
 
 ![](../images/pmd03_bug.png)
 
-Components are loosely coupled if they are weakly associated, have little knowledge of each other and can easily be replaces with similar implementations.
+Components are loosely coupled if they are weakly associated, have little knowledge of each other and can easily be replaced with similar implementations.
 In this specific case, using interface types, particularly the `List` interface, is recommended instead of using the implementation type, `ArrayList`, because that limits the possibility to use other implementations i.e. `LinkedList`. 
 To fix this, we needed to change the type of the array of projects, `arPrj`, in the `JTimeSchedFrame` class and, given that this variable is used as a parameter of the `ProjectTableModel` constructor, we also changed the type of the argument of this constructor and the type of the attribute `arPrj` that this constructor initializes.
 
@@ -434,6 +442,9 @@ And we made the following changes:
 	}
 ```
 
+By addressing this violation, the [new report](reports/pmd/pmd_04.pdf) now identifies doesn't report the violation anymore.
+![](../images/pmd03_fix.png)
+
 **4) [EmptyCatchBlock](https://metapx.org/java-ignore-exception/)**
 
 ![](../images/pmd04_bug.png)
@@ -452,7 +463,7 @@ try {
 }
 ```
 
-In Java there isn't a particular syntax to ignore exception as Python, the way around is indeed use empty catch blocks. However, to the `pmm` understand that this exception is an ignored one, the exception variable name must be `ignored`. The rewritten code as it follows: 
+In Java there isn't a particular syntax to ignore an exception like in Python. The way around this is indeed to use empty catch blocks. However, according to the `pmd`'s understanding, as this exception is an ignored one, the name of the exception's variable must be `ignored`. The rewritten code is the following: 
 
 ```java
 // backup project-file
@@ -466,11 +477,14 @@ try {
 }
 ```
 
+The [new report](reports/pmd/pmd_05.pdf) and the image below show that the violation is no longer reported.
+![](../images/pmd04_fix.png)
+
 **5) [Simplified Ternary](https://pmd.sourceforge.io/pmd-6.49.0/pmd_rules_java_design.html#simplifiedternary)**
 
 ![](../images/pmd05_bug.png)
 
-This is a simple statment that could be simplified. Previously the following code was written using a ternary:
+This violation identifies a statement that could be simplified. Previously the following code was written using a ternary:
 
 ```java
 	@Override
@@ -493,7 +507,7 @@ This is a simple statment that could be simplified. Previously the following cod
 	}
 ```
 
-The statment `prj.isRunning()` already returns a boolean, therefore the expression can be simplified to `return !prj.isRunning()`. With this alteration the code becomes cleaner and more efficient. The final code is at follows: 
+The statement `prj.isRunning()` already returns a boolean, therefore the expression can be simplified to `return !prj.isRunning()`. With this change the code becomes cleaner and more efficient. The final code is the following: 
 
 ```java
 	@Override
@@ -515,7 +529,8 @@ The statment `prj.isRunning()` already returns a boolean, therefore the expressi
 		}
 	}
 ```
-
+The [new report](reports/pmd/pmd_06.pdf) and the image below show that the file `ProjectTableModel.java`, which previously had 6 violations, now only has 4.
+![](../images/pmd05_fix.png)
 
 ## Components 
 
