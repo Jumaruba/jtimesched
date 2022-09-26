@@ -465,7 +465,6 @@ The statment `prj.isRunning()` already returns a boolean, therefore the expressi
 ```
 
 
-
 ## Components 
 
 - Diana Freitas :: up201806230
