@@ -63,11 +63,11 @@ SpotBugs is a static testing tool that can be used to find bugs in Java programs
 
 #### Report
 
-> Brief description of the report produced by the static testing tool. 
-
-**=== BUGS FOUND ===**
+#### Bugs Found
 
 **1) BAD_PRACTICE :: RV_RETURN_VALUE_IGNORED_BAD_PRACTICE**
+
+![](../images/spotbugs01_bug.png)
 
 Originally the code was written as follows: 
 ```java
@@ -88,6 +88,8 @@ if (!dirConf.isDirectory()) {
 ```
 
 **2) STYLE :: SF_SWITCH_NO_DEFAULT**
+
+![](../images/spotbugs02_bug.png)
 
 The code was written as follows: 
 ```java
@@ -120,6 +122,8 @@ switch (column) {
 
 **3) PERFORMANCE :: DM_NUMBER_CTOR**
 
+![](../images/spotbugs03_bug.png)
+
 The code was written as follows:
 ```java
 tf.setAttribute("indent-number", Integer.valueOf(4));
@@ -133,6 +137,8 @@ Similar modifications were performed for all the cases where the Integer or Long
 For the same reason, when the Boolean constructor was used it was modified from `new Boolean(true)` to `Boolean.TRUE` and from `new Boolean(false)` to `Boolean.FALSE`.
 
 **4) MALICIOUS_CODE :: EI_EXPOSE_REP2** 
+
+![](../images/spotbugs04_bug.png)
 
 The code was written as follows: 
 ```java 
@@ -172,6 +178,8 @@ public Component getTfEditCopy(){
 ```
 
 **5) BAD_PRACTICE :: DM_EXIT** 
+
+![](../images/spotbugs05_bug.png)
 
 Previously the code was written as such: 
 ```java 
@@ -235,9 +243,11 @@ PMD is a static source code analyzer that detects common programming flaws. It i
 
 > Brief description of the report produced by the static testing tool. 
 
-**=== BUGS FOUND ===**
+#### Bugs Found
 
 **1) Design - [ClassWithOnlyPrivateConstructorsShouldBeFinal](https://pmd.sourceforge.io/pmd-6.49.0/pmd_rules_java_design.html#classwithonlyprivateconstructorsshouldbefinal)**
+
+![](../images/pmd01_bug.png)
 
 `ProjectTime` is a class that is only used to format and parse the time, and therefore it only uses private constructors and static methods. For this reason, it should be final.
 
@@ -270,6 +280,10 @@ public final class ProjectTime {
 ```
 
 **2) Error Prone - [UseEqualsToCompareStrings](https://pmd.sourceforge.io/pmd-6.49.0/pmd_rules_java_errorprone.html#useequalstocomparestrings)**
+
+![](../images/pmd02_bug1.png)
+
+![](../images/pmd02_bug2.png)
 
 In Java, Strings are actually Objects and, therefore, should be compared with the `equals()` method. While `equals()`compares the actual values of the Strings, the `==` operator only compares the references. For this reason, the `==` int he original code snippet shown bellow was replace with the use of `equals()` method.
 
@@ -354,6 +368,8 @@ For this reason, we changed the code to the following:
 
 **3) Best Practice - [LooseCoupling](https://pmd.sourceforge.io/pmd-6.49.0/pmd_rules_java_bestpractices.html#loosecoupling)**
 
+![](../images/pmd03_bug.png)
+
 Components are loosely coupled if they are weakly associated, have little knowledge of each other and can easily be replaces with similar implementations.
 In this specific case, using interface types, particularly the `List` interface, is recommended instead of using the implementation type, `ArrayList`, because that limits the possibility to use other implementations i.e. `LinkedList`. 
 To fix this, we needed to change the type of the array of projects, `arPrj`, in the `JTimeSchedFrame` class and, given that this variable is used as a parameter of the `ProjectTableModel` constructor, we also changed the type of the argument of this constructor and the type of the attribute `arPrj` that this constructor initializes.
@@ -388,6 +404,8 @@ And we made the following changes:
 
 **4) [EmptyCatchBlock](https://metapx.org/java-ignore-exception/)**
 
+![](../images/pmd04_bug.png)
+
 In order to ignore a specific exception, there was an empty catch block in the code: 
 
 ```java
@@ -417,6 +435,8 @@ try {
 ```
 
 **5) [Simplified Ternary](https://pmd.sourceforge.io/pmd-6.49.0/pmd_rules_java_design.html#simplifiedternary)**
+
+![](../images/pmd05_bug.png)
 
 This is a simple statment that could be simplified. Previously the following code was written using a ternary:
 
