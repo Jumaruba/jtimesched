@@ -141,7 +141,7 @@ public class ProjectTableModel extends AbstractTableModel {
 		case ProjectTableModel.COLUMN_TIMEOVERALL:
 		case ProjectTableModel.COLUMN_TIMETODAY:
 			// running tasks cannot be edited
-			return (prj.isRunning() ? false : true);
+			return !prj.isRunning();
 		default:
 			return false;	
 		}

@@ -416,7 +416,55 @@ try {
 }
 ```
 
-**5) TODO**
+**5) [Simplified Ternary](https://pmd.sourceforge.io/pmd-6.49.0/pmd_rules_java_design.html#simplifiedternary)**
+
+This is a simple statment that could be simplified. Previously the following code was written using a ternary:
+
+```java
+	@Override
+	public boolean isCellEditable(int row, int column) {
+		Project prj = this.getProjectAt(row);
+		
+		switch (column) {
+		case ProjectTableModel.COLUMN_CHECK:
+		case ProjectTableModel.COLUMN_TITLE:
+		case ProjectTableModel.COLUMN_COLOR:
+		case ProjectTableModel.COLUMN_CREATED:
+			return true;
+		case ProjectTableModel.COLUMN_TIMEOVERALL:
+		case ProjectTableModel.COLUMN_TIMETODAY:
+			// running tasks cannot be edited
+			return (prj.isRunning() ? false : true);
+		default:
+			return false;	
+		}
+	}
+```
+
+The statment `prj.isRunning()` already returns a boolean, therefore the expression can be simplified to `return !prj.isRunning()`. With this alteration the code becomes cleaner and more efficient. The final code is at follows: 
+
+```java
+	@Override
+	public boolean isCellEditable(int row, int column) {
+		Project prj = this.getProjectAt(row);
+		
+		switch (column) {
+		case ProjectTableModel.COLUMN_CHECK:
+		case ProjectTableModel.COLUMN_TITLE:
+		case ProjectTableModel.COLUMN_COLOR:
+		case ProjectTableModel.COLUMN_CREATED:
+			return true;
+		case ProjectTableModel.COLUMN_TIMEOVERALL:
+		case ProjectTableModel.COLUMN_TIMETODAY:
+			// running tasks cannot be edited
+			return !prj.isRunning();
+		default:
+			return false;	
+		}
+	}
+```
+
+
 
 ## Components 
 
