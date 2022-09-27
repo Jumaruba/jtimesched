@@ -60,16 +60,13 @@ SpotBugs is a static testing tool that can be used to find bugs in Java programs
 #### Configuration
 
 To understand if the tool needed extra configuration, we first executed it with the default settings. 
-After analyzing the report, we've decided to don't add further configurations, since, in our point of view, no filtering was necessary. 
-
-> TODO: Maybe just say that we didn't change anything?
+After analyzing the report, we've decided not to add further configurations, since, from our point of view, the default rules and configuration were appropriate for our project, and no extra filtering was necessary.
 
 #### Report
 
 The [initial report](reports/spotbugs/spotbugs_01.pdf) produced by SpotBugs identifies 32 bugs and 0 errors. We can also verify that all the bugs reported belong to the classes of the project and gui directories or to the main class of the application. All the reported bugs have medium priority. We can verify that the bugs have different categories: `MALICIOUS_CODE`, `BAD_PRACTICE`, `EXPERIMENTAL`, `PERFORMANCE`, `STYLE` and `CORRECTNESS`.
 
 Most of them are true bugs that should be addressed, even though they are only of medium priority. 
-> Are they ?? Yeis
 
 #### Bugs Found
 
@@ -105,7 +102,7 @@ By changing the code has indicated above, the bug was fixed and, as we can see i
 
 A `STYLE` bug was reported in a switch case of the `TimeSchedTableMouseListener` inner class of the `JTimeSchedFrame` class, as we can see below:
 
-![](../images/spotbugs02_bug.png) TODO:Change
+![](../images/spotbugs02_bug.png)
 
 The code was written as follows: 
 ```java
@@ -135,7 +132,7 @@ switch (column) {
 }
 ```
 
-This resulted in a [new report](reports/spotbugs/spotbugs_03.pdf) but the number of reported bugs kept the same because new similar bugs were reported in the same file. As we can see below, the bug no longer shows in the report, but another bug in a switch case of the same file is reported.
+This resulted in a [new report](reports/spotbugs/spotbugs_03.pdf),  but the number of reported bugs kept the same because new similar bugs were reported in the same file. As we can see below, the bug no longer shows in the report, but another bug in a switch case of the same file is reported.
 ![](../images/spotbugs02_fix.png)
 
 **3) PERFORMANCE :: DM_NUMBER_CTOR**
@@ -269,14 +266,10 @@ PMD is a static source code analyzer that detects common programming flaws. It i
 #### Report 
 
 The [initial PMD report](reports/pmd/pmd_01.pdf) identifies many violations, mainly with priority 3 and 4, and one with priority 1. 
-Some examples are: EmptyCatchBlock, ControlStatementBraces, LiteralsFirstInComparisons. 
+Some examples are: `EmptyCatchBlock`, `ControlStatementBraces`, `LiteralsFirstInComparisons`. 
 The violations found and analyzed are true positives.   
-One might think that some violations such as `ControlStatementBraces` are false positives, but this is rather a noise. The 
-tool correctly identified the violation, however these are irrelevant to us. 
-Therefore, we've modified the configurations to exclude these cases	.
-
-> TODO: continue with types of violations? Do you think those are true violations that need to be addressed, or are just false-positives?
-> Secalhar dizer que notamos que algumas eram de ControlStatementBraces e que por isso nao eram relevantes? Nao sei se conseguimos excluir nas configuraçoes esta violação, imepdindo que apareçam nos reports
+One might think that some violations such as `ControlStatementBraces` are false positives, but this is rather a noise. The tool correctly identified the violation, however these are irrelevant to us. 
+Therefore, we've modified the configurations to exclude these cases.
 
 #### Configuration
 The basic rulesets were gathered from the [pmd maven official website](https://maven.apache.org/plugins/maven-pmd-plugin/examples/usingRuleSets.html).   
@@ -290,20 +283,16 @@ The `pmd-quickstart.xml` rule set was obtained from the [pmd github page](https:
 
 The following lines explains the motivation behind this configuration. 
 
-- `UselessParentheses`: This rule warns the use of useless parentheses in some statements. Although the parentheses don't modify the code behavior, in our conception, in some cases it might helps other developers to understand the code, by making the priority explicit. 
+- `UselessParentheses`: This rule throws a warning whenever useless parentheses are used in a statement. Although the parentheses don't modify the code behavior, we believe that, in some cases, it might helps other developers to understand the code, by making the priority explicit. 
 - `ControlStatementBraces`: The tool recommends to use braces even in scenarios where it isn't mandatory. Such as: 
 ```java
-if (somethig)
+if (something)
 	do something...
 ```
-In our view, this is a subjective scenario: some people might prefer to don't use braces to keep the code clean, while others prefer using it to keep consistency.
+From our point of view, this is a subjective scenario: some people might prefer not to use braces to keep the code clean, while others may prefer using it to keep consistency.
 Since this violation is a matter of perspective, we agreed to comment this rule. 
 
-- `UncommentedEmptyMethodBody`: The commented method bodies are the overridden ones. The super class might implement the method, and there's no desired behavior for the function. Thus, we considered that the empty body is necessary and for this motive, the rule was commented. 
-
-
-> TODO: dizer porque razão usamos aqueles rulesets
-
+- `UncommentedEmptyMethodBody`: The commented method bodies are the overridden ones. The super class might implement the method, and there's no desired behavior for the function. Thus, we considered that the empty body is necessary and for this reason, the rule was commented. 
 
 #### Bugs Found
 
