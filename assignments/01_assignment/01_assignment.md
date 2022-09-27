@@ -59,6 +59,9 @@ SpotBugs is a static testing tool that can be used to find bugs in Java programs
 
 #### Configuration
 
+To understand if the tool needed extra configuration, we first executed it with the default settings. 
+After analyzing the report, we've decided to don't add further configurations, since, in our point of view, no filtering was necessary. 
+
 > TODO: Maybe just say that we didn't change anything?
 
 #### Report
@@ -66,7 +69,7 @@ SpotBugs is a static testing tool that can be used to find bugs in Java programs
 The [initial report](reports/spotbugs/spotbugs_01.pdf) produced by SpotBugs identifies 32 bugs and 0 errors. We can also verify that all the bugs reported belong to the classes of the project and gui directories or to the main class of the application. All the reported bugs have medium priority. We can verify that the bugs have different categories: `MALICIOUS_CODE`, `BAD_PRACTICE`, `EXPERIMENTAL`, `PERFORMANCE`, `STYLE` and `CORRECTNESS`.
 
 Most of them are true bugs that should be addressed, even though they are only of medium priority. 
-> Are they ??
+> Are they ?? Yeis
 
 #### Bugs Found
 
@@ -263,16 +266,44 @@ This way, the program will finish with an Exception and, consequently, the bug n
 #### Description
 PMD is a static source code analyzer that detects common programming flaws. It includes many built-in rules for different languages, such as [Java](https://pmd.sourceforge.io/pmd-6.49.0/pmd_rules_java.html) and also supports the creation of new rules. It is normally integrated in the build process and provides a tool to detect duplicated code - the CPD or "copy-paste-detector".
 
-#### Configuration
-
-> TODO: dizer porque razão usamos aqueles rulesets
-
 #### Report 
 
 The [initial PMD report](reports/pmd/pmd_01.pdf) identifies many violations, mainly with priority 3 and 4, and one with priority 1. 
+Some examples are: EmptyCatchBlock, ControlStatementBraces, LiteralsFirstInComparisons. 
+The violations found and analyzed are true positives.   
+One might think that some violations such as `ControlStatementBraces` are false positives, but this is rather a noise. The 
+tool correctly identified the violation, however these are irrelevant to us. 
+Therefore, we've modified the configurations to exclude these cases	.
 
 > TODO: continue with types of violations? Do you think those are true violations that need to be addressed, or are just false-positives?
 > Secalhar dizer que notamos que algumas eram de ControlStatementBraces e que por isso nao eram relevantes? Nao sei se conseguimos excluir nas configuraçoes esta violação, imepdindo que apareçam nos reports
+
+#### Configuration
+The basic rulesets were gathered from the [pmd maven official website](https://maven.apache.org/plugins/maven-pmd-plugin/examples/usingRuleSets.html).   
+The `pmd-quickstart.xml` rule set was obtained from the [pmd github page](https://github.com/pmd/pmd/blob/master/pmd-java/src/main/resources/rulesets/java/quickstart.xml). The following rules were commented in the `pmd-quickstart.xml` file: 
+
+```xml 
+<rule ref="category/java/codestyle.xml/UselessParentheses"/>
+<rule ref="category/java/codestyle.xml/ControlStatementBraces"/>
+<rule ref="category/java/documentation.xml/UncommentedEmptyMethodBody"/>
+```
+
+The following lines explains the motivation behind this configuration. 
+
+- `UselessParentheses`: This rule warns the use of useless parentheses in some statements. Although the parentheses don't modify the code behavior, in our conception, in some cases it might helps other developers to understand the code, by making the priority explicit. 
+- `ControlStatementBraces`: The tool recommends to use braces even in scenarios where it isn't mandatory. Such as: 
+```java
+if (somethig)
+	do something...
+```
+In our view, this is a subjective scenario: some people might prefer to don't use braces to keep the code clean, while others prefer using it to keep consistency.
+Since this violation is a matter of perspective, we agreed to comment this rule. 
+
+- `UncommentedEmptyMethodBody`: The commented method bodies are the overridden ones. The super class might implement the method, and there's no desired behavior for the function. Thus, we considered that the empty body is necessary and for this motive, the rule was commented. 
+
+
+> TODO: dizer porque razão usamos aqueles rulesets
+
 
 #### Bugs Found
 

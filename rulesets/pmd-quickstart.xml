@@ -88,7 +88,7 @@
     <!-- <rule ref="category/java/codestyle.xml/CallSuperInConstructor" /> -->
     <!-- <rule ref="category/java/codestyle.xml/CommentDefaultAccessModifier" /> -->
     <!-- <rule ref="category/java/codestyle.xml/ConfusingTernary" /> -->
-    <rule ref="category/java/codestyle.xml/ControlStatementBraces"/>
+    <!-- <rule ref="category/java/codestyle.xml/ControlStatementBraces"/>-->
     <!--<rule ref="category/java/codestyle.xml/DefaultPackage"/> deprecated since 6.35.0 -->
     <!-- <rule ref="category/java/codestyle.xml/EmptyMethodInAbstractClassShouldBeAbstract" /> -->
     <rule ref="category/java/codestyle.xml/ExtendsObject"/>
@@ -113,7 +113,7 @@
     <rule ref="category/java/codestyle.xml/UnnecessaryModifier"/>
     <rule ref="category/java/codestyle.xml/UnnecessaryReturn"/>
     <!-- <rule ref="category/java/codestyle.xml/UseDiamondOperator" /> -->
-    <rule ref="category/java/codestyle.xml/UselessParentheses"/>
+    <!--<rule ref="category/java/codestyle.xml/UselessParentheses"/>-->
     <rule ref="category/java/codestyle.xml/UselessQualifiedThis"/>
 
 
@@ -170,7 +170,7 @@
     <!-- <rule ref="category/java/documentation.xml/CommentRequired" /> -->
     <!-- <rule ref="category/java/documentation.xml/CommentSize" /> -->
     <rule ref="category/java/documentation.xml/UncommentedEmptyConstructor"/>
-    <rule ref="category/java/documentation.xml/UncommentedEmptyMethodBody"/>
+    <!--<rule ref="category/java/documentation.xml/UncommentedEmptyMethodBody"/>-->
 
 
 
