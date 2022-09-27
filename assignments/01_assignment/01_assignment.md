@@ -283,7 +283,7 @@ The `pmd-quickstart.xml` rule set was obtained from the [pmd github page](https:
 
 The following lines explains the motivation behind this configuration. 
 
-- `UselessParentheses`: This rule throws a warning whenever useless parentheses are used in a statement. Although the parentheses don't modify the code behavior, we believe that, in some cases, it might helps other developers to understand the code, by making the priority explicit. 
+- `UselessParentheses`: This rule throws a warning whenever useless parentheses are used in a statement. Although the parentheses don't modify the code behavior, we believe that, in some cases, it might helps other developers to understand the code, by making the scope more explicit. 
 - `ControlStatementBraces`: The tool recommends to use braces even in scenarios where it isn't mandatory. Such as: 
 ```java
 if (something)
