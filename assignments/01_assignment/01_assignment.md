@@ -555,8 +555,8 @@ The [new report](reports/pmd/pmd_06.pdf) and the image below show that the file 
 
 ## Extra 
 
-In addition to the tools, we've executed the `checkstyle` plugin. 
-The report output made explicit that, in order to make the code more readable a formatting tools was necessary.  
+In addition to these tools, we've executed the `checkstyle` plugin. 
+The report output made explicit that, in order to make the code more readable, a formatting tools was necessary.  
 We've installed and executed the `googleformatter-maven-plugin` plugin. This reduced the number of `checkstyle` errors from 4000 to 600. 
 
 ## Components 
