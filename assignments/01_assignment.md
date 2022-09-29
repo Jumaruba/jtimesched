@@ -58,6 +58,9 @@ To sum up, the static testing can be categorized in **manual examination** and *
 
 ### Checkstyle
 
+"Checkstyle is a static code analysis tool used in software development for checking if Java source code is compliant with specified coding rules."
+TODO
+
 #### Description
 
 
