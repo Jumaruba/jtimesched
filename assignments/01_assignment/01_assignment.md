@@ -553,6 +553,12 @@ The statement `prj.isRunning()` already returns a boolean, therefore the express
 The [new report](reports/pmd/pmd_06.pdf) and the image below show that the file `ProjectTableModel.java`, which previously had 6 violations, now only has 4.
 ![](../images/pmd05_fix.png)
 
+## Extra 
+
+In addition to the tools, we've executed the `checkstyle` plugin. 
+The report output made explicit that, in order to make the code more readable a formatting tools was necessary.  
+We've installed and executed the `googleformatter-maven-plugin` plugin. This reduced the number of `checkstyle` errors from 4000 to 600. 
+
 ## Components 
 
 - Diana Freitas :: up201806230
