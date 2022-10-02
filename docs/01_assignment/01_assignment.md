@@ -437,28 +437,28 @@ To fix this, we needed to change the type of the array of projects, `arPrj`, in 
 
 In the `JTimeSchedFrame` class, the original code was the following:
 ```java
-private ArrayList<Project> arPrj = new ArrayList<Project>();
+private ArrayList<project> arPrj = new ArrayList<project>();
 ```
 
 The code that resulted from the changes was the one below:
 ```java
-private List<Project> arPrj = new ArrayList<Project>();
+private List<project> arPrj = new ArrayList<project>();
 ```
 
 In the `ProjectTableModel` class the original code was this:
 ```java
-	private ArrayList<Project> arPrj;
+	private ArrayList<project> arPrj;
 	
-	public ProjectTableModel(ArrayList<Project> arPrj) {
+	public ProjectTableModel(ArrayList<project> arPrj) {
 		this.arPrj = arPrj;
 	}
 ```
 
 And we made the following changes:
 ```java
-	private List<Project> arPrj;
+	private List<project> arPrj;
 	
-	public ProjectTableModel(List<Project> arPrj) {
+	public ProjectTableModel(List<project> arPrj) {
 		this.arPrj = arPrj;
 	}
 ```
@@ -510,7 +510,7 @@ This violation identifies a statement that could be simplified. Previously the f
 ```java
 	@Override
 	public boolean isCellEditable(int row, int column) {
-		Project prj = this.getProjectAt(row);
+		project prj = this.getProjectAt(row);
 		
 		switch (column) {
 		case ProjectTableModel.COLUMN_CHECK:
@@ -533,7 +533,7 @@ The statement `prj.isRunning()` already returns a boolean, therefore the express
 ```java
 	@Override
 	public boolean isCellEditable(int row, int column) {
-		Project prj = this.getProjectAt(row);
+		project prj = this.getProjectAt(row);
 		
 		switch (column) {
 		case ProjectTableModel.COLUMN_CHECK:
