@@ -33,7 +33,8 @@ import javax.swing.table.TableCellEditor;
 import de.dominik_geyer.jtimesched.gui.ColorDialog;
 
 @SuppressWarnings("serial")
-public class ColorCellEditor extends AbstractCellEditor implements TableCellEditor, MouseListener {
+public class ColorCellEditor extends AbstractCellEditor
+    implements TableCellEditor, MouseListener {
   JFrame parent;
   JButton btnEdit;
   Color currentColor;
@@ -64,7 +65,8 @@ public class ColorCellEditor extends AbstractCellEditor implements TableCellEdit
     this.btnEdit.setBackground(this.currentColor);
 
     Point posClick = e.getLocationOnScreen();
-    ColorDialog colorDialog = new ColorDialog(parent, posClick, this.currentColor);
+    ColorDialog colorDialog =
+        new ColorDialog(parent, posClick, this.currentColor);
 
     colorDialog.setVisible(true);
     this.selectedColor = colorDialog.getSelectedColor();

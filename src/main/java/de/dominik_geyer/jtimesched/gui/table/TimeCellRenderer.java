@@ -34,7 +34,12 @@ public class TimeCellRenderer extends JLabel implements TableCellRenderer {
 
   @Override
   public Component getTableCellRendererComponent(
-      JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+      JTable table,
+      Object value,
+      boolean isSelected,
+      boolean hasFocus,
+      int row,
+      int column) {
 
     ProjectTableModel tstm = (ProjectTableModel) table.getModel();
     int modelRow = table.convertRowIndexToModel(row);
@@ -48,15 +53,20 @@ public class TimeCellRenderer extends JLabel implements TableCellRenderer {
         tcc = new TimeCellComponent(prj.getSecondsToday(), prj.getQuotaToday());
         tcc.setToolTipText(
             prj.getQuotaToday() > 0
-                ? String.format("Quota today: %s", ProjectTime.formatSeconds(prj.getQuotaToday()))
+                ? String.format(
+                    "Quota today: %s",
+                    ProjectTime.formatSeconds(prj.getQuotaToday()))
                 : null);
         break;
       case ProjectTableModel.COLUMN_TIMEOVERALL:
-        tcc = new TimeCellComponent(prj.getSecondsOverall(), prj.getQuotaOverall());
+        tcc =
+            new TimeCellComponent(
+                prj.getSecondsOverall(), prj.getQuotaOverall());
         tcc.setToolTipText(
             prj.getQuotaOverall() > 0
                 ? String.format(
-                    "Quota overall: %s", ProjectTime.formatSeconds(prj.getQuotaOverall()))
+                    "Quota overall: %s",
+                    ProjectTime.formatSeconds(prj.getQuotaOverall()))
                 : null);
         break;
     }

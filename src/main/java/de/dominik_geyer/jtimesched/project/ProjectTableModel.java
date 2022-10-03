@@ -155,13 +155,16 @@ public class ProjectTableModel extends AbstractTableModel {
         JTimeSchedApp.getLogger()
             .info(
                 String.format(
-                    "%s check for project '%s'", (checked) ? "Set" : "Unset", prj.getTitle()));
+                    "%s check for project '%s'",
+                    (checked) ? "Set" : "Unset", prj.getTitle()));
         prj.setChecked(checked);
         break;
       case ProjectTableModel.COLUMN_TITLE:
         String title = (String) value;
         JTimeSchedApp.getLogger()
-            .info(String.format("Renamed project '%s' to '%s'", prj.getTitle(), title));
+            .info(
+                String.format(
+                    "Renamed project '%s' to '%s'", prj.getTitle(), title));
         prj.setTitle(title);
         break;
       case ProjectTableModel.COLUMN_COLOR:
@@ -188,12 +191,15 @@ public class ProjectTableModel extends AbstractTableModel {
             .info(
                 String.format(
                     "Manually set time %s for project '%s' from %s to %s",
-                    (column == ProjectTableModel.COLUMN_TIMEOVERALL) ? "overall" : "today",
+                    (column == ProjectTableModel.COLUMN_TIMEOVERALL)
+                        ? "overall"
+                        : "today",
                     prj.getTitle(),
                     ProjectTime.formatSeconds(oldSeconds),
                     ProjectTime.formatSeconds(newSeconds)));
 
-        if (column == ProjectTableModel.COLUMN_TIMEOVERALL) prj.setSecondsOverall(newSeconds);
+        if (column == ProjectTableModel.COLUMN_TIMEOVERALL)
+          prj.setSecondsOverall(newSeconds);
         else prj.adjustSecondsToday(newSeconds);
         break;
     }

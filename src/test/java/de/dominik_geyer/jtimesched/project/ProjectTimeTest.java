@@ -15,7 +15,7 @@ public class ProjectTimeTest {
   @Test
   public void parseZeroTimeTest() {
     try {
-      // Given 
+      // Given
       String strTime = "0:00:00";
 
       // When
@@ -31,7 +31,7 @@ public class ProjectTimeTest {
   @Test
   public void parseSecondsTest() {
     try {
-      // Given 
+      // Given
       String strTime = "0:00:05";
 
       // When
@@ -47,7 +47,7 @@ public class ProjectTimeTest {
   @Test
   public void parseMinutesTest() {
     try {
-      // Given 
+      // Given
       String strTime = "0:15:48";
 
       // When
@@ -63,7 +63,7 @@ public class ProjectTimeTest {
   @Test
   public void parseHoursTest() {
     try {
-      // Given 
+      // Given
       String strTime = "6:15:48";
 
       // When
@@ -79,7 +79,7 @@ public class ProjectTimeTest {
   @Test
   public void parseDaysTest() {
     try {
-      // Given 
+      // Given
       String strTime = "36:15:48";
 
       // When
@@ -95,10 +95,11 @@ public class ProjectTimeTest {
   @ParameterizedTest
   @MethodSource("parseSecondsInvalidParams")
   public void parseSecondsInvalidTest(String argument) {
-    assertThrows(ParseException.class, () -> ProjectTime.parseSeconds(argument));
+    assertThrows(
+        ParseException.class, () -> ProjectTime.parseSeconds(argument));
   }
 
   static Stream<String> parseSecondsInvalidParams() {
-    return Stream.of("", "2", "0:07:80", null);
+    return Stream.of("", "2", "0:07:80", "6:54", null);
   }
 }

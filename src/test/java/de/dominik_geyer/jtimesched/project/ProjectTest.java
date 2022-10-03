@@ -11,12 +11,12 @@ public class ProjectTest {
   @BeforeEach
   void setUp() {
     project = new Project();
-  } 
+  }
 
   // Test setRunning and getRunning first, setSecondsOverall, getSecondsOverall
   @Test
   public void pauseRunningTest() throws ProjectException {
-    //TODO: Diana (acabar)
+    // TODO: Diana (acabar)
     // Given
     Project projectSpy = Mockito.spy(project);
     projectSpy.setRunning(true);
@@ -38,5 +38,4 @@ public class ProjectTest {
   public void setSecondsTodayTest() {
     // TODO: Xuliane
   }
-
 }
