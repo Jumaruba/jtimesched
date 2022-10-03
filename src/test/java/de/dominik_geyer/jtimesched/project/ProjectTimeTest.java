@@ -24,38 +24,74 @@ public class ProjectTimeTest {
 
   @Test
   public void formatZeroTimeTest() {
-    String secondsStr = "0:00:00";
-    assertEquals(ProjectTime.formatSeconds(0), secondsStr);
+    // Given
+    int seconds = 0;
+
+    // When
+    String result = ProjectTime.formatSeconds(seconds);
+
+    // Then
+    assertEquals("0:00:00", result);
   }
 
   @Test
   public void formatSecondsTest() {
-    String secondsStr = "0:00:05";
-    assertEquals(ProjectTime.formatSeconds(5), secondsStr);
+    // Given
+    int seconds = 5;
+
+    // When
+    String result = ProjectTime.formatSeconds(seconds);
+
+    // Then
+    assertEquals("0:00:05", result);
   }
 
   @Test
   public void formatMinutesTest() {
-    String secondsStr = "0:01:05";
-    assertEquals(ProjectTime.formatSeconds(65), secondsStr);
+    // Given
+    int seconds = 65;
+
+    // When
+    String result = ProjectTime.formatSeconds(seconds);
+
+    // Then
+    assertEquals("0:01:05", result);
   }
 
   @Test
   public void formatHoursTest() {
-    String secondsStr = "1:10:15";
-    assertEquals(ProjectTime.formatSeconds(4215), secondsStr);
+    // Given
+    int seconds = 4215;
+
+    // When
+    String result = ProjectTime.formatSeconds(seconds);
+
+    // Then
+    assertEquals("1:10:15", result);
   }
 
   @Test
   public void formatDaysTest() {
-    String secondsStr = "25:01:05";
-    assertEquals(ProjectTime.formatSeconds(90065), secondsStr);
+    // Given
+    int seconds = 90065;
+
+    // When
+    String result = ProjectTime.formatSeconds(seconds);
+
+    // Then
+    assertEquals("25:01:05", result);
   }
 
   @Test
   public void formatNegativeTest() {
-    String secondsStr = "0:00:00";
-    assertEquals(ProjectTime.formatSeconds(-1), secondsStr);
+    // Given
+    int seconds = -1;
+
+    // When
+    String result = ProjectTime.formatSeconds(seconds);
+
+    // Then
+    assertEquals("0:00:00", result);
   }
 
 }
