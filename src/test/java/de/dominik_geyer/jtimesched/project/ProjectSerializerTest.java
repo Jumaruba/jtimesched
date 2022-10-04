@@ -17,9 +17,10 @@ import org.xml.sax.helpers.AttributesImpl;
 
 public class ProjectSerializerTest {
   private final String xmlProlog = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-  
+
+  // Simple element
   @Test
-  public void newElementWithAttributesTest() throws TransformerConfigurationException {
+  public void elementWithAttributesTest() throws TransformerConfigurationException {
     // Given
     TransformerHandler hd = getTransformerHandler();
     StringWriter writer = getWriter(hd);
@@ -32,14 +33,14 @@ public class ProjectSerializerTest {
     } catch (SAXException e) {
       fail("Exception should not be thrown");
     }
-    
+
     // Then
     final String expected = xmlProlog + "<time overall=\"4\"/>";
     assertEquals(writer.toString(), expected);
   }
 
   @Test
-  public void newElementWithAttributesAndTextTest() throws TransformerConfigurationException {
+  public void elementWithAttributesAndTextTest() throws TransformerConfigurationException {
     // Given
     TransformerHandler hd = getTransformerHandler();
     StringWriter writer = getWriter(hd);
@@ -56,14 +57,14 @@ public class ProjectSerializerTest {
     } catch (SAXException e) {
       fail("Exception should not be thrown");
     }
-    
+
     // Then
     final String expected = xmlProlog + "<color r=\"24\" g=\"165\" b=\"67\">#18a542</color>";
     assertEquals(writer.toString(), expected);
   }
 
   @Test
-  public void newElementWithAttributesAndLongTest() throws TransformerConfigurationException {
+  public void elementWithAttributesAndLongTest() throws TransformerConfigurationException {
     // Given
     TransformerHandler hd = getTransformerHandler();
     StringWriter writer = getWriter(hd);
@@ -78,19 +79,19 @@ public class ProjectSerializerTest {
     } catch (SAXException e) {
       fail("Exception should not be thrown");
     }
-    
+
     // Then
     final String expected = xmlProlog + "<time format=\"seconds\">1664828078692</time>";
     assertEquals(writer.toString(), expected);
   }
 
   @Test
-  public void newEmptyElementTest() throws TransformerConfigurationException {
+  public void elementEmptyTest() throws TransformerConfigurationException {
     // Given
     TransformerHandler hd = getTransformerHandler();
     StringWriter writer = getWriter(hd);
     String el = "time";
-  
+
     try {
       // When
       ProjectSerializer.addXmlElement(hd, el, null, null);
@@ -103,62 +104,68 @@ public class ProjectSerializerTest {
     assertEquals(writer.toString(), expected);
   }
 
+  // Nested elements
   @Test
-  public void nestedElementsTest() throws TransformerConfigurationException {
+  public void nestedElementsWithAttributesTest() throws TransformerConfigurationException {
     TransformerHandler hd = getTransformerHandler();
     StringWriter writer = getWriter(hd);
-    String el = "createdAt";
-    Object data = 1664828078692L;
+    String el1 = "createdAt";
+    String el2 = "startedAt";
+    Object data1 = 1664828078692L;
+    AttributesImpl atts2 = new AttributesImpl();
+    atts2.addAttribute("", "", "value", "", "1664828011325");
 
     try {
       // When
       hd.startElement("", "", "project", new AttributesImpl());
-      ProjectSerializer.addXmlElement(hd, el, null, data);
+      ProjectSerializer.addXmlElement(hd, el1, null, data1);
+      ProjectSerializer.addXmlElement(hd, el2, atts2, null);
       hd.endElement("", "", "project");
     } catch (SAXException e) {
       fail("Exception should not be thrown");
     }
-    
-    final String expected = xmlProlog + "<project><createdAt>1664828078692</createdAt></project>";
+
+    final String expected = xmlProlog
+        + "<project><createdAt>1664828078692</createdAt><startedAt value=\"1664828011325\"/></project>";
     assertEquals(writer.toString(), expected);
   }
 
+  // Invalid partitions
   @Test
-  public void emptyElementTest() throws TransformerConfigurationException {
+    public void nullTransformerTest() throws TransformerConfigurationException {
+    // Given
+    String el = "project";
+
+    // When and Then
+    assertThrows(NullPointerException.class, () -> ProjectSerializer.addXmlElement(null, el,
+    null, null));
+  }
+
+  @Test
+  public void unnamedElementTest() throws TransformerConfigurationException, SAXException {
     // Given
     TransformerHandler hd = getTransformerHandler();
     String el = "";
 
+    ProjectSerializer.addXmlElement(hd, el, null, null);
+
     // When and Then
-    assertThrows(Exception.class, () -> ProjectSerializer.addXmlElement(hd, el, null, null));
+    assertThrows(SAXException.class, () -> ProjectSerializer.addXmlElement(hd, el,
+    null, null));
   }
 
   @Test
-  public void nullTransformerTest() throws TransformerConfigurationException {
+  public void nullElementTest() throws TransformerConfigurationException {
     // Given
     TransformerHandler hd = getTransformerHandler();
-    StringWriter writer = getWriter(hd);
-    String el = "name";
-    AttributesImpl atts = new AttributesImpl();
-    atts.addAttribute("", "", "hello", "String", "4");
-    Object data = "Hello";
 
-    try {
-      // When
-      ProjectSerializer.addXmlElement(hd, el, atts, data);
-    } catch (SAXException e) {
-      fail("Exception should not be thrown");
-    }
-    
-    // Then
-    final String expected = xmlProlog + "<name hello=\"4\">Hello</name>";
-    System.out.println(writer.toString());
-    assertEquals(writer.toString(), expected);
+    // When and Then
+    assertThrows(SAXException.class, () -> ProjectSerializer.addXmlElement(hd, null,
+    null, null));
   }
 
-
+  
   // Auxiliary methods
-
   public TransformerHandler getTransformerHandler() throws TransformerConfigurationException {
     SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
     return tf.newTransformerHandler();
