@@ -66,7 +66,7 @@ Converts the number of seconds to the equivalent time in hours, minutes and seco
 - `s` is 0
 - `s` is negative
 3. **Constraints**: Given that the parameter represents the number of seconds, we can restrict the number of cases to test by having in mind that the expected output must respect the domain of the minutes and seconds. We want the number of seconds to always be less than 60 (1 minute = 60 seconds) and the number of minutes to always be less than 60 (3600 seconds = 60 minutes = 1 hour), so we may test cases where we only have seconds, where we have at least a minute, at least an hour or at least a day. Also, given that negative times are invalid, we only need to test this case with one value as the output should be the same.
-4. **Unit Tests**: Given that we only have a single parameter we only need to test the function for the different possible values of `s`:
+4. **Input combinations / Tests**: Given that we only have a single parameter we only need to test the function for the different possible values of `s`:
 - `s` is positive and lower than 60 (1 minute);
 - `s` is positive, higher or equal to 60 (1 minute) and lower than 3600 (1 hour);
 - `s` is positive and higher or equal to 3600 (1 hour) and lower than 86400 (1 day);
