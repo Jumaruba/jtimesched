@@ -23,17 +23,14 @@ public class ProjectTableModelTest {
     projectTableModel = null;
   }
 
-
-  @DisplayName("Not running - Editable columns")
+  @DisplayName("[NOT running] Editable columns")
   @ParameterizedTest
   @ValueSource(ints = {
-          ProjectTableModel.COLUMN_ACTION_DELETE,
           ProjectTableModel.COLUMN_TITLE,
           ProjectTableModel.COLUMN_COLOR,
           ProjectTableModel.COLUMN_CREATED,
           ProjectTableModel.COLUMN_TIMEOVERALL,
-          ProjectTableModel.COLUMN_TIMETODAY,
-          ProjectTableModel.COLUMN_ACTION_STARTPAUSE})
+          ProjectTableModel.COLUMN_TIMETODAY})
   public void isCellEditable1Test(int column) {
     // Given
     int row = 0;
@@ -44,15 +41,39 @@ public class ProjectTableModelTest {
     Assertions.assertTrue(cellEditable);
   }
 
-  @DisplayName("Running - Editable columns")
+  @DisplayName("[NOT running] Out of range positive columns")
+  @ParameterizedTest
+  @ValueSource(ints = {8,9,10,Integer.MAX_VALUE})
+  public void isCellEditable5Test(int column){
+    // Given
+    int row = 0;
+    projectTableModel.getProjectAt(0).setRunning(false);
+    // When
+    boolean cellEditable = projectTableModel.isCellEditable(row, column);
+    // Then
+    Assertions.assertFalse(cellEditable);
+  }
+
+  @DisplayName("[NOT running] - Out of range negative columns")
+  @ParameterizedTest
+  @ValueSource(ints = {-1,-2,-8,Integer.MIN_VALUE})
+  public void isCellEditable7Test(int column) {
+    // Given
+    int row = 0;
+    projectTableModel.getProjectAt(0).setRunning(false);
+    // When
+    boolean cellEditable = projectTableModel.isCellEditable(row, column);
+    // Then
+    Assertions.assertFalse(cellEditable);
+
+  }
+
+  @DisplayName("[Running] Editable columns")
   @ParameterizedTest
   @ValueSource(ints = {
-          ProjectTableModel.COLUMN_ACTION_DELETE,
           ProjectTableModel.COLUMN_TITLE,
           ProjectTableModel.COLUMN_COLOR,
-          ProjectTableModel.COLUMN_CREATED,
-          ProjectTableModel.COLUMN_ACTION_STARTPAUSE
-  })
+          ProjectTableModel.COLUMN_CREATED })
   public void isCellEditable2Test(int column) {
     // Given
     int row = 0;
@@ -64,7 +85,7 @@ public class ProjectTableModelTest {
   }
 
 
-  @DisplayName("Running - Non editable columns")
+  @DisplayName("[Running] Non editable columns")
   @ParameterizedTest
   @ValueSource(ints = {
           ProjectTableModel.COLUMN_TIMEOVERALL,
@@ -79,4 +100,36 @@ public class ProjectTableModelTest {
     // Then
     Assertions.assertFalse(cellEditable);
   }
+
+  @DisplayName("[Running] Out of range positive columns")
+  @ParameterizedTest
+  @ValueSource(ints = {8,9,10,Integer.MAX_VALUE})
+  public void isCellEditable4Test(int column){
+    // Given
+    int row = 0;
+    projectTableModel.getProjectAt(0).setRunning(true);
+    // When
+    boolean cellEditable = projectTableModel.isCellEditable(row, column);
+    // Then
+    Assertions.assertFalse(cellEditable);
+  }
+
+
+
+
+  @DisplayName("[Running] Out of range negative columns")
+  @ParameterizedTest
+  @ValueSource(ints = {-1,-2,-8,Integer.MIN_VALUE})
+  public void isCellEditable6Test(int column){
+    // Given
+    int row = 0;
+    projectTableModel.getProjectAt(0).setRunning(true);
+    // When
+    boolean cellEditable = projectTableModel.isCellEditable(row, column);
+    // Then
+    Assertions.assertFalse(cellEditable);
+  }
+
 }
+
+
