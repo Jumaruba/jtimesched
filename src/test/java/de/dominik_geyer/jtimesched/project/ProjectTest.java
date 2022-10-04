@@ -41,7 +41,7 @@ public class ProjectTest {
   }
 
 
-  public static Stream<Arguments> genSeconds(){
+  public static Stream<Arguments> genSetSecondsToday(){
       return Stream.of(
               Arguments.of(Integer.MIN_VALUE, 0),
               Arguments.of(-100, 0),
@@ -56,8 +56,8 @@ public class ProjectTest {
   }
 
   @ParameterizedTest
-  @MethodSource("genSeconds")
-  public void setSecondsTodayPositiveTest(int seconds, int expected) {
+  @MethodSource("genSetSecondsToday")
+  public void setSecondsTodayTest(int seconds, int expected) {
     // Given
     Project project = new Project();
     // When
