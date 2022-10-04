@@ -15,10 +15,10 @@ This application persists the data regarding the tasks in an XML file, allowing 
 
 ### Function Description
 ```java
-protected static void addXmlElement(TransformerHandler hd, String element, AttributesImpl atts, Object data);
+protected static void addXmlElement(TransformerHandler hd, String element, AttributesImpl atts, Object data) throws SAXException;
 ```
 
-Adds an xml element with the tag `element`, the attributes `atts` and the data `data` to `hd`.
+Adds to the `hd` transformer an xml element with the tag `element`, the attributes `atts` and the data `data`, represented as a `String`. A `SAXException` is thrown when an error occurs when generating the Xml.
 
 e.g. The following XML content would be the result of adding an element named "note" with the attribute "author" and the data "This is a note".
 ```XML
@@ -28,16 +28,15 @@ e.g. The following XML content would be the result of adding an element named "n
 
 ### Category-Partition
 1. **Parameters/Input**:
-- `hd`, a `TransformerHandler` used to build the XMl;
+- `hd`, a `TransformerHandler` used to build the Xml;
 - `element`, a `String` representing the name of the element (tag);
-- `atts`, a `AttributesImpl` representing the attributes of the `element`;
+- `atts`, a `AttributesImpl` instance representing the attributes of the `element`;
 - `data`, the content of the `element`, which may be text or other elements;
-2. **Characteristics of each parameter**: Considering the requirements, ... 
-> TODO
-3. **Constraints**: 
-> TODO
-4. **Unit Tests**: 
-> TODO
+2. **Characteristics of each parameter**: Considering the requirements:
+- the `element` and `data` parameters must respect [Xml's syntactic rules](). Given that an element may be empty, `data` may be `null`. However, if `data` is not `null`, it must be an object that implements the `toString()` method, because the content of an Xml element is textual;
+- the existence of attributes (`atts`) must not be compulsive, has Xml elements don't always have them.
+3. **Constraints**: Given that, in the particular case of this application, we only want to store simple details about each `Project`, we won't need this function to work with nested elements. Therefore, the data just needs to tolerate numeric values (to store times), String values (for the title, notes, among others), and, of course, empty Xml elements. 
+4. **Input combinations / Tests**: 
 
 ### Unit Tests & Outcome
 The tests implemented can be found [here](../../src/test/java/de/dominik_geyer/jtimesched/project/ProjectSerializerTest.java).
