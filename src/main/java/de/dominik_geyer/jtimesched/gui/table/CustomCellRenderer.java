@@ -45,7 +45,12 @@ public class CustomCellRenderer extends JLabel implements TableCellRenderer {
 
   @Override
   public Component getTableCellRendererComponent(
-      JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+      JTable table,
+      Object value,
+      boolean isSelected,
+      boolean hasFocus,
+      int row,
+      int column) {
 
     ProjectTableModel tstm = (ProjectTableModel) table.getModel();
     int modelRow = table.convertRowIndexToModel(row);
@@ -75,7 +80,9 @@ public class CustomCellRenderer extends JLabel implements TableCellRenderer {
                   .replaceAll("\t", "&nbsp;&nbsp;&nbsp;&nbsp;");
 
           this.setToolTipText(
-              "<html><strong><u>Notes:</u></strong><br/><br/>" + tooltip + "</html>");
+              "<html><strong><u>Notes:</u></strong><br/><br/>"
+                  + tooltip
+                  + "</html>");
         } else {
           this.setToolTipText(null);
         }

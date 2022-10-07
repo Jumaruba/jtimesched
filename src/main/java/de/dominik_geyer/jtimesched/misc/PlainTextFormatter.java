@@ -30,6 +30,8 @@ public class PlainTextFormatter extends SimpleFormatter {
 
     return String.format(
         "%s [%s]: %s%n",
-        sdf.format(new Date(record.getMillis())), record.getLevel(), record.getMessage());
+        sdf.format(new Date(record.getMillis())),
+        record.getLevel(),
+        record.getMessage());
   }
 }

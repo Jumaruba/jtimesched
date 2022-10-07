@@ -68,7 +68,9 @@ public class ProjectTable extends JTable {
 
     // set default sort-column
     List<RowSorter.SortKey> sortKeys = new ArrayList<RowSorter.SortKey>();
-    sortKeys.add(new RowSorter.SortKey(ProjectTableModel.COLUMN_CREATED, SortOrder.ASCENDING));
+    sortKeys.add(
+        new RowSorter.SortKey(
+            ProjectTableModel.COLUMN_CREATED, SortOrder.ASCENDING));
     this.getRowSorter().setSortKeys(sortKeys);
 
     // determine minimum size of a checkbox without text
@@ -95,7 +97,14 @@ public class ProjectTable extends JTable {
             new CheckCellRenderer(),
             null
           },
-          {ProjectTableModel.COLUMN_TITLE, 200, 100, -1, new CustomCellRenderer(), null},
+          {
+            ProjectTableModel.COLUMN_TITLE,
+            200,
+            100,
+            -1,
+            new CustomCellRenderer(),
+            null
+          },
           {
             ProjectTableModel.COLUMN_COLOR,
             -1,
@@ -156,9 +165,11 @@ public class ProjectTable extends JTable {
 
       if ((Integer) cp[3] > 0) tc.setMaxWidth((Integer) cp[3]);
 
-      if ((TableCellRenderer) cp[4] != null) tc.setCellRenderer((TableCellRenderer) cp[4]);
+      if ((TableCellRenderer) cp[4] != null)
+        tc.setCellRenderer((TableCellRenderer) cp[4]);
 
-      if ((TableCellEditor) cp[5] != null) tc.setCellEditor((TableCellEditor) cp[5]);
+      if ((TableCellEditor) cp[5] != null)
+        tc.setCellEditor((TableCellEditor) cp[5]);
     }
   }
 
@@ -177,7 +188,8 @@ public class ProjectTable extends JTable {
     if (!strPattern.isEmpty()) {
       // isHighlight = Pattern.matches(this.highlightString, p.getTitle());
 
-      Pattern pattern = Pattern.compile(Pattern.quote(strPattern), Pattern.CASE_INSENSITIVE);
+      Pattern pattern =
+          Pattern.compile(Pattern.quote(strPattern), Pattern.CASE_INSENSITIVE);
       isHighlight = pattern.matcher(p.getTitle()).find();
     }
 

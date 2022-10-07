@@ -114,11 +114,13 @@ public class JTimeSchedFrame extends JFrame {
     this.setMinimumSize(new Dimension(520, 150));
 
     // create tray-icon and set default close-behavior
-    if (this.setupTrayIcon()) this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+    if (this.setupTrayIcon())
+      this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
     else this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     // add handler for GUI log
-    JTimeSchedApp.getLogger().addHandler(new JTimeSchedGUILogHandler(this.tfLog));
+    JTimeSchedApp.getLogger()
+        .addHandler(new JTimeSchedGUILogHandler(this.tfLog));
 
     // backup project-file
     try {
@@ -128,7 +130,8 @@ public class JTimeSchedFrame extends JFrame {
     } catch (Exception e) {
       e.printStackTrace();
       JTimeSchedApp.getLogger()
-          .warning("Unable to create backup of project file: " + e.getMessage());
+          .warning(
+              "Unable to create backup of project file: " + e.getMessage());
     }
 
     // load project-file
@@ -136,10 +139,12 @@ public class JTimeSchedFrame extends JFrame {
       this.loadProjects();
     } catch (FileNotFoundException e) {
       JTimeSchedApp.getLogger()
-          .info("Projects file does not exist, starting with empty projects file.");
+          .info(
+              "Projects file does not exist, starting with empty projects file.");
     } catch (Exception e) {
       e.printStackTrace();
-      JTimeSchedApp.getLogger().severe("Error loading projects file: " + e.getMessage());
+      JTimeSchedApp.getLogger()
+          .severe("Error loading projects file: " + e.getMessage());
 
       JOptionPane.showMessageDialog(
           this,
@@ -157,7 +162,8 @@ public class JTimeSchedFrame extends JFrame {
           "Error loading projects file",
           JOptionPane.ERROR_MESSAGE);
 
-      throw new RuntimeException("Error loading projects file: " + e.getMessage());
+      throw new RuntimeException(
+          "Error loading projects file: " + e.getMessage());
     }
 
     // check all projects for a today-time reset
@@ -171,7 +177,9 @@ public class JTimeSchedFrame extends JFrame {
 
     // listen on table-clicks
     this.tblSched.addMouseListener(new TimeSchedTableMouseListener());
-    this.tblSched.getTableHeader().addMouseListener(new TimeSchedTableHeaderMouseListener());
+    this.tblSched
+        .getTableHeader()
+        .addMouseListener(new TimeSchedTableHeaderMouseListener());
 
     this.tblSched.addKeyListener(new TimeSchedTableKeyListener());
 
@@ -182,7 +190,9 @@ public class JTimeSchedFrame extends JFrame {
     // bottom panel
     JPanel panelBottom = new JPanel();
     panelBottom.setLayout(new BoxLayout(panelBottom, BoxLayout.LINE_AXIS));
-    JButton btnAdd = new JButton("Add project", JTimeSchedFrame.getImageIcon("project-add.png"));
+    JButton btnAdd =
+        new JButton(
+            "Add project", JTimeSchedFrame.getImageIcon("project-add.png"));
     btnAdd.addActionListener(
         new ActionListener() {
           @Override
@@ -229,14 +239,16 @@ public class JTimeSchedFrame extends JFrame {
           public void keyTyped(KeyEvent ke) {}
         });
 
-    Dimension sizeTf = new Dimension(100, this.tfHighlight.getMinimumSize().height);
+    Dimension sizeTf =
+        new Dimension(100, this.tfHighlight.getMinimumSize().height);
     this.tfHighlight.setMaximumSize(sizeTf);
     this.tfHighlight.setMaximumSize(sizeTf);
     panelBottom.add(this.tfHighlight);
     panelBottom.add(Box.createRigidArea(new Dimension(5, 0)));
 
     // log toggle button
-    this.btnLogToggle = new JToggleButton(JTimeSchedFrame.getImageIcon("log-toggle.png"));
+    this.btnLogToggle =
+        new JToggleButton(JTimeSchedFrame.getImageIcon("log-toggle.png"));
     this.btnLogToggle.setToolTipText("toggle log area");
     this.btnLogToggle.addActionListener(
         new ActionListener() {
@@ -244,7 +256,9 @@ public class JTimeSchedFrame extends JFrame {
           public void actionPerformed(ActionEvent arg0) {
             Boolean isVisible = spLog.isVisible();
             setSize(
-                getWidth(), getHeight() + JTimeSchedFrame.LOGAREA_HEIGHT * (isVisible ? -1 : 1));
+                getWidth(),
+                getHeight()
+                    + JTimeSchedFrame.LOGAREA_HEIGHT * (isVisible ? -1 : 1));
             spLog.setVisible(!isVisible);
             spLog.doLayout();
             doLayout();
@@ -257,8 +271,10 @@ public class JTimeSchedFrame extends JFrame {
     // this.tfLog.setFont(this.tfLog.getFont().deriveFont(10.0f));
     this.spLog = new JScrollPane(this.tfLog);
     this.spLog.setVisible(false);
-    this.spLog.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-    this.spLog.setPreferredSize(new Dimension(100 /* ignored */, JTimeSchedFrame.LOGAREA_HEIGHT));
+    this.spLog.setVerticalScrollBarPolicy(
+        JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+    this.spLog.setPreferredSize(
+        new Dimension(100 /* ignored */, JTimeSchedFrame.LOGAREA_HEIGHT));
 
     // the whole bottom panel
     JPanel panelBottomAll = new JPanel(new BorderLayout());
@@ -270,11 +286,14 @@ public class JTimeSchedFrame extends JFrame {
     try {
       this.loadSettings();
     } catch (FileNotFoundException fnfe) {
-      JTimeSchedApp.getLogger().info("Settings file does not exist, running with defaults.");
+      JTimeSchedApp.getLogger()
+          .info("Settings file does not exist, running with defaults.");
     } catch (Exception e) {
       e.printStackTrace();
       JTimeSchedApp.getLogger()
-          .warning("Error loading settings, running with defaults: " + e.getMessage());
+          .warning(
+              "Error loading settings, running with defaults: "
+                  + e.getMessage());
     }
 
     // setup projects-save timer, interval 60 seconds
@@ -333,7 +352,8 @@ public class JTimeSchedFrame extends JFrame {
   }
 
   public static Image getImage(String filename) {
-    return Toolkit.getDefaultToolkit().getImage(JTimeSchedFrame.getImageResource(filename));
+    return Toolkit.getDefaultToolkit()
+        .getImage(JTimeSchedFrame.getImageResource(filename));
   }
 
   public static ImageIcon getImageIcon(String filename) {
@@ -396,7 +416,8 @@ public class JTimeSchedFrame extends JFrame {
 
     for (int size : JTimeSchedFrame.appIconSizes) {
       String filename =
-          String.format("appicon/jTimeSched_%s_%dpx.png", (running ? "on" : "off"), size);
+          String.format(
+              "appicon/jTimeSched_%s_%dpx.png", (running ? "on" : "off"), size);
       images.add(JTimeSchedFrame.getImage(filename));
     }
 
@@ -405,7 +426,8 @@ public class JTimeSchedFrame extends JFrame {
 
   protected void updateTrayIcon(boolean running) {
     int trayIconSize = this.trayIcon.getSize().width;
-    int useSize = JTimeSchedFrame.appIconSizes[JTimeSchedFrame.appIconSizes.length - 1];
+    int useSize =
+        JTimeSchedFrame.appIconSizes[JTimeSchedFrame.appIconSizes.length - 1];
 
     for (int size : JTimeSchedFrame.appIconSizes) {
       if (trayIconSize <= size) {
@@ -415,7 +437,9 @@ public class JTimeSchedFrame extends JFrame {
     }
 
     String filename =
-        String.format("appicon/jTimeSched_%s_%dpx.png", (running ? "on" : "off"), useSize);
+        String.format(
+            "appicon/jTimeSched_%s_%dpx.png",
+            (running ? "on" : "off"), useSize);
     this.trayIcon.setImage(JTimeSchedFrame.getImage(filename));
   }
 
@@ -527,7 +551,8 @@ public class JTimeSchedFrame extends JFrame {
 
     // get recently added row (view index)
     int viewRow = this.tblSched.convertRowIndexToView(tstm.getRowCount() - 1);
-    int viewColumn = this.tblSched.convertColumnIndexToView(ProjectTableModel.COLUMN_TITLE);
+    int viewColumn =
+        this.tblSched.convertColumnIndexToView(ProjectTableModel.COLUMN_TITLE);
 
     // start editing cell
     this.tblSched.editCellAt(viewRow, viewColumn);
@@ -590,7 +615,8 @@ public class JTimeSchedFrame extends JFrame {
                       + "released under the GPLv3 license</html>",
                   "About jTimeSched",
                   JOptionPane.INFORMATION_MESSAGE,
-                  JTimeSchedFrame.getImageIcon("appicon/jTimeSched_on_64px.png"));
+                  JTimeSchedFrame.getImageIcon(
+                      "appicon/jTimeSched_on_64px.png"));
             }
           };
 
@@ -614,7 +640,8 @@ public class JTimeSchedFrame extends JFrame {
               JTimeSchedFrame.this.dispose();
 
               if (SystemTray.isSupported())
-                SystemTray.getSystemTray().remove(JTimeSchedFrame.this.trayIcon);
+                SystemTray.getSystemTray()
+                    .remove(JTimeSchedFrame.this.trayIcon);
 
               System.exit(0);
             }
@@ -651,7 +678,9 @@ public class JTimeSchedFrame extends JFrame {
 
       trayIcon =
           new TrayIcon(
-              JTimeSchedFrame.getImage("appicon/jTimeSched_off_16px.png"), "jTimeSched", popup);
+              JTimeSchedFrame.getImage("appicon/jTimeSched_off_16px.png"),
+              "jTimeSched",
+              popup);
 
       ActionListener actionListener =
           new ActionListener() {
@@ -699,7 +728,8 @@ public class JTimeSchedFrame extends JFrame {
       ProjectSerializer ps = new ProjectSerializer(JTimeSchedApp.PRJ_FILE);
       ps.writeXml(JTimeSchedFrame.this.arPrj);
     } catch (Exception e) {
-      JTimeSchedApp.getLogger().severe("Error saving project file: " + e.getMessage());
+      JTimeSchedApp.getLogger()
+          .severe("Error saving project file: " + e.getMessage());
       e.printStackTrace();
     }
   }
@@ -707,8 +737,8 @@ public class JTimeSchedFrame extends JFrame {
   /**
    * Creates a backup of the current projects file.
    *
-   * <p>NOTE: There is a more convenient way to do this: Path.copyTo(). However, Path.copyTo() of
-   * NIO is only available in >=J2SE7
+   * <p>NOTE: There is a more convenient way to do this: Path.copyTo(). However,
+   * Path.copyTo() of NIO is only available in >=J2SE7
    *
    * @throws FileNotFoundException
    * @throws Exception
@@ -755,7 +785,9 @@ public class JTimeSchedFrame extends JFrame {
       boolean sortAsc = in.readBoolean();
       List<RowSorter.SortKey> sortKeys = new ArrayList<RowSorter.SortKey>();
       sortKeys.add(
-          new RowSorter.SortKey(sortColumn, sortAsc ? SortOrder.ASCENDING : SortOrder.DESCENDING));
+          new RowSorter.SortKey(
+              sortColumn,
+              sortAsc ? SortOrder.ASCENDING : SortOrder.DESCENDING));
       this.tblSched.getRowSorter().setSortKeys(sortKeys);
     } catch (Exception ex) {
       throw ex;
@@ -779,10 +811,12 @@ public class JTimeSchedFrame extends JFrame {
       out.writeBoolean(this.isVisible());
       out.writeBoolean(this.spLog.isVisible());
 
-      List<? extends SortKey> sortKeys = this.tblSched.getRowSorter().getSortKeys();
+      List<? extends SortKey> sortKeys =
+          this.tblSched.getRowSorter().getSortKeys();
       RowSorter.SortKey sortKey = sortKeys.get(0);
       out.writeInt(sortKey.getColumn());
-      boolean sortAsc = (sortKey.getSortOrder() == SortOrder.ASCENDING) ? true : false;
+      boolean sortAsc =
+          (sortKey.getSortOrder() == SortOrder.ASCENDING) ? true : false;
       out.writeBoolean(sortAsc);
 
       out.close();
@@ -830,7 +864,9 @@ public class JTimeSchedFrame extends JFrame {
                 JOptionPane.showInputDialog(
                     JTimeSchedFrame.this,
                     "Enter new quota for time "
-                        + (column == ProjectTableModel.COLUMN_TIMEOVERALL ? "overall" : "today")
+                        + (column == ProjectTableModel.COLUMN_TIMEOVERALL
+                            ? "overall"
+                            : "today")
                         + ":",
                     ProjectTime.formatSeconds(
                         (column == ProjectTableModel.COLUMN_TIMEOVERALL)
@@ -840,9 +876,11 @@ public class JTimeSchedFrame extends JFrame {
             if (input != null) {
               int newSeconds = 0;
               try {
-                if (!input.isEmpty()) newSeconds = ProjectTime.parseSeconds(input);
+                if (!input.isEmpty())
+                  newSeconds = ProjectTime.parseSeconds(input);
 
-                if (column == ProjectTableModel.COLUMN_TIMEOVERALL) prj.setQuotaOverall(newSeconds);
+                if (column == ProjectTableModel.COLUMN_TIMEOVERALL)
+                  prj.setQuotaOverall(newSeconds);
                 else prj.setQuotaToday(newSeconds);
 
                 tstm.fireTableRowsUpdated(row, row);
@@ -856,7 +894,8 @@ public class JTimeSchedFrame extends JFrame {
             }
             break;
           case ProjectTableModel.COLUMN_TITLE:
-            NotesDialog dialog = new NotesDialog(JTimeSchedFrame.this, prj.getNotes());
+            NotesDialog dialog =
+                new NotesDialog(JTimeSchedFrame.this, prj.getNotes());
             dialog.setVisible(true);
 
             if (dialog.isConfirmed()) {
@@ -925,7 +964,8 @@ public class JTimeSchedFrame extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
                   ProjectTableModel ptm =
-                      (ProjectTableModel) JTimeSchedFrame.this.tblSched.getModel();
+                      (ProjectTableModel)
+                          JTimeSchedFrame.this.tblSched.getModel();
 
                   // make use of table model's removeProject method
                   while (ptm.getRowCount() > 0) {
@@ -1019,7 +1059,9 @@ public class JTimeSchedFrame extends JFrame {
     @Override
     public void publish(LogRecord lr) {
       SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-      String line = String.format("%s %s%n", sdf.format(new Date(lr.getMillis())), lr.getMessage());
+      String line =
+          String.format(
+              "%s %s%n", sdf.format(new Date(lr.getMillis())), lr.getMessage());
       this.logArea.append(line);
     }
   }
