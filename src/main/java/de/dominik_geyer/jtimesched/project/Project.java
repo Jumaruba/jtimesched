@@ -220,6 +220,10 @@ public class Project {
   public String toString() {
     return String.format(
         "Project [title=%s, running=%s, secondsOverall=%d, secondsToday=%d, checked=%s]",
-        title, (running) ? "yes" : "no", secondsOverall, secondsToday, (checked) ? "yes" : "no");
+        title,
+        (running) ? "yes" : "no",
+        secondsOverall,
+        secondsToday,
+        (checked) ? "yes" : "no");
   }
 }

@@ -121,7 +121,8 @@ public class ColorDialog extends JDialog implements ActionListener {
     panel.add(btn);
 
     // exit on key ESC
-    final KeyStroke keyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, true);
+    final KeyStroke keyStroke =
+        KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, true);
     getRootPane()
         .registerKeyboardAction(
             new ActionListener() {
@@ -148,7 +149,9 @@ public class ColorDialog extends JDialog implements ActionListener {
     } else if (CHOOSER.equals(e.getActionCommand())) {
       Color chosenColor =
           JColorChooser.showDialog(
-              ColorDialog.this, "Choose a custom color", ColorDialog.this.currentColor);
+              ColorDialog.this,
+              "Choose a custom color",
+              ColorDialog.this.currentColor);
 
       if (chosenColor != null) this.selectedColor = chosenColor;
       else this.selectedColor = this.currentColor;

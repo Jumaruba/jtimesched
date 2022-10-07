@@ -57,9 +57,11 @@ public class ProjectSerializer {
   // become unavailable. Also, it's not thread safe.
   public synchronized void writeXml(List<Project> projects)
       throws TransformerConfigurationException, SAXException, IOException {
-    OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(this.filename), "UTF8");
+    OutputStreamWriter out =
+        new OutputStreamWriter(new FileOutputStream(this.filename), "UTF8");
     StreamResult streamResult = new StreamResult(out);
-    SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
+    SAXTransformerFactory tf =
+        (SAXTransformerFactory) SAXTransformerFactory.newInstance();
 
     // http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6296446
     tf.setAttribute("indent-number", Integer.valueOf(4));
@@ -81,8 +83,10 @@ public class ProjectSerializer {
 
       addXmlElement(hd, "title", null, p.getTitle());
       addXmlElement(hd, "notes", null, p.getNotes());
-      addXmlElement(hd, "created", null, Long.valueOf(p.getTimeCreated().getTime()));
-      addXmlElement(hd, "started", null, Long.valueOf(p.getTimeStart().getTime()));
+      addXmlElement(
+          hd, "created", null, Long.valueOf(p.getTimeCreated().getTime()));
+      addXmlElement(
+          hd, "started", null, Long.valueOf(p.getTimeStart().getTime()));
       addXmlElement(hd, "running", null, "no" /*p.isRunning() ? "yes" : "no"*/);
       addXmlElement(hd, "checked", null, p.isChecked() ? "yes" : "no");
 
@@ -149,10 +153,12 @@ public class ProjectSerializer {
       p.setTimeStart(new Date(ts));
 
       e = getFirstElement(pe, "running");
-      p.setRunning((e.getFirstChild().getNodeValue().equals("yes")) ? true : false);
+      p.setRunning(
+          (e.getFirstChild().getNodeValue().equals("yes")) ? true : false);
 
       e = getFirstElement(pe, "checked");
-      p.setChecked((e.getFirstChild().getNodeValue().equals("yes")) ? true : false);
+      p.setChecked(
+          (e.getFirstChild().getNodeValue().equals("yes")) ? true : false);
 
       e = getFirstElement(pe, "time");
       int seconds = Integer.parseInt(e.getAttribute("overall"));
@@ -203,18 +209,21 @@ public class ProjectSerializer {
     return ((Element) e.getElementsByTagName(name).item(0));
   }
 
-  protected static void startXmlElement(TransformerHandler hd, String element, AttributesImpl atts)
+  protected static void startXmlElement(
+      TransformerHandler hd, String element, AttributesImpl atts)
       throws SAXException {
     if (atts == null) atts = new AttributesImpl();
     hd.startElement("", "", element, atts);
   }
 
-  protected static void endXmlElement(TransformerHandler hd, String element) throws SAXException {
+  protected static void endXmlElement(TransformerHandler hd, String element)
+      throws SAXException {
     hd.endElement("", "", element);
   }
 
   protected static void addXmlElement(
-      TransformerHandler hd, String element, AttributesImpl atts, Object data) throws SAXException {
+      TransformerHandler hd, String element, AttributesImpl atts, Object data)
+      throws SAXException {
     if (atts == null) atts = new AttributesImpl();
     hd.startElement("", "", element, atts);
     if (data != null) {
@@ -224,7 +233,8 @@ public class ProjectSerializer {
     hd.endElement("", "", element);
   }
 
-  protected static void addXmlAttribute(AttributesImpl atts, String attribute, Object data) {
+  protected static void addXmlAttribute(
+      AttributesImpl atts, String attribute, Object data) {
     atts.addAttribute("", "", attribute, "CDATA", data.toString());
   }
 }

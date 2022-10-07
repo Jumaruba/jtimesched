@@ -50,7 +50,8 @@ public class NotesDialog extends JDialog {
 
     // this.add(new JLabel("Additional notes:"), BorderLayout.NORTH);
 
-    this.taNotes = new JTextArea(NotesDialog.TEXTAREA_ROWS, NotesDialog.TEXTAREA_COLS);
+    this.taNotes =
+        new JTextArea(NotesDialog.TEXTAREA_ROWS, NotesDialog.TEXTAREA_COLS);
     this.taNotes.setAutoscrolls(true);
     this.taNotes.setLineWrap(true);
     this.taNotes.setWrapStyleWord(true);

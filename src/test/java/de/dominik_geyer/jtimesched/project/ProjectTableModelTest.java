@@ -1,6 +1,5 @@
 package de.dominik_geyer.jtimesched.project;
 
-import de.dominik_geyer.jtimesched.gui.table.ProjectTable;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -9,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProjectTableModelTest {
-
   public static ProjectTableModel projectTableModel;
+  
   @BeforeEach
   public void initProjectTableModel(){
     Project project = new Project();
