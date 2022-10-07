@@ -1,6 +1,5 @@
 package de.dominik_geyer.jtimesched.project;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.stream.Stream;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
@@ -39,6 +38,7 @@ public class ProjectTimeTest {
       Arguments.of(90065,"25:01:05"),
       Arguments.of(-1,"0:00:00")
     );
+  }
 
   static Stream<Arguments> parseSecondsValidParams() {
     return Stream.of(
