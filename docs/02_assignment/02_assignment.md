@@ -36,7 +36,7 @@ e.g. The following XML content would be the result of adding an element named "n
   - `data`, the content of the `element`;
 
 2. **Characteristics of each parameter**:
-  - the `element` and `data` parameters must respect [Xml's syntactic rules](). Given that an element may be empty, `data` may be `null`. However, if `data` is not `null`, it must be an object that implements the `toString()` method, because the content of an Xml element is textual. The name of the element must not be empty;
+  - the `element` and `data` parameters must respect [Xml's syntactic rules](https://www.w3schools.com/xml/xml_syntax.asp). Given that an element may be empty, `data` may be `null`. However, if `data` is not `null`, it must be an object that implements the `toString()` method, because the content of an Xml element is textual. The name of the element must not be empty;
   - the existence of attributes (`atts`) must not be compulsive, as Xml elements don't always have them;
   - the `TranformerHandler` `hd` may be either "new" i.e. when no elements were added yet; or it may already have elements i.e. when we wish to add multiple nested elements. If it is `null`, no element can, of course, be added.
 
