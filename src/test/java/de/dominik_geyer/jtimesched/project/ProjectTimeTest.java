@@ -7,86 +7,22 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.text.ParseException;
 import java.util.stream.Stream;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 public class ProjectTimeTest {
-  @Test
-  public void parseZeroTimeTest() {
-    try {
-      // Given
-      String strTime = "0:00:00";
+  @ParameterizedTest
+  @MethodSource("parseSecondsValidParams")
+  public void parseZeroTimeTest(String strTime, int expected) {
+    // Given `strTime`
 
+    try {
       // When
       int result = ProjectTime.parseSeconds(strTime);
 
       // Then
-      assertEquals(0, result);
-    } catch (ParseException e) {
-      fail("Should not have thrown any exception");
-    }
-  }
-
-  @Test
-  public void parseSecondsTest() {
-    try {
-      // Given
-      String strTime = "0:00:05";
-
-      // When
-      int result = ProjectTime.parseSeconds(strTime);
-
-      // Then
-      assertEquals(5, result);
-    } catch (ParseException e) {
-      fail("Should not have thrown any exception");
-    }
-  }
-
-  @Test
-  public void parseMinutesTest() {
-    try {
-      // Given
-      String strTime = "0:15:48";
-
-      // When
-      int result = ProjectTime.parseSeconds(strTime);
-
-      // Then
-      assertEquals(948, result);
-    } catch (ParseException e) {
-      fail("Should not have thrown any exception");
-    }
-  }
-
-  @Test
-  public void parseHoursTest() {
-    try {
-      // Given
-      String strTime = "6:15:48";
-
-      // When
-      int result = ProjectTime.parseSeconds(strTime);
-
-      // Then
-      assertEquals(22548, result);
-    } catch (ParseException e) {
-      fail("Should not have thrown any exception");
-    }
-  }
-
-  @Test
-  public void parseDaysTest() {
-    try {
-      // Given
-      String strTime = "36:15:48";
-
-      // When
-      int result = ProjectTime.parseSeconds(strTime);
-
-      // Then
-      assertEquals(130548, result);
+      assertEquals(expected, result);
     } catch (ParseException e) {
       fail("Should not have thrown any exception");
     }
@@ -99,7 +35,20 @@ public class ProjectTimeTest {
         ParseException.class, () -> ProjectTime.parseSeconds(argument));
   }
 
+  static Stream<Arguments> parseSecondsValidParams() {
+    return Stream.of(
+        Arguments.of("0:00:00", 0),
+        Arguments.of("0:00:05", 5),
+        Arguments.of("0:00:5", 5),
+        Arguments.of("0:15:48", 948),
+        Arguments.of("0:15:8", 908),
+        Arguments.of("0:5:8", 308),
+        Arguments.of("6:15:48", 22548),
+        Arguments.of("36:15:48", 130548));
+  }
+
   static Stream<String> parseSecondsInvalidParams() {
-    return Stream.of("", "2", "0:07:80", "6:54", null);
+    return Stream.of("", "0:90:05", "0:6:054", 
+      "0:006:54", "6:54", "2", "0:07:60", null);
   }
 }
