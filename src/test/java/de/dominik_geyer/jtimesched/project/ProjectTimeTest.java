@@ -1,39 +1,44 @@
 package de.dominik_geyer.jtimesched.project;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.util.stream.Stream;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
-
 import java.text.ParseException;
-import java.util.stream.Stream;
-
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 public class ProjectTimeTest {
   @ParameterizedTest
-  @MethodSource("parseSecondsValidParams")
-  public void parseZeroTimeTest(String strTime, int expected) {
-    // Given `strTime`
-
-    try {
-      // When
-      int result = ProjectTime.parseSeconds(strTime);
-
-      // Then
-      assertEquals(expected, result);
-    } catch (ParseException e) {
-      fail("Should not have thrown any exception");
-    }
-  }
-
-  @ParameterizedTest
   @MethodSource("parseSecondsInvalidParams")
   public void parseSecondsInvalidTest(String argument) {
     assertThrows(
         ParseException.class, () -> ProjectTime.parseSeconds(argument));
   }
+  
+  @ParameterizedTest
+  @MethodSource("genFormatSeconds")
+  public void formatSecondsTest(int s, String expected) {
+    // Given 'seconds'
+
+    // When
+    String result = ProjectTime.formatSeconds(s);
+
+    // Then
+    assertEquals(expected, result);
+  }
+
+  public static Stream<Arguments> genFormatSeconds() {
+    return Stream.of(
+      Arguments.of(0, "0:00:00"),
+      Arguments.of(5,"0:00:05"),
+      Arguments.of(65,"0:01:05"),
+      Arguments.of(4215,"1:10:15"),
+      Arguments.of(90065,"25:01:05"),
+      Arguments.of(-1,"0:00:00")
+    );
 
   static Stream<Arguments> parseSecondsValidParams() {
     return Stream.of(

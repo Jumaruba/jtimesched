@@ -7,7 +7,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.stream.Stream;
 
 public class ProjectTest {
-
   public static Stream<Arguments> genSetSecondsToday(){
       return Stream.of(
               Arguments.of(Integer.MIN_VALUE, 0),
