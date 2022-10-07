@@ -20,7 +20,8 @@ public class ProjectSerializerTest {
 
   // Simple element
   @Test
-  public void elementWithAttributesTest() throws TransformerConfigurationException {
+  public void elementWithAttributesTest()
+      throws TransformerConfigurationException {
     // Given
     TransformerHandler hd = getTransformerHandler();
     StringWriter writer = getWriter(hd);
@@ -40,7 +41,8 @@ public class ProjectSerializerTest {
   }
 
   @Test
-  public void elementWithAttributesAndTextTest() throws TransformerConfigurationException {
+  public void elementWithAttributesAndTextTest()
+      throws TransformerConfigurationException {
     // Given
     TransformerHandler hd = getTransformerHandler();
     StringWriter writer = getWriter(hd);
@@ -59,12 +61,14 @@ public class ProjectSerializerTest {
     }
 
     // Then
-    final String expected = xmlProlog + "<color r=\"24\" g=\"165\" b=\"67\">#18a542</color>";
+    final String expected =
+        xmlProlog + "<color r=\"24\" g=\"165\" b=\"67\">#18a542</color>";
     assertEquals(writer.toString(), expected);
   }
 
   @Test
-  public void elementWithAttributesAndLongTest() throws TransformerConfigurationException {
+  public void elementWithAttributesAndLongTest()
+      throws TransformerConfigurationException {
     // Given
     TransformerHandler hd = getTransformerHandler();
     StringWriter writer = getWriter(hd);
@@ -81,7 +85,8 @@ public class ProjectSerializerTest {
     }
 
     // Then
-    final String expected = xmlProlog + "<time format=\"seconds\">1664828078692</time>";
+    final String expected =
+        xmlProlog + "<time format=\"seconds\">1664828078692</time>";
     assertEquals(writer.toString(), expected);
   }
 
@@ -106,7 +111,8 @@ public class ProjectSerializerTest {
 
   // Nested elements
   @Test
-  public void nestedElementsWithAttributesTest() throws TransformerConfigurationException {
+  public void nestedElementsWithAttributesTest()
+      throws TransformerConfigurationException {
     TransformerHandler hd = getTransformerHandler();
     StringWriter writer = getWriter(hd);
     String el1 = "createdAt";
@@ -125,24 +131,27 @@ public class ProjectSerializerTest {
       fail("Exception should not be thrown");
     }
 
-    final String expected = xmlProlog
-        + "<project><createdAt>1664828078692</createdAt><startedAt value=\"1664828011325\"/></project>";
+    final String expected =
+        xmlProlog
+            + "<project><createdAt>1664828078692</createdAt><startedAt value=\"1664828011325\"/></project>";
     assertEquals(writer.toString(), expected);
   }
 
   // Invalid partitions
   @Test
-    public void nullTransformerTest() throws TransformerConfigurationException {
+  public void nullTransformerTest() throws TransformerConfigurationException {
     // Given
     String el = "project";
 
     // When and Then
-    assertThrows(NullPointerException.class, () -> ProjectSerializer.addXmlElement(null, el,
-    null, null));
+    assertThrows(
+        NullPointerException.class,
+        () -> ProjectSerializer.addXmlElement(null, el, null, null));
   }
 
   @Test
-  public void unnamedElementTest() throws TransformerConfigurationException, SAXException {
+  public void unnamedElementTest()
+      throws TransformerConfigurationException, SAXException {
     // Given
     TransformerHandler hd = getTransformerHandler();
     String el = "";
@@ -150,8 +159,9 @@ public class ProjectSerializerTest {
     ProjectSerializer.addXmlElement(hd, el, null, null);
 
     // When and Then
-    assertThrows(SAXException.class, () -> ProjectSerializer.addXmlElement(hd, el,
-    null, null));
+    assertThrows(
+        SAXException.class,
+        () -> ProjectSerializer.addXmlElement(hd, el, null, null));
   }
 
   @Test
@@ -160,14 +170,16 @@ public class ProjectSerializerTest {
     TransformerHandler hd = getTransformerHandler();
 
     // When and Then
-    assertThrows(SAXException.class, () -> ProjectSerializer.addXmlElement(hd, null,
-    null, null));
+    assertThrows(
+        SAXException.class,
+        () -> ProjectSerializer.addXmlElement(hd, null, null, null));
   }
 
-  
   // Auxiliary methods
-  public TransformerHandler getTransformerHandler() throws TransformerConfigurationException {
-    SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
+  public TransformerHandler getTransformerHandler()
+      throws TransformerConfigurationException {
+    SAXTransformerFactory tf =
+        (SAXTransformerFactory) SAXTransformerFactory.newInstance();
     return tf.newTransformerHandler();
   }
 

@@ -17,7 +17,7 @@ public class ProjectTimeTest {
     assertThrows(
         ParseException.class, () -> ProjectTime.parseSeconds(argument));
   }
-  
+
   @ParameterizedTest
   @MethodSource("parseSecondsValidParams")
   public void parseSecondsValidTest(String strTime, int expected) {
@@ -35,10 +35,10 @@ public class ProjectTimeTest {
   }
 
   static Stream<String> parseSecondsInvalidParams() {
-    return Stream.of("", "0:90:05", "0:6:054", 
-      "0:006:54", "6:54", "2", "0:07:60", null);
+    return Stream.of(
+        "", "0:90:05", "0:6:054", "0:006:54", "6:54", "2", "0:07:60", null);
   }
-  
+
   static Stream<Arguments> parseSecondsValidParams() {
     return Stream.of(
         Arguments.of("0:00:00", 0),
@@ -65,14 +65,11 @@ public class ProjectTimeTest {
 
   public static Stream<Arguments> genFormatSeconds() {
     return Stream.of(
-      Arguments.of(0, "0:00:00"),
-      Arguments.of(5,"0:00:05"),
-      Arguments.of(65,"0:01:05"),
-      Arguments.of(4215,"1:10:15"),
-      Arguments.of(90065,"25:01:05"),
-      Arguments.of(-1,"0:00:00")
-    );
+        Arguments.of(0, "0:00:00"),
+        Arguments.of(5, "0:00:05"),
+        Arguments.of(65, "0:01:05"),
+        Arguments.of(4215, "1:10:15"),
+        Arguments.of(90065, "25:01:05"),
+        Arguments.of(-1, "0:00:00"));
   }
-
-
 }
