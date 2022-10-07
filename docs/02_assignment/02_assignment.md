@@ -31,7 +31,7 @@ e.g. The following XML content would be the result of adding an element named "n
 
 2. **Characteristics of each parameter**:
   - the `element` and `data` parameters must respect [Xml's syntactic rules](https://www.w3schools.com/xml/xml_syntax.asp). Given that an element may be empty, `data` may be `null`. However, if `data` is not `null`, it must be an object that implements the `toString()` method, because the content of an Xml element is textual. The name of the element must not be empty;
-  - the existence of attributes (`atts`) must not be compulsive, as Xml elements don't always have them;
+  - the existence of attributes (`atts`) must not be mandatory, as Xml elements don't always have them;
   - the `TranformerHandler` `hd` may be either "new" i.e. when no elements were added yet; or it may already have elements i.e. when we wish to add multiple nested elements. If it is `null`, no element can, of course, be added.
 
 3. **Constraints**: Given that, in the particular case of this application, we only want to store simple details about each `Project`, the `data` parameter just needs to tolerate numeric values (to store times), `String` values (for the title, notes, among others), and, of course, it must support `null` values, in the case of empty Xml elements.
@@ -61,18 +61,14 @@ The remaining tests, which test the usage of an empty or `null` `element`, fail.
 
 ### Why test this function?
 *"Never trust user input"*.  
-Unit tests not only improve the product quality, but also increases its security.
-The test tries to focus on these two aspects and therefore, given that the user can 
-modify the `secondsToday` field using the GUI, the question that raises is:
+Unit tests not only improve the product quality, but also increase its security. The test tries to focus on these two aspects and therefore, given that the user can modify the `secondsToday` field using the GUI, the question that raises is:
 > Is the user able to crash the program with some input? 
 
 ### Function Description
 ```java 
 public void setSecondsToday(int secondsToday); 
 ```
-By the name of the function, it's clear that it changes
-the value of a variable called `secondsToday`, which handles the value of the column
-`Today Time` in the program GUI. 
+By the name of the function, it's clear that it changes the value of a variable called `secondsToday`, which handles the value of the column `Today Time` in the program GUI. 
 
 ### Category-Partition
 1. **Parameters/Input**:
@@ -93,10 +89,10 @@ the value of a variable called `secondsToday`, which handles the value of the co
 - `seconds` is -60;
 - `seconds` is a negative number higher than -60; 
 
-Since negative numbers are not possible, it's expected that negative numbers are handled and are equals to zero. 
+Since negative numbers are not possible, it's expected that negative numbers are handled and are equal to zero. 
 
 ### Unit Tests & Outcome
-The tests implemented can be found [here](../../src/test/java/de/dominik_geyer/jtimesched/project/ProjectTimeTest.java).
+The tests implemented can be found [here](../../src/test/java/de/dominik_geyer/jtimesched/project/ProjectTest.java).
 
 ```java 
 @ParameterizedTest
@@ -215,10 +211,7 @@ The test passed for all the possible values of `s`, except for the last one (neg
 
 ### Why test this function?
 
-As checked while executing the software, some fields are not supposed to be
-**edited/changed** while the timer is counting: `Time Overall` and `Time Today`.
-However, it's still necessary to check if the function works as expected in other scenarios
-inside the domain.
+As checked while executing the software, some fields are not supposed to be **edited/changed** while the timer is counting: `Time Overall` and `Time Today`. However, it's still necessary to check if the function works as expected in other scenarios inside the domain.
 
 ### Function Description
 
@@ -247,13 +240,9 @@ While the timer is not counting, all the columns are editable except `COLUMN_ACT
 If the program is running, however, it was analysed in the GUI that the
 `COLUMN_TIMEOVERALL` and `COLUMN_TIMETODAY` columns are not editable.
 
-In addition to that, it wasn't possible to know for sure which column  `COLUMN_COUNT`
-refers to in the GUI. Thus, it was considered that this column can't be modified by the user and for this 
-reason, not editable. 
+In addition to that, it wasn't possible to know for sure which column  `COLUMN_COUNT` refers to in the GUI. Thus, it was considered that this column can't be modified by the user and for this reason, not editable. 
 
-The columns `COLUMN_ACTION_DELETE` and `COLUMN_ACTION_START_PAUSE` are not 
-editable, since these columns trigger control actions and are not related to personalization. Therefore,
-they are considered not editable. 
+The columns `COLUMN_ACTION_DELETE` and `COLUMN_ACTION_START_PAUSE` are not editable, since these columns trigger control actions and are not related to personalization. Therefore, they are considered not editable. 
 
 ### Category-Partition
 
@@ -263,32 +252,28 @@ they are considered not editable.
 - `column`: an `int`, representing the column identification number;
 - `isRunning`: a `boolean` that defines if the program will be counting during the test.
 
-2. **Characteristics of each parameter**: Given that the `column` is an integer, it can be any integer in the range
-   [`Integer.MIN_VALUE`, `Integer.MAX_VALUE`]. To simplify the test, the row only infers to the first project in
-   the `arProj` list,
-   since the goal is not to check if the function can retrieve the project from a position
-   correctly, but verify if a cell is editable or not.
+2. **Characteristics of each parameter**: Given that the `column` is an integer, it can be any integer in the range [`Integer.MIN_VALUE`, `Integer.MAX_VALUE`]. To simplify the test, the row only infers to the first project in the `arProj` list, since the goal is not to check if the function can retrieve the project from a position correctly, but verify if a cell is editable or not.
 
 The `isRunning` input varies between `false` and `positive`.
 
 3. **Constraints**: The only constraint valid in this test is the maximum and minimum value of integer.
 4. **Input combination/ Unit test**: The tests analysis 7 situations:
-
-- `isRunning = false`
-    - `column: [1,6]`. All the types of column should be editable, except `COLUMN_COUNT`.
-    - `column: {0,7,8}`. As explained before, these columns are not considered editable and the 
-  function should return false upon receiving a `column` parameter with one of these values. 
-    - `column: [-Integer.MIN_VALUE, -1]`. No negative value should be accepted editable.
-    - `column: [9, Integer.MAX_VALUE]`. All numbers higher than 7 should not be modified,
-      since the column doesn't exist.
-- `isRunning = true`
-    - `column: [1,4]`. Can be modified while the counter is counting.
-    - `column: [5,8] U [0,0]`. These columns are blocked to be modified while the counter is in execution 
-  or are not editable by default.
-    - `column: [-Integer.MIN_VALUE, -1]`. No negative value should be accepted editable.
-    - `column: [9, Integer.MAX_VALUE]`. All numbers higher than 7 should not be modified.
+  - `isRunning = false`
+      - `column: [1,6]`. All the types of column should be editable, except `COLUMN_COUNT`.
+      - `column: {0,7,8}`. As explained before, these columns are not considered editable and the 
+    function should return false upon receiving a `column` parameter with one of these values. 
+      - `column: [-Integer.MIN_VALUE, -1]`. No negative value should be accepted editable.
+      - `column: [9, Integer.MAX_VALUE]`. All numbers higher than 7 should not be modified,
+        since the column doesn't exist.
+  - `isRunning = true`
+      - `column: [1,4]`. Can be modified while the counter is counting.
+      - `column: [5,8] U [0,0]`. These columns are blocked to be modified while the counter is in execution 
+    or are not editable by default.
+      - `column: [-Integer.MIN_VALUE, -1]`. No negative value should be accepted editable.
+      - `column: [9, Integer.MAX_VALUE]`. All numbers higher than 7 should not be modified.
 
 ### Unit Tests and Outcome
+The tests used for this function can be found [here](../../src/test/java/de/dominik_geyer/jtimesched/project/ProjectTableModelTest.java).
 
 Before starting each test the following function is executed: 
 ```java
@@ -342,7 +327,4 @@ isEditableTemplate(false, column, true);
 
 All tests passed with success. 
 
-Although these might look simple, the lack of documentation overcomplicated the 
-process of understanding of the function, since this is a `BlackBox` test approach. The meaning and 
-the goal of the function had to be deducted and the function had to be executed in isolation, 
-in order to distinguish by tries and mistakes the meaning of the parameters.
+Although these might look simple, the lack of documentation overcomplicated the process of understanding the function, since this is a `BlackBox` test approach. The meaning and the goal of the function had to be deducted and the function had to be executed in isolation, to distinguish by tries and mistakes the meaning of the parameters.
