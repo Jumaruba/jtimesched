@@ -2,13 +2,10 @@ package de.dominik_geyer.jtimesched.project;
 
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.mockito.Mockito;
-
 import java.util.stream.Stream;
 
 public class ProjectTest {
@@ -36,5 +33,5 @@ public class ProjectTest {
     project.setSecondsToday(seconds);
     // Then
     Assertions.assertEquals(expected, project.getSecondsToday());
-
+  }
 }

@@ -60,7 +60,9 @@ public class TimeCellComponent extends JLabel {
               ? TimeCellComponent.BAR_COLOR
               : TimeCellComponent.BAR_COLOR_OVERDUE;
       int width =
-          (this.time < this.quota) ? this.getWidth() * this.time / this.quota : this.getWidth();
+          (this.time < this.quota)
+              ? this.getWidth() * this.time / this.quota
+              : this.getWidth();
 
       if (width > TimeCellComponent.BAR_THRESHOLD) {
         g.setColor(color);

@@ -36,7 +36,8 @@ public class JTimeSchedApp {
   public static final String IMAGES_PATH = DATA_PATH + "img/";
   public static final String CONF_PATH = "conf/";
   public static final String PRJ_FILE = CONF_PATH + "jTimeSched.projects";
-  public static final String PRJ_FILE_BACKUP = JTimeSchedApp.PRJ_FILE + ".backup";
+  public static final String PRJ_FILE_BACKUP =
+      JTimeSchedApp.PRJ_FILE + ".backup";
   public static final String SETTINGS_FILE = CONF_PATH + "jTimeSched.settings";
   public static final String LOCK_FILE = CONF_PATH + "jTimeSched.lock";
   public static final String LOG_FILE = CONF_PATH + "jTimeSched.log";
@@ -90,7 +91,8 @@ public class JTimeSchedApp {
       JTimeSchedApp.LOGGER.addHandler(fh);
     } catch (Exception e) {
       e.printStackTrace();
-      System.err.println("Enable to initialize logger for file " + JTimeSchedApp.LOG_FILE);
+      System.err.println(
+          "Enable to initialize logger for file " + JTimeSchedApp.LOG_FILE);
     }
 
     // open main frame
@@ -98,22 +100,24 @@ public class JTimeSchedApp {
   }
 
   /**
-   * Determines and returns the application's version, which is set in the Manifest file in
-   * attribute "ImplementationVersion".
+   * Determines and returns the application's version, which is set in the
+   * Manifest file in attribute "ImplementationVersion".
    *
-   * @return String The application's version; if not set in Manifest or not available it returns
-   *     the string "unknown"
+   * @return String The application's version; if not set in Manifest or not
+   *     available it returns the string "unknown"
    */
   public static String getAppVersion() {
     String appVersion =
-        Package.getPackage("de.dominik_geyer.jtimesched").getImplementationVersion();
+        Package.getPackage("de.dominik_geyer.jtimesched")
+            .getImplementationVersion();
     return (appVersion != null) ? appVersion : "unknown";
   }
 
   private static boolean lockInstance() {
     try {
       final File file = new File(JTimeSchedApp.LOCK_FILE);
-      final RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rw");
+      final RandomAccessFile randomAccessFile =
+          new RandomAccessFile(file, "rw");
       final FileLock fileLock = randomAccessFile.getChannel().tryLock();
       if (fileLock != null) {
         Runtime.getRuntime()
@@ -137,7 +141,10 @@ public class JTimeSchedApp {
       }
     } catch (Exception e) {
       System.err.println(
-          "Unable to create and/or lock file: " + JTimeSchedApp.LOCK_FILE + " " + e.getMessage());
+          "Unable to create and/or lock file: "
+              + JTimeSchedApp.LOCK_FILE
+              + " "
+              + e.getMessage());
     }
     return false;
   }
