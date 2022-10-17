@@ -144,22 +144,24 @@ Likewise, for the valid cases (when the parameter respects the format) we will t
   - `strTime` doesn't respect the expected format;
   - `strTime` has the expected format.
 
-  To define these categories, we deal with the seconds, minutes and hours like they were different parameters. 
+  To define these categories, we deal with the seconds, minutes and hours like they were different parameters (`s`, `m` and `h`). 
   First, if we consider the domain of the seconds, minutes and hours, we know that:
-  - 0 <= seconds < 60
-  - 0 <= minutes < 60
-  - 0 <= hours
+  - 0 <= s < 60
+  - 0 <= m < 60
+  - 0 <= h
 
   As we want to make sure this function successfully coverts a time `String` even when it exceeds the duration of a day (24 hours), we consider the cases where:
   - 0 <= hours <= 24
   - 24 < hours
 
   Then, if we consider the regex format string, we can identify the following conditions:
-  - 0 < seconds.length() < 3
-  - 0 < minutes.length() < 3
-  - 0 < hours.length()
+  - 0 < s.len < 3
+  - 0 < m.len < 3
+  - 0 < h.len
 
-  As we are actually dealing with a regex `String`, the cases where the seconds, minutes or hours are lower than 0, are associated with the ones where the number of digits (length) used to represent them is 0. We also verified that, for the cases where we have minutes or seconds lower than 9, we can test all the possible categories described for the number of digits, but when we have numbers that are higher than 9, we can't represent them with less than 2 digits. 
+  As we are actually dealing with a regex `String`, the cases where the seconds, minutes or hours are lower than 0, are the ones where the number of digits (length) used to represent them is 0. 
+  <!-- We also verified that, for the cases where we have minutes or seconds lower than 9, we can test all the possible categories described for the number of digits, but when we have numbers that are higher than 9, we can't represent them with less than 2 digits. 
+  Regarding the digits of the hours, as we don't have an upper limit it is enough to   -->
   
   With that in mind, when we combine these conditions, we arrive to the following cases:
   - Invalid categories:
@@ -180,9 +182,22 @@ Likewise, for the valid cases (when the parameter respects the format) we will t
     - 0 <= seconds < 60, 0 <= minutes < 60, 0 <= hours <= 24
     - 0 <= seconds < 60, 0 <= minutes < 60, 24 < hours
 
+(Temporary) My thoughts:
+- s < 0 / s.len == 0
+- s >= 60 AND 0 < s.len < 3 (s.len is necessarily 2)
+- s >= 60 AND s.len > 3 
+- 0 <= s < 60 AND 0 < s.len < 3 (TODO) 
+- 0 <= s < 60 AND s.len > 3
 
+- m < 0 / m.len == 0
+- m >= 60 AND 0 < m.len < 3 (m.len is necessarily 2)
+- m >= 60 AND m.len > 3 
+- 0 <= m < 60 AND 0 < m.len < 3 (TODO)
+- 0 <= s < 60 AND m.len > 3
 
-    
+- h < 0 / h.len == 0
+- 0 <= h <= 24 (TODO)
+- h > 24 (h.len is necessarily higher than 0)
 
 ### Unit Tests & Outcome
 The tests implemented can be found [here](../../src/test/java/de/dominik_geyer/jtimesched/project/ProjectTimeTest.java).
