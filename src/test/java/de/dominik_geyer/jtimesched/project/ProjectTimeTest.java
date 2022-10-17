@@ -36,19 +36,22 @@ public class ProjectTimeTest {
 
   static Stream<String> parseSecondsInvalidParams() {
     return Stream.of(
-        "", "0:90:05", "0:6:054", "0:006:54", "6:54", "2", "0:07:60", null);
+        "", "0:90:05", "0:6:054", "0:007:05", "6:54", "2", "0:07:60", "0:07:", "0::02", ":6:54", null);
   }
 
   static Stream<Arguments> parseSecondsValidParams() {
     return Stream.of(
-        Arguments.of("0:00:00", 0),
-        Arguments.of("0:00:05", 5),
-        Arguments.of("0:00:5", 5),
-        Arguments.of("0:15:48", 948),
-        Arguments.of("0:15:8", 908),
-        Arguments.of("0:5:8", 308),
-        Arguments.of("6:15:48", 22548),
-        Arguments.of("36:15:48", 130548));
+      Arguments.of("22:5:48", 79548),
+      Arguments.of("36:25:8", 131108)
+        // Arguments.of("0:00:00", 0),
+        // Arguments.of("0:00:05", 5),
+        // Arguments.of("0:00:5", 5),
+        // Arguments.of("0:15:48", 948),
+        // Arguments.of("0:15:8", 908),
+        // Arguments.of("0:5:8", 308),
+        // Arguments.of("6:15:48", 22548),
+        // Arguments.of("36:15:48", 130548)
+      );
   }
 
   @ParameterizedTest

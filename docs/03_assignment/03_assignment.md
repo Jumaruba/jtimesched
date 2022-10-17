@@ -158,30 +158,31 @@ Likewise, for the valid cases (when the parameter respects the format) we will t
     - 0 < `minutes.len` < 3
     - 0 < `hours.len`
 
-    As we are actually dealing with a time `String`, the cases where the seconds, minutes or hours are lower than 0, are the ones where the number of digits (length) used to represent them is 0 e.g. `seconds` < 0 and `seconds.len` == 0 are considered the same case. With that in mind, when we combine the conditions above, and arrive to the following categories:  
-
     - **Categories for `seconds`**:
       - Valid:
         - **S1**: `seconds` >= 0 AND `seconds` < 60 AND 0 < `seconds.len` < 3 
       - Invalid:
         - **S2**: `seconds` >= 60
-        - **S3**: `seconds.len` == 0
-        - **S4**: `seconds.len` >= 3
+        - **S3**: `seconds` < 0
+        - **S4**: `seconds.len` == 0
+        - **S5**: `seconds.len` >= 3
 
     - **Categories for `minutes`:**
         - Valid:
           - **M1**: `minutes` >= 0 AND `minutes` < 60 AND 0 < `minutes.len` < 3 
         - Invalid:
-          - **M3**: `minutes` >= 60
-          - **M2**: `minutes.len` == 0
-          - **M4**: `minutes.len` >= 3
+          - **M2**: `minutes` >= 60
+          - **S3**: `minutes` < 0
+          - **M4**: `minutes.len` == 0
+          - **M5**: `minutes.len` >= 3
       
     - **Categories for `hours`:**
       - Valid:
         - **H1**: `hours` >= 0 AND `hours` <= 24 AND `hours.len` > 0
         - **H2**: `hours` > 24 (`hours.len` is necessarily higher than 0)
       - Invalid:
-        - **H3**: `hours.len` == 0
+        - **H3**: `hours` < 0
+        - **H4**: `hours.len` == 0
 
 &nbsp;&nbsp;&nbsp;&nbsp;
 : By combining all the categories above, we arrive to the following categories:
@@ -200,12 +201,20 @@ Likewise, for the valid cases (when the parameter respects the format) we will t
         *e.g. "36:15:48"*
     - Invalid format: Any category that results from combining at least one of the categories that represent an invalid format for the `hours`, `minutes` or `seconds` will also represent an invalid format. Therefore, to reduce the number of tests, we will consider each invalid format separately, as we explained in the note above.
       - **E5** (**S2**): `seconds` >= 60 *e.g. "0:07:60"*;
-      - **E6** (**M2**): `minutes` >= 60 *e.g. "0:70:06"*
-      - **E7** (**S3**): `seconds.len` == 0 *e.g. "0:07:"*
-      - **E8** (**M33**): `minutes.len` == 0 *e.g. "0::06" or *6*
-      - **E9** (**H3**): `hours.len` == 0 *e.g. ":07:57" or "7:57"*
-      - **E10** (**S4**): `seconds.len` >= 3 *e.g. "0:07:001"*
-      - **E11** (**M4**): `minutes.len` >= 3 *e.g. "0:007:05"*
+      - **E6** (**M2**): `minutes` >= 60 *e.g. "0:90:"*
+      - **E7** (**S3**): `seconds` < 0 *e.g. "2:02:-1"*;
+      - **E8** (**M3**): `minutes` < 0 *e.g. "2:-1:05"*
+      - **E9** (**H3**): `hours` < 0 *e.g. "-1:09:05"*
+      - **E10** (**S4**): `seconds.len` == 0 *e.g. "0:07:"*
+      - **E11** (**M4**): `minutes.len` == 0 *e.g. "0::02" or "2"
+      - **E12** (**H4**): `hours.len` == 0 *e.g. ":6:54" or "6:54"*
+      - **E13** (**S5**): `seconds.len` >= 3 *e.g. "0:6:054"*
+      - **E14** (**M5**): `minutes.len` >= 3 *e.g. "0:007:05"*
+
+<!-- TODO: maybe add these conditions:
+      - `hours.len` == 0 and `minutes.len` == 0
+      - `hours.len` == 0 and 0 < `minutes.len` <= 3
+      and, if so, change note and description -->
 
 ### Boundary Analysis
 **Boundary Analyses for E1**:
@@ -270,23 +279,35 @@ TODO: explain division
 - On point: "0:60:0" *repeated*
 - Off point: "0:59:0" *repeated*
 
-**Boundary Analysis for E7**: `seconds.len` == 0
+**Boundary Analysis for E7**: `seconds` < 0
+- On point: "0:0:0" *repeated*
+- Off point: "0:0:-1" *repeated*
+
+**Boundary Analysis for E8**: `minutes` < 0
+- On point: "0:0:0" *repeated*
+- Off point: "0:-1:0" *repeated*
+
+**Boundary Analysis for E9**: `hours` < 0
+- On point: "0:0:0" *repeated*
+- Off point: "-1:0:0" *repeated*
+
+**Boundary Analysis for E10**: `seconds.len` == 0
 - On point: "0:0:" *repeated*
 - Off point: "0:0:0" *repeated* (even though it is an equality, there is no negative length, so there is only one off point)
 
-**Boundary Analysis for E8**: `minutes.len` == 0
+**Boundary Analysis for E11**: `minutes.len` == 0
 - On point: "0::0" *repeated* -- DOUBT: is "0" also an "on point"?
 - Off points: "0:0:0" *repeated* (even though it is an equality, there is no negative length, so there is only one off point)
 
-**Boundary Analysis for E9**: `hours.len` == 0
+**Boundary Analysis for E12**: `hours.len` == 0
 - On point: ":0:0" *repeated* -- DOUBT: is "0:0" also an "on point"?
 - Off points: "0:0:0" *repeated* (even though it is an equality, there is no negative length, so there is only one off point)
 
-**Boundary Analysis for E10**: `seconds.len` >= 3
+**Boundary Analysis for E13**: `seconds.len` >= 3
 - On point: "0:0:000" *repeated*
 - Off point: "0:0:00"
 
-**Boundary Analysis for E10**: `minutes.len` >= 3
+**Boundary Analysis for E14**: `minutes.len` >= 3
 - On point: "0:000:0" *repeated*
 - Off point: "0:00:00"
 
