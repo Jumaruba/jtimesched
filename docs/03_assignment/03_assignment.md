@@ -135,69 +135,91 @@ Converts a time `String` in the format "\d+:[0-5]?\d:[0-5]?\d" (hours:minutes:se
 2. **Characteristics of each parameter**: Considering the requirements, the parameter `strTime` must respect a specific time format "\d+:[0-5]?\d:[0-5]?\d" in order for the conversion to work correctly.
 3. **Constraints**: Given that the parameter is a `String`, it can assume infinite values, either respecting the requested format or not. Therefore, for the exceptional behavior we will consider only the cases where `strTime` is null, empty or has another format different from the accepted one. 
 Likewise, for the valid cases (when the parameter respects the format) we will take into account the domain of time itself in order to define our corner cases, testing if the conversion works well with time Strings that have seconds, minutes, hours and more hours than a single day.
-4. **Input combinations / Tests**: This function only has one parameter (`strTime`), so we are going to test it considering the possible values of this parameter:
-  The first 2 categories correspond to the cases where:
+4. **Input combinations / Tests**: This function only has one parameter (`strTime`), so we are going to test it considering the possible values of this parameter.
+The first 2 categories correspond to the cases where:
   - **E1**: `strTime` is `null`;
   - **E2**: `strTime` is an empty `String`.
 
-  All the other partitions correspond to a case where:
+All the other partitions correspond to a case where:
   - `strTime` doesn't respect the expected format;
   - `strTime` has the expected format.
 
-  To define these categories, we deal with the seconds, minutes and hours like they were different parameters (`s`, `m` and `h`). 
-  First, if we consider the domain of the seconds, minutes and hours, we know that:
-  - 0 <= s < 60
-  - 0 <= m < 60
-  - 0 <= h
+To define these categories, we deal with the seconds, minutes and hours like they were different parameters (`seconds`, `minutes` and `hours`). 
+First, if we consider the domain of the seconds, minutes and hours, we know that:
+  - 0 <= `seconds` < 60
+  - 0 <= `minutes` < 60
+  - 0 <= `hours`
 
-  As we want to make sure this function successfully coverts a time `String` even when it exceeds the duration of a day (24 hours), we consider the cases where:
-  - 0 <= hours <= 24
-  - 24 < hours
+As we want to make sure this function successfully coverts a time `String` even when it exceeds the duration of a day (24 hours), we consider the cases where:
+  - 0 <= `hours` <= 24
+  - 24 < `hours`
 
-  Then, if we consider the regex format string, we can identify the following conditions:
-  - 0 < s.len < 3
-  - 0 < m.len < 3
-  - 0 < h.len
+Then, if we consider the regex format string, we can identify the following conditions:
+  - 0 < `seconds.len` < 3
+  - 0 < `minutes.len` < 3
+  - 0 < `hours.len`
 
-  As we are actually dealing with a regex `String`, the cases where the seconds, minutes or hours are lower than 0, are the ones where the number of digits (length) used to represent them is 0. 
-  <!-- We also verified that, for the cases where we have minutes or seconds lower than 9, we can test all the possible categories described for the number of digits, but when we have numbers that are higher than 9, we can't represent them with less than 2 digits. 
-  Regarding the digits of the hours, as we don't have an upper limit it is enough to   -->
-  
-  With that in mind, when we combine these conditions, we arrive to the following cases:
+As we are actually dealing with a regex `String`, the cases where the seconds, minutes or hours are lower than 0, are the ones where the number of digits (length) used to represent them is 0. Therefore, `seconds` < 0 and `seconds.len` == 0 are considered the same case.
+
+With that in mind, when we combine these conditions for the seconds, minutes and hours, we arrive to the following cases:
+
+Categories for `seconds`:
+  - Valid:
+    - **S1**: 0 <= `seconds`< 60 AND 0 < `seconds.len` < 3 
+  - Invalid:
+    - **S2**: `seconds` < 0 / `seconds.len` == 0
+    - **S3**: `seconds` >= 60 AND 0 < `seconds.len` < 3 (`seconds.len` is necessarily 2)
+    - **S4**: `seconds` >= 60 AND `seconds.len` >= 3 
+    - **S5**: 0 <= `seconds`< 60 AND `seconds.len` >= 3
+
+Categories for `minutes`:
+  - Valid:
+    - **M1**: 0 <= `minutes`< 60 AND 0 < `minutes.len` < 3 
+  - Invalid:
+    - **M2**: `minutes` < 0 / `minutes.len` == 0
+    - **M3**: `minutes` >= 60 AND 0 < `minutes.len` < 3 (`minutes.len` is necessarily 2)
+    - **M4**: `minutes` >= 60 AND `minutes.len` >= 3 
+    - **M5**: 0 <= `minutes`< 60 AND `minutes.len` >= 3
+
+Categories for `hours`:
+  - Valid:
+    - **H1**: 0 <= `hours` <= 24
+    - **H2**: h > 24 (`hours.len` is necessarily higher than 0)
+  - Invalid:
+    - **H3**: `hours` < 0 / `hours.len` == 0
+
+Combining all the ones above, we arrive to the following categories:
+  - **E1**: `strTime` is `null`;
+  - **E2**: `strTime` is an empty `String`;
+  - Invalid format:
+    - **E3**: ...
+  - Valid format:
+    - 
+    - 
+    - 
+
+<!-- **Temporary Notes**
   - Invalid categories:
-    - seconds >= 60, minutes >= 60, hours.length() <= 0
-    - seconds >= 60, minutes >= 60, 0 <= hours <= 24
-    - seconds >= 60, minutes >= 60, hours > 24
+    -  (0 <= `seconds` < 60 AND `seconds.len` >= 3)
 
-    - seconds >= 60, 0 <= minutes < 60, hours.length() <= 0
-    - seconds >= 60, 0 <= minutes < 60, 0 <= hours <= 24
-    - seconds >= 60, 0 <= minutes < 60, hours > 24
-
-    - 0 <= seconds < 60, minutes >= 60, hours.length() <= 0
-    - 0 <= seconds < 60, minutes >= 60, 0 <= hours <= 24
-    - 0 <= seconds < 60, minutes >= 60, hours > 24
     
-    - 0 <= seconds < 60, 0 <= minutes < 60, hours.length() <= 0
+    - `seconds` >= 60, `minutes` >= 60, `hours.len` <= 0
+    - `seconds` >= 60, `minutes` >= 60, 0 <= `hours` <= 24
+    - `seconds` >= 60, `minutes` >= 60, `hours` > 24
+
+    - `seconds` >= 60, 0 <= `minutes` < 60, `hours.len` <= 0
+    - `seconds` >= 60, 0 <= `minutes` < 60, 0 <= `hours` <= 24
+    - `seconds` >= 60, 0 <= `minutes` < 60, `hours` > 24
+
+    - 0 <= `seconds` < 60, `minutes` >= 60, `hours.len` <= 0
+    - 0 <= `seconds` < 60, `minutes` >= 60, 0 <= `hours` <= 24
+    - 0 <= `seconds` < 60, `minutes` >= 60, `hours` > 24
+    
+    - 0 <= `seconds` < 60, 0 <= `minutes` < 60, `hours.len` <= 0
   - Valid categories:
-    - 0 <= seconds < 60, 0 <= minutes < 60, 0 <= hours <= 24
-    - 0 <= seconds < 60, 0 <= minutes < 60, 24 < hours
-
-(Temporary) My thoughts:
-- s < 0 / s.len == 0
-- s >= 60 AND 0 < s.len < 3 (s.len is necessarily 2)
-- s >= 60 AND s.len > 3 
-- 0 <= s < 60 AND 0 < s.len < 3 (TODO) 
-- 0 <= s < 60 AND s.len > 3
-
-- m < 0 / m.len == 0
-- m >= 60 AND 0 < m.len < 3 (m.len is necessarily 2)
-- m >= 60 AND m.len > 3 
-- 0 <= m < 60 AND 0 < m.len < 3 (TODO)
-- 0 <= s < 60 AND m.len > 3
-
-- h < 0 / h.len == 0
-- 0 <= h <= 24 (TODO)
-- h > 24 (h.len is necessarily higher than 0)
+    - 0 <= `seconds` < 60, 0 <= `minutes` < 60, 0 <= `hours` <= 24
+    - 0 <= `seconds` < 60, 0 <= `minutes` < 60, 24 < `hours`
+ -->
 
 ### Unit Tests & Outcome
 The tests implemented can be found [here](../../src/test/java/de/dominik_geyer/jtimesched/project/ProjectTimeTest.java).
