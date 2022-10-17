@@ -136,25 +136,53 @@ Converts a time `String` in the format "\d+:[0-5]?\d:[0-5]?\d" (hours:minutes:se
 3. **Constraints**: Given that the parameter is a `String`, it can assume infinite values, either respecting the requested format or not. Therefore, for the exceptional behavior we will consider only the cases where `strTime` is null, empty or has another format different from the accepted one. 
 Likewise, for the valid cases (when the parameter respects the format) we will take into account the domain of time itself in order to define our corner cases, testing if the conversion works well with time Strings that have seconds, minutes, hours and more hours than a single day.
 4. **Input combinations / Tests**: This function only has one parameter (`strTime`), so we are going to test it considering the possible values of this parameter:
-  - `strTime` doesn't have the expected format ("\d+:[0-5]?\d:[0-5]?\d"):
-    - `strTime` is null;
-    - `strTime`is an empty `String`;
-    - `strTime` in not null nor an empty `String`, but it doesn't respect the format:
-      - `strTime` doesn't respect the seconds domain e.g. "0:07:60";
-      - `strTime` doesn't respect the minutes domain e.g. "0:90:05";
-      - `strTime` has a seconds value with more than 2 digits e.g. "0:6:054";
-      - `strTime` has a minutes value with more than 2 digits e.g. "0:006:54";
-      - `strTime` doesn't have hours e.g. "6:54";
-      - `strTime` doesn't have hours and minutes e.g. "2".
-  - `strTime` has the expected format:
-    - `strTime` is 0 i.e. "0:00:00";
-    - `strTime` only has seconds e.g. "0:00:05";
-    - `strTime` has minutes and seconds e.g. "0:15:48";
-    - `strTime` the seconds value has 1 digit e.g. "0:00:5";
-    - `strTime` the minutes value has 1 digit e.g. "0:15:8";
-    - `strTime` the seconds and minutes values have 1 digit e.g. "0:5:8";
-    - `strTime` has at least 1 hour but no more than 24 e.g. 6:15:48;
-    - `strTime` has more than 24 hours e.g. "36:15:48".
+  The first 2 categories correspond to the cases where:
+  - **E1**: `strTime` is `null`;
+  - **E2**: `strTime` is an empty `String`.
+
+  All the other partitions correspond to a case where:
+  - `strTime` doesn't respect the expected format;
+  - `strTime` has the expected format.
+
+  To define these categories, we deal with the seconds, minutes and hours like they were different parameters. 
+  First, if we consider the domain of the seconds, minutes and hours, we know that:
+  - 0 <= seconds < 60
+  - 0 <= minutes < 60
+  - 0 <= hours
+
+  As we want to make sure this function successfully coverts a time `String` even when it exceeds the duration of a day (24 hours), we consider the cases where:
+  - 0 <= hours <= 24
+  - 24 < hours
+
+  Then, if we consider the regex format string, we can identify the following conditions:
+  - 0 < seconds.length() < 3
+  - 0 < minutes.length() < 3
+  - 0 < hours.length()
+
+  As we are actually dealing with a regex `String`, the cases where the seconds, minutes or hours are lower than 0, are associated with the ones where the number of digits (length) used to represent them is 0. We also verified that, for the cases where we have minutes or seconds lower than 9, we can test all the possible categories described for the number of digits, but when we have numbers that are higher than 9, we can't represent them with less than 2 digits. 
+  
+  With that in mind, when we combine these conditions, we arrive to the following cases:
+  - Invalid categories:
+    - seconds >= 60, minutes >= 60, hours.length() <= 0
+    - seconds >= 60, minutes >= 60, 0 <= hours <= 24
+    - seconds >= 60, minutes >= 60, hours > 24
+
+    - seconds >= 60, 0 <= minutes < 60, hours.length() <= 0
+    - seconds >= 60, 0 <= minutes < 60, 0 <= hours <= 24
+    - seconds >= 60, 0 <= minutes < 60, hours > 24
+
+    - 0 <= seconds < 60, minutes >= 60, hours.length() <= 0
+    - 0 <= seconds < 60, minutes >= 60, 0 <= hours <= 24
+    - 0 <= seconds < 60, minutes >= 60, hours > 24
+    
+    - 0 <= seconds < 60, 0 <= minutes < 60, hours.length() <= 0
+  - Valid categories:
+    - 0 <= seconds < 60, 0 <= minutes < 60, 0 <= hours <= 24
+    - 0 <= seconds < 60, 0 <= minutes < 60, 24 < hours
+
+
+
+    
 
 ### Unit Tests & Outcome
 The tests implemented can be found [here](../../src/test/java/de/dominik_geyer/jtimesched/project/ProjectTimeTest.java).
