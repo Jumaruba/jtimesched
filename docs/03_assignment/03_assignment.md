@@ -229,20 +229,20 @@ Likewise, for the valid cases (when the parameter respects the format) we will t
 TODO: explain division
 - **Boundary Analysis for S1**: `seconds` >= 0 AND `seconds` < 60 AND 0 < `seconds.len` < 3 
   - `seconds` >= 0
-    - On point: "0:0:0" (true)
-    - Off point: "0:0:-1" (false)
+    - On point: "0:0:0" *repeated*
+    - Off point: "0:0:-1"
   - `seconds` < 60
-    - On point: "0:0:60" (false)
-    - Off point: "0:0:59" (true)
+    - On point: "0:0:60" 
+    - Off point: "0:0:59"
   - `seconds.len` > 0
-    - On point: "0:0:" (false)
-    - Off point: "0:0:0" (true)
+    - On point: "0:0:"
+    - Off point: "0:0:0" *repeated*
   - `seconds.len` < 3 
-    - On point: "0:0:000" (false)
-    - Off point: "0:0:00" (true)
+    - On point: "0:0:000"
+    - Off point: "0:0:00"
 - **Boundary Analysis for M1**: `minutes` >= 0 AND `minutes` < 60 AND 0 < `minutes.len` < 3 
   - `minutes` >= 0
-    - On point: "0:0:0"
+    - On point: "0:0:0" *repeated*
     - Off point: "0:-1:0"
   - `minutes` < 60
     - On point: "0:60:0"
@@ -309,7 +309,28 @@ TODO: explain division
 
 **Boundary Analysis for E14**: `minutes.len` >= 3
 - On point: "0:000:0" *repeated*
-- Off point: "0:00:00"
+- Off point: "0:00:0"
+<!-- 
+New cases to test (not included in the category-partition tests):
+"0:0:0"
+"0:0:-1"
+"0:0:60" 
+"0:0:59"
+"0:0:"
+"0:0:000"
+"0:0:00"
+"0:-1:0"
+"0:60:0"
+"0:59:0"
+"0::0" 
+"0"
+"0:000:0"
+"-1:0:0"
+"24:0:0"
+"23:0:0"
+"0:0"
+":0:0"
+"25:0:0" -->
 
 ### Unit Tests & Outcome
 The tests implemented can be found [here](../../src/test/java/de/dominik_geyer/jtimesched/project/ProjectTimeTest.java).

@@ -36,7 +36,7 @@ public class ProjectTimeTest {
 
   static Stream<String> parseSecondsInvalidParams() {
     return Stream.of(
-        "", "0:90:05", "0:6:054", "0:007:05", "6:54", "2", "0:07:60", "0:07:", "0::02", ":6:54", null);
+        "", "0:90:05", "0:6:054", "0:007:05", "6:54", "2", "0:07:60", "0:07:", "0::02", ":6:54", "2:02:-1", "2:-1:05", "-1:09:05", null);
   }
 
   static Stream<Arguments> parseSecondsValidParams() {
