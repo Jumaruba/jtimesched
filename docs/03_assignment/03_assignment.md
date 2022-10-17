@@ -145,7 +145,7 @@ All the other partitions correspond to a case where:
   - `strTime` has the expected format.
 
 To define these categories, we deal with the seconds, minutes and hours like they were different parameters (`seconds`, `minutes` and `hours`). 
-First, if we consider the domain of the seconds, minutes and hours, we know that:
+First, if we consider their time domains, we know that:
   - 0 <= `seconds` < 60
   - 0 <= `minutes` < 60
   - 0 <= `hours`
@@ -154,12 +154,12 @@ As we want to make sure this function successfully coverts a time `String` even 
   - 0 <= `hours` <= 24
   - 24 < `hours`
 
-Then, if we consider the regex format string, we can identify the following conditions:
+Then, if we consider the regular expression, we can identify the following conditions:
   - 0 < `seconds.len` < 3
   - 0 < `minutes.len` < 3
   - 0 < `hours.len`
 
-As we are actually dealing with a regex `String`, the cases where the seconds, minutes or hours are lower than 0, are the ones where the number of digits (length) used to represent them is 0. Therefore, `seconds` < 0 and `seconds.len` == 0 are considered the same case.
+As we are actually dealing with a regex `String`, the cases where the seconds, minutes or hours are lower than 0, are the ones where the number of digits (length) used to represent them is 0 e.g. `seconds` < 0 and `seconds.len` == 0 are considered the same case.
 
 With that in mind, when we combine these conditions for the seconds, minutes and hours, we arrive to the following cases:
 
@@ -167,59 +167,45 @@ Categories for `seconds`:
   - Valid:
     - **S1**: 0 <= `seconds`< 60 AND 0 < `seconds.len` < 3 
   - Invalid:
-    - **S2**: `seconds` < 0 / `seconds.len` == 0
-    - **S3**: `seconds` >= 60 AND 0 < `seconds.len` < 3 (`seconds.len` is necessarily 2)
-    - **S4**: `seconds` >= 60 AND `seconds.len` >= 3 
-    - **S5**: 0 <= `seconds`< 60 AND `seconds.len` >= 3
+    - **S2**: `seconds` >= 60
+    - **S3**: `seconds.len` == 0
+    - **S4**: `seconds.len` >= 3 
+
+*Note*: We decided to treat each invalid case separately *i.e.* we don't combine invalid lengths with valid values and vice versa, nor do we combine multiple invalid values, because each format error must be enough for the function to fail. Otherwise, we would, for example, have an additional case for the `seconds` where the length is invalid but the value is valid: 0 <= `seconds`< 60 AND `seconds.len` >= 3. To define all the other categories we will follow a similar approach.
 
 Categories for `minutes`:
   - Valid:
     - **M1**: 0 <= `minutes`< 60 AND 0 < `minutes.len` < 3 
   - Invalid:
-    - **M2**: `minutes` < 0 / `minutes.len` == 0
-    - **M3**: `minutes` >= 60 AND 0 < `minutes.len` < 3 (`minutes.len` is necessarily 2)
-    - **M4**: `minutes` >= 60 AND `minutes.len` >= 3 
-    - **M5**: 0 <= `minutes`< 60 AND `minutes.len` >= 3
+    - **M3**: `minutes` >= 60
+    - **M2**: `minutes.len` == 0
+    - **M4**: `minutes.len` >= 3 
 
 Categories for `hours`:
   - Valid:
     - **H1**: 0 <= `hours` <= 24
-    - **H2**: h > 24 (`hours.len` is necessarily higher than 0)
+    - **H2**: `hours` > 24 (`hours.len` is necessarily higher than 0)
   - Invalid:
-    - **H3**: `hours` < 0 / `hours.len` == 0
+    - **H3**: `hours.len` == 0
 
 Combining all the ones above, we arrive to the following categories:
   - **E1**: `strTime` is `null`;
   - **E2**: `strTime` is an empty `String`;
-  - Invalid format:
-    - **E3**: ...
   - Valid format:
-    - 
-    - 
-    - 
-
-<!-- **Temporary Notes**
-  - Invalid categories:
-    -  (0 <= `seconds` < 60 AND `seconds.len` >= 3)
-
-    
-    - `seconds` >= 60, `minutes` >= 60, `hours.len` <= 0
-    - `seconds` >= 60, `minutes` >= 60, 0 <= `hours` <= 24
-    - `seconds` >= 60, `minutes` >= 60, `hours` > 24
-
-    - `seconds` >= 60, 0 <= `minutes` < 60, `hours.len` <= 0
-    - `seconds` >= 60, 0 <= `minutes` < 60, 0 <= `hours` <= 24
-    - `seconds` >= 60, 0 <= `minutes` < 60, `hours` > 24
-
-    - 0 <= `seconds` < 60, `minutes` >= 60, `hours.len` <= 0
-    - 0 <= `seconds` < 60, `minutes` >= 60, 0 <= `hours` <= 24
-    - 0 <= `seconds` < 60, `minutes` >= 60, `hours` > 24
-    
-    - 0 <= `seconds` < 60, 0 <= `minutes` < 60, `hours.len` <= 0
-  - Valid categories:
-    - 0 <= `seconds` < 60, 0 <= `minutes` < 60, 0 <= `hours` <= 24
-    - 0 <= `seconds` < 60, 0 <= `minutes` < 60, 24 < `hours`
- -->
+    - **E3**: (0 <= `seconds`< 60 AND 0 < `seconds.len` < 3) AND 
+              (0 <= `minutes`< 60 AND 0 < `minutes.len` < 3 ) AND
+              (0 <= `hours` <= 24)
+    - **E4**: (0 <= `seconds`< 60 AND 0 < `seconds.len` < 3) AND 
+              (0 <= `minutes`< 60 AND 0 < `minutes.len` < 3 ) AND
+              (`hours` > 24)
+  - Invalid format: Any category that results from combining at least one of the categories that represent an invalid format for the `hours`, `minutes` or `seconds` will also represent an invalid format. Therefore, to reduce the number of tests, we will consider each invalid format separately, as we explained in the note above.
+  - **E5**: `seconds.len` == 0
+  - **E6**: `minutes.len` == 0
+  - **E7**: `hours.len` == 0
+  - **E8**: `seconds.len` >= 3
+  - **E9**: `minutes.len` >= 3
+  - **E10**: `seconds` >= 60
+  - **E11**: `minutes` >= 60
 
 ### Unit Tests & Outcome
 The tests implemented can be found [here](../../src/test/java/de/dominik_geyer/jtimesched/project/ProjectTimeTest.java).
