@@ -162,7 +162,7 @@ Likewise, for the valid cases (when the parameter respects the format) we will t
 
     - **Categories for `seconds`**:
       - Valid:
-        - **S1**: 0 <= `seconds`< 60 AND 0 < `seconds.len` < 3 
+        - **S1**: `seconds` >= 0 AND `seconds` < 60 AND 0 < `seconds.len` < 3 
       - Invalid:
         - **S2**: `seconds` >= 60
         - **S3**: `seconds.len` == 0
@@ -170,7 +170,7 @@ Likewise, for the valid cases (when the parameter respects the format) we will t
 
     - **Categories for `minutes`:**
         - Valid:
-          - **M1**: 0 <= `minutes`< 60 AND 0 < `minutes.len` < 3 
+          - **M1**: `minutes` >= 0 AND `minutes` < 60 AND 0 < `minutes.len` < 3 
         - Invalid:
           - **M3**: `minutes` >= 60
           - **M2**: `minutes.len` == 0
@@ -178,7 +178,7 @@ Likewise, for the valid cases (when the parameter respects the format) we will t
       
     - **Categories for `hours`:**
       - Valid:
-        - **H1**: 0 <= `hours` <= 24
+        - **H1**: `hours` >= 0 AND `hours` <= 24 AND `hours.len` > 0
         - **H2**: `hours` > 24 (`hours.len` is necessarily higher than 0)
       - Invalid:
         - **H3**: `hours.len` == 0
@@ -188,20 +188,107 @@ Likewise, for the valid cases (when the parameter respects the format) we will t
     - **E1**: `strTime` is `null`;
     - **E2**: `strTime` is an empty `String`;
     - Valid format:
-      - **E3**: (0 <= `seconds`< 60 AND 0 < `seconds.len` < 3) AND 
-                (0 <= `minutes`< 60 AND 0 < `minutes.len` < 3 ) AND
-                (0 <= `hours` <= 24)
-      - **E4**: (0 <= `seconds`< 60 AND 0 < `seconds.len` < 3) AND 
-                (0 <= `minutes`< 60 AND 0 < `minutes.len` < 3 ) AND
-                (`hours` > 24)
+      - **E3** (**S1** + **M1** + **H1**): 
+        (`seconds` >= 0, `seconds` < 60 AND 0 < `seconds.len` < 3) AND 
+        (`minutes` >= 0 AND `minutes` < 60 AND 0 < `minutes.len` < 3 ) AND
+        (`hours` >= 0 AND `hours` <= 24 AND `hours.len` > 0)
+        *e.g. "22:15:48"*
+      - **E4** (**S1** + **M1** + **H2**): 
+        (`seconds` >= 0, `seconds` < 60 AND 0 < `seconds.len` < 3) AND 
+        (`minutes` >= 0 AND `minutes` < 60 AND 0 < `minutes.len` < 3 ) AND
+        (`hours` > 24)
+        *e.g. "36:15:48"*
     - Invalid format: Any category that results from combining at least one of the categories that represent an invalid format for the `hours`, `minutes` or `seconds` will also represent an invalid format. Therefore, to reduce the number of tests, we will consider each invalid format separately, as we explained in the note above.
-      - **E5**: `seconds.len` == 0
-      - **E6**: `minutes.len` == 0
-      - **E7**: `hours.len` == 0
-      - **E8**: `seconds.len` >= 3
-      - **E9**: `minutes.len` >= 3
-      - **E10**: `seconds` >= 60
-      - **E11**: `minutes` >= 60
+      - **E5** (**S2**): `seconds` >= 60 *e.g. "0:07:60"*;
+      - **E6** (**M2**): `minutes` >= 60 *e.g. "0:70:06"*
+      - **E7** (**S3**): `seconds.len` == 0 *e.g. "0:07:"*
+      - **E8** (**M33**): `minutes.len` == 0 *e.g. "0::06" or *6*
+      - **E9** (**H3**): `hours.len` == 0 *e.g. ":07:57" or "7:57"*
+      - **E10** (**S4**): `seconds.len` >= 3 *e.g. "0:07:001"*
+      - **E11** (**M4**): `minutes.len` >= 3 *e.g. "0:007:05"*
+
+### Boundary Analysis
+**Boundary Analyses for E1**:
+- On point: `null`
+- Off point: empty string
+
+**Boundary Analysis for E2**:
+- On point: empty string
+- Off point: "0:0:0" (time is zero)
+
+**Boundary Analysis for E3 (S1 + M1 + H1)**:
+TODO: explain division
+- **Boundary Analysis for S1**: `seconds` >= 0 AND `seconds` < 60 AND 0 < `seconds.len` < 3 
+  - `seconds` >= 0
+    - On point: "0:0:0" (true)
+    - Off point: "0:0:-1" (false)
+  - `seconds` < 60
+    - On point: "0:0:60" (false)
+    - Off point: "0:0:59" (true)
+  - `seconds.len` > 0
+    - On point: "0:0:" (false)
+    - Off point: "0:0:0" (true)
+  - `seconds.len` < 3 
+    - On point: "0:0:000" (false)
+    - Off point: "0:0:00" (true)
+- **Boundary Analysis for M1**: `minutes` >= 0 AND `minutes` < 60 AND 0 < `minutes.len` < 3 
+  - `minutes` >= 0
+    - On point: "0:0:0"
+    - Off point: "0:-1:0"
+  - `minutes` < 60
+    - On point: "0:60:0"
+    - Off point: "0:59:0"
+  - `minutes.len` > 0
+    - On point: "0::0" -- DOUBT: is "0" also an "on point"?
+    - Off point: "0:0:0" *repeated*
+  - `minutes.len` < 3 
+    - On point: "0:000:0"
+    - Off point: "0:0:0" *repeated*
+- **Boundary Analysis for H1**: `hours` >= 0 AND `hours` <= 24 AND `hours.len` > 0
+  - `hours` >= 0
+    - On point: "0:0:0" *repeated*
+    - Off point: "-1:0:0"
+  - `hours` <= 24
+    - On point: "24:0:0"
+    - Off point: "23:0:0"
+  - `hours.len` > 0
+    - On point: "0:0:0" *repeated*
+    - Off point: "0:0" and ":0:0" -- DOUBT
+  
+**Boundary Analysis for E3 (S1 + M1 + H2)**:
+TODO: explain division
+- **Boundary Analysis for H2**: `hours` > 24
+  - `hours` > 24
+    - On point: "24:0:0" *repeated*
+    - Off point: "25:0:0" 
+
+**Boundary Analysis for E5**: `seconds` >= 60
+- On point: "0:0:60" *repeated*
+- Off point: "0:0:59" *repeated*
+
+**Boundary Analysis for E6**: `minutes` >= 60
+- On point: "0:60:0" *repeated*
+- Off point: "0:59:0" *repeated*
+
+**Boundary Analysis for E7**: `seconds.len` == 0
+- On point: "0:0:" *repeated*
+- Off point: "0:0:0" *repeated* (even though it is an equality, there is no negative length, so there is only one off point)
+
+**Boundary Analysis for E8**: `minutes.len` == 0
+- On point: "0::0" *repeated* -- DOUBT: is "0" also an "on point"?
+- Off points: "0:0:0" *repeated* (even though it is an equality, there is no negative length, so there is only one off point)
+
+**Boundary Analysis for E9**: `hours.len` == 0
+- On point: ":0:0" *repeated* -- DOUBT: is "0:0" also an "on point"?
+- Off points: "0:0:0" *repeated* (even though it is an equality, there is no negative length, so there is only one off point)
+
+**Boundary Analysis for E10**: `seconds.len` >= 3
+- On point: "0:0:000" *repeated*
+- Off point: "0:0:00"
+
+**Boundary Analysis for E10**: `minutes.len` >= 3
+- On point: "0:000:0" *repeated*
+- Off point: "0:00:00"
 
 ### Unit Tests & Outcome
 The tests implemented can be found [here](../../src/test/java/de/dominik_geyer/jtimesched/project/ProjectTimeTest.java).
