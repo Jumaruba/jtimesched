@@ -245,7 +245,7 @@ Category **E1** combines categories **S1**, **M1** and **H1**, resulting in a lo
     - On point: "0:60:0"
     - Off point: "0:59:0"
   - `minutes.len` > 0
-    - On point: "0::0" -- DOUBT: is "0" also an "on point"?
+    - On point: "0::0"
     - Off point: "0:0:0" *repeated*
   - `minutes.len` < 3 
     - On point: "0:000:0"
@@ -259,7 +259,7 @@ Category **E1** combines categories **S1**, **M1** and **H1**, resulting in a lo
     - Off point: "23:0:0"
   - `hours.len` > 0
     - On point: "0:0:0" *repeated*
-    - Off point: "0:0" and ":0:0" -- DOUBT
+    - Off point: ":0:0"
   
 **Boundary Analysis for E2 (S1 + M1 + H2)**:
 Similarly to the last category, **E2** combines categories **S1**, **M1** and **H2**, which led us to perform the Boundary Analysis on each of this categories individually. As we already performed this analysis for **S1** and **M1**, the only one left is **H2**.
@@ -296,6 +296,7 @@ Similarly to the last category, **E2** combines categories **S1**, **M1** and **
 - On point: "0:0:0" *repeated*
 - Off point: "-1:0:0" *repeated*
 
+--- DOUBT
 **Boundary Analysis for E10**: `seconds.len` == 0
 - On point: "0:0:" *repeated*
 - Off point: "0:0:0" *repeated* (even though it is an equality, there is no negative length, so there is only one off point)
@@ -349,12 +350,20 @@ New cases to test (not included in the category-partition tests):
 ### Unit Tests & Outcome
 The tests implemented can be found [here](../../src/test/java/de/dominik_geyer/jtimesched/project/ProjectTimeTest.java).
 
+**Category-Partition Tests**
 To test the invalid parameters described above, we used the `@ParametrizedTest` `parseSecondsInvalidTest` with a `@MethodSource` that feeds all the invalid parameters to be tested, mainly `null`, empty string and all the other cases that don't respect the expected format. The test passes for all the invalid inputs, throwing a `ParseException`, except when the input is `null`. In that case, the test fails because a `NullPointerException` is thrown. We believe that this exception should be handled in order to avoid unexpected behavior i.e. by throwing a `ParseException` instead.
 
-Even though the specification considered above does not tolerate formats such as "06:54", we believe that this method could be improved in order to support such cases.
+Even though the specification considered above does not tolerate formats such as "06:54" and "2", we believe that this method could be improved in order to support such cases.
 
 To test the other partitions, we created the `@ParametrizedTest` `parseSecondsValidTest` with a `@MethodSource` that feeds all the valid parameters described above. The test passed successfully for all the valid values, returning the number of seconds that correspond to the `String` parameter.
 
+**Boundary Tests**
+Similarly, to test the boundaries, mainly the on-points and off-points, we started by excluding the ones that wer already tested above, such as the `null` and empty String. We then divided them in valid and invalid values, that is, we separated the ones that are supposed to make the function work as expected and the ones that are expected to cause a `ParseException`.
+After that, we created 2 `@ParametrizedTests`, one for the valid values `parseSecondsValidBoundariesTest`; and another for the invalid - `parseSecondsInvalidBoundariesTest`.
+TODO: metodos usados (asserts e isso)
+The first test uses the `parseSecondsValidBoundaries` `@MethodSource` to feed the test function with all the invalid boundaries described above: . The second test uses the `parseSecondsInvalidBoundaries` `@MethodSource` to feed the test function with all the valid boundaries: .
+
+TODO: resultados
 ---  
 
 ## Test 4 - project.ProjectTime.formatSeconds
