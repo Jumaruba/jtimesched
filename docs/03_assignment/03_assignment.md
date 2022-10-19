@@ -325,28 +325,6 @@ Similarly to the last category, **E2** combines categories **S1**, **M1** and **
 - On point: :0:0 *repeated*
 - Off point: 0:0:0 *repeated*
 
-<!-- 
-New cases to test (not included in the category-partition tests):
-"0:0:0"
-"0:0:-1"
-"0:0:60" 
-"0:0:59"
-"0:0:"
-"0:0:000"
-"0:0:00"
-"0:-1:0"
-"0:60:0"
-"0:59:0"
-"0::0" 
-"0"
-"0:000:0"
-"-1:0:0"
-"24:0:0"
-"23:0:0"
-"0:0"
-":0:0"
-"25:0:0" -->
-
 ### Unit Tests & Outcome
 The tests implemented can be found [here](../../src/test/java/de/dominik_geyer/jtimesched/project/ProjectTimeTest.java).
 
