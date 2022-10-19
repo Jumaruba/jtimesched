@@ -58,7 +58,6 @@ public class ProjectTimeTest {
         Arguments.of("0:0:59", 59),
         Arguments.of("0:59:0", 3540),
         Arguments.of("24:0:0", 86400),
-        Arguments.of("23:0:0", 82800),
         Arguments.of("25:0:0", 90000));
   }
 
@@ -72,7 +71,7 @@ public class ProjectTimeTest {
 
   static Stream<String> parseSecondsInvalidParams() {
     return Stream.of(
-        "", "0:90:05", "0:6:054", "0:007:05", "6:54", "2", "0:07:60", "0:07:", "0::02", ":6:54", "2:02:-1", "2:-1:05",
+        "", "0:07:60", "0:90:05", "0:6:054", "0:007:05", "6:54", "2",  "0:07:", "0::02", ":6:54", "2:02:-1", "2:-1:05",
         "-1:09:05", null);
   }
 
