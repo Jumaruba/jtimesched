@@ -42,16 +42,7 @@ public class ProjectTimeTest {
   static Stream<Arguments> parseSecondsValidParams() {
     return Stream.of(
       Arguments.of("22:5:48", 79548),
-      Arguments.of("36:25:8", 131108)
-        // Arguments.of("0:00:00", 0),
-        // Arguments.of("0:00:05", 5),
-        // Arguments.of("0:00:5", 5),
-        // Arguments.of("0:15:48", 948),
-        // Arguments.of("0:15:8", 908),
-        // Arguments.of("0:5:8", 308),
-        // Arguments.of("6:15:48", 22548),
-        // Arguments.of("36:15:48", 130548)
-      );
+      Arguments.of("36:25:8", 131108));
   }
 
   @ParameterizedTest

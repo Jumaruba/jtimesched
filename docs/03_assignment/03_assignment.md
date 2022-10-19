@@ -135,15 +135,10 @@ Converts a time `String` in the format "\d+:[0-5]?\d:[0-5]?\d" (hours:minutes:se
 2. **Characteristics of each parameter**: Considering the requirements, the parameter `strTime` must respect a specific time format "\d+:[0-5]?\d:[0-5]?\d" in order for the conversion to work correctly.
 3. **Constraints**: Given that the parameter is a `String`, it can assume infinite values, either respecting the requested format or not. Therefore, for the exceptional behavior we will consider only the cases where `strTime` is null, empty or has another format different from the accepted one. 
 Likewise, for the valid cases (when the parameter respects the format) we will take into account the domain of time itself in order to define our corner cases, testing if the conversion works well with time Strings that have seconds, minutes, hours and more hours than a single day.
-4. **Input combinations / Tests**: This function only has one parameter (`strTime`), so we are going to test it considering the possible values of this parameter. The first 2 categories correspond to the cases where:  
-    - **E1**: `strTime` is `null`;
-    - **E2**: `strTime` is an empty `String`;  
-
-    All the other partitions correspond to a case where:
-    - `strTime` doesn't respect the expected format;
-    - `strTime` has the expected format.
+4. **Input combinations / Tests**: This function only has one parameter (`strTime`), so we are going to test it considering the possible values of this parameter. 
+    All the categories correspond to a case where either `strTime` doesn't respect the expected format or `strTime` has the expected format.
   
-    To define these categories, we deal with the seconds, minutes and hours like they were different parameters (`seconds`, `minutes` and `hours`). 
+    To define the categories, we deal with the seconds, minutes and hours like they were different parameters (`seconds`, `minutes` and `hours`). 
     First, if we consider their time domains, we know that:
     - 0 <= `seconds` < 60
     - 0 <= `minutes` < 60
@@ -154,10 +149,19 @@ Likewise, for the valid cases (when the parameter respects the format) we will t
     - 24 < `hours`
 
     Then, if we take into account the regular expression, we can identify the following conditions:
-    - 0 < `seconds.len` < 3
-    - 0 < `minutes.len` < 3
-    - 0 < `hours.len`
+    - 0 < `seconds.len` < 3 *i.e. we can have "1:2:3" or "1:2:03", but not "1:2:003"*
+    - 0 < `minutes.len` < 3 *i.e. we can have "1:2:3" or "1:02:3", but not "1:002:3"*
+    - 0 < `hours.len` *i.e. we can have "1:2:3","01:2:3", "001:2:3", ...*
 
+    Finally, we want to test if the expression works without hours, minutes or seconds, that is, if it accepts formats like: "04:05" or just "5". From the function's description, we know that this cases should be invalid, which leads us to the following conditions:
+    <!-- - `seconds` component exists i.e: "04:05" -->
+    - `hours` component exists *i.e: "4:4" is invalid*
+    - `minutes` component exists *i.e: "4" is invalid*
+
+    Having all of this conditions in mind, we started by defining the categories for each "parameter":
+
+    *Note*: We decided to treat each invalid case separately *i.e.* we don't combine invalid lengths with valid values and vice versa, nor do we combine multiple invalid values, because each format error must be enough for the function to fail. Otherwise, we would, for example, have an additional case for the `seconds` where the length is invalid but the value is valid: 0 <= `seconds`< 60 AND `seconds.len` >= 3. To define all the other categories we will follow a similar approach.
+    
     - **Categories for `seconds`**:
       - Valid:
         - **S1**: `seconds` >= 0 AND `seconds` < 60 AND 0 < `seconds.len` < 3 
@@ -175,6 +179,7 @@ Likewise, for the valid cases (when the parameter respects the format) we will t
           - **S3**: `minutes` < 0
           - **M4**: `minutes.len` == 0
           - **M5**: `minutes.len` >= 3
+          - **M6**: `minutes` component exists *i.e: "4" is invalid*
       
     - **Categories for `hours`:**
       - Valid:
@@ -183,50 +188,42 @@ Likewise, for the valid cases (when the parameter respects the format) we will t
       - Invalid:
         - **H3**: `hours` < 0
         - **H4**: `hours.len` == 0
+        - **H5**: `hours` component exists *i.e: "4:4" is invalid*
 
 &nbsp;&nbsp;&nbsp;&nbsp;
 : By combining all the categories above, we arrive to the following categories:
-    - **E1**: `strTime` is `null`;
-    - **E2**: `strTime` is an empty `String`;
-    - Valid format:
-      - **E3** (**S1** + **M1** + **H1**): 
+    - `strTime` has a valid format:
+      - **E1** (**S1** + **M1** + **H1**): 
         (`seconds` >= 0, `seconds` < 60 AND 0 < `seconds.len` < 3) AND 
         (`minutes` >= 0 AND `minutes` < 60 AND 0 < `minutes.len` < 3 ) AND
         (`hours` >= 0 AND `hours` <= 24 AND `hours.len` > 0)
         *e.g. "22:15:48"*
-      - **E4** (**S1** + **M1** + **H2**): 
+      - **E2** (**S1** + **M1** + **H2**): 
         (`seconds` >= 0, `seconds` < 60 AND 0 < `seconds.len` < 3) AND 
         (`minutes` >= 0 AND `minutes` < 60 AND 0 < `minutes.len` < 3 ) AND
         (`hours` > 24)
         *e.g. "36:15:48"*
-    - Invalid format: Any category that results from combining at least one of the categories that represent an invalid format for the `hours`, `minutes` or `seconds` will also represent an invalid format. Therefore, to reduce the number of tests, we will consider each invalid format separately, as we explained in the note above.
-      - **E5** (**S2**): `seconds` >= 60 *e.g. "0:07:60"*;
-      - **E6** (**M2**): `minutes` >= 60 *e.g. "0:90:"*
-      - **E7** (**S3**): `seconds` < 0 *e.g. "2:02:-1"*;
-      - **E8** (**M3**): `minutes` < 0 *e.g. "2:-1:05"*
-      - **E9** (**H3**): `hours` < 0 *e.g. "-1:09:05"*
-      - **E10** (**S4**): `seconds.len` == 0 *e.g. "0:07:"*
-      - **E11** (**M4**): `minutes.len` == 0 *e.g. "0::02" or "2"
-      - **E12** (**H4**): `hours.len` == 0 *e.g. ":6:54" or "6:54"*
-      - **E13** (**S5**): `seconds.len` >= 3 *e.g. "0:6:054"*
-      - **E14** (**M5**): `minutes.len` >= 3 *e.g. "0:007:05"*
-
-<!-- TODO: maybe add these conditions:
-      - `hours.len` == 0 and `minutes.len` == 0
-      - `hours.len` == 0 and 0 < `minutes.len` <= 3
-      and, if so, change note and description -->
+    - `strTime` has an invalid format: Any category that results from combining at least one of the categories that represent an invalid format for the `hours`, `minutes` or `seconds` will also represent an invalid format here. Therefore, to reduce the number of tests, we will consider each invalid format separately, as we explained in the note above.
+      - **E3**: `strTime` is `null`;
+      - **E4**: `strTime` is an empty `String`;
+      - `strTime` is not `null` nor empty, but it doesn't respect the format:
+        - **E5** (**S2**): `seconds` >= 60 *e.g. "0:07:60"*;
+        - **E6** (**M2**): `minutes` >= 60 *e.g. "0:90:"*
+        - **E7** (**S3**): `seconds` < 0 *e.g. "2:02:-1"*;
+        - **E8** (**M3**): `minutes` < 0 *e.g. "2:-1:05"*
+        - **E9** (**H3**): `hours` < 0 *e.g. "-1:09:05"*
+        - **E10** (**S4**): `seconds.len` == 0 *e.g. "0:07:"*
+        - **E11** (**M4**): `minutes.len` == 0 *e.g. "0::02"*
+        - **E12** (**H4**): `hours.len` == 0 *e.g. ":6:54"*
+        - **E13** (**S5**): `seconds.len` >= 3 *e.g. "0:6:054"*
+        - **E14** (**M5**): `minutes.len` >= 3 *e.g. "0:007:05"*      
+        - **E15** (**M6**): only the `seconds`component exists *e.g. "2"*
+        - **E16** (**H5**): `hours` component doesn't exist *e.g. "6:54"*
 
 ### Boundary Analysis
-**Boundary Analyses for E1**:
-- On point: `null`
-- Off point: empty string
 
-**Boundary Analysis for E2**:
-- On point: empty string
-- Off point: "0:0:0" (time is zero)
-
-**Boundary Analysis for E3 (S1 + M1 + H1)**:
-TODO: explain division
+**Boundary Analysis for E1 (S1 + M1 + H1)**:
+Category **E1** combines categories **S1**, **M1** and **H1**, resulting in a logical conjunction of the conditions that characterize a valid `strTime` format. For this reason, we decided to perform the Boundary Analysis on **S1**, **M1** and **H1** individually.
 - **Boundary Analysis for S1**: `seconds` >= 0 AND `seconds` < 60 AND 0 < `seconds.len` < 3 
   - `seconds` >= 0
     - On point: "0:0:0" *repeated*
@@ -264,12 +261,20 @@ TODO: explain division
     - On point: "0:0:0" *repeated*
     - Off point: "0:0" and ":0:0" -- DOUBT
   
-**Boundary Analysis for E3 (S1 + M1 + H2)**:
-TODO: explain division
+**Boundary Analysis for E2 (S1 + M1 + H2)**:
+Similarly to the last category, **E2** combines categories **S1**, **M1** and **H2**, which led us to perform the Boundary Analysis on each of this categories individually. As we already performed this analysis for **S1** and **M1**, the only one left is **H2**.
 - **Boundary Analysis for H2**: `hours` > 24
   - `hours` > 24
     - On point: "24:0:0" *repeated*
     - Off point: "25:0:0" 
+
+**Boundary Analyses for E3**: `strTime` is `null`
+- On point: `null`
+- Off point: empty string --- DOUBT (como é igualdade deveria ser tmb os on-points de todas as outras)
+
+**Boundary Analysis for E4**: `strTime` is an empty `String`
+- On point: empty string
+- Off point: "0:0:0" (time is zero) --- DOUBT (como é igualdade deveria ser tmb os on-points de todas as outras)
 
 **Boundary Analysis for E5**: `seconds` >= 60
 - On point: "0:0:60" *repeated*
@@ -296,11 +301,11 @@ TODO: explain division
 - Off point: "0:0:0" *repeated* (even though it is an equality, there is no negative length, so there is only one off point)
 
 **Boundary Analysis for E11**: `minutes.len` == 0
-- On point: "0::0" *repeated* -- DOUBT: is "0" also an "on point"?
+- On point: "0::0" *repeated*
 - Off points: "0:0:0" *repeated* (even though it is an equality, there is no negative length, so there is only one off point)
 
 **Boundary Analysis for E12**: `hours.len` == 0
-- On point: ":0:0" *repeated* -- DOUBT: is "0:0" also an "on point"?
+- On point: ":0:0" *repeated*
 - Off points: "0:0:0" *repeated* (even though it is an equality, there is no negative length, so there is only one off point)
 
 **Boundary Analysis for E13**: `seconds.len` >= 3
@@ -310,6 +315,15 @@ TODO: explain division
 **Boundary Analysis for E14**: `minutes.len` >= 3
 - On point: "0:000:0" *repeated*
 - Off point: "0:00:0"
+
+**Boundary Analysis for E15**: only the `seconds`component exists
+- On point: 0
+- Off point: 0:0
+
+**Boundary Analysis for E16**: `hours` component doesn't exist
+- On point: :0:0 *repeated*
+- Off point: 0:0:0 *repeated*
+
 <!-- 
 New cases to test (not included in the category-partition tests):
 "0:0:0"
