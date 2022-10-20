@@ -196,20 +196,20 @@ Converts the number of seconds to the equivalent time in hours, minutes and seco
 
 Considering the partitions defined in the previous section, let's define the **on-points** and **off-points** and make sure that these are covered by the tests. 
 
-- [s >= `Integer.MIN_VALUE`] : an extreme point. **PERGUNTAR AO PROF**
-- [s < 0, s >= 0]: 
+- {s >= `Integer.MIN_VALUE`} : an extreme point. **PERGUNTAR AO PROF**
+- {s < 0, s >= 0}: 
 	- on-point: 0 (E2)
 	- off-point: -1 (E1)
-- [s < 60, s >= 60]:
+- {s < 60, s >= 60}:
 	- on-point: 60 (E3)
 	- off-point: 59 (E2)
-- [s < 3600, s >= 3600]:
+- {s < 3600, s >= 3600}:
 	- on-point: 3600 (E4)
 	- off-point: 3599 (E3) 
-- [s < 86400, s >= 86400]:
+- {s < 86400, s >= 86400}:
 	- on-point: 86400 (E5)
 	- off-point: 86399 (E4)
-- [s < `Integer.MAX_VALUE]: an extreme point. **PERGUNTAR AO PROF**
+- {s < `Integer.MAX_VALUE}: an extreme point. **PERGUNTAR AO PROF**
 
 ### Unit Tests & Outcome
 To test the combinations that were identified above, we used the `ParametrizedTest` `formatSecondsTest`, which can be found [here](../../src/test/java/de/dominik_geyer/jtimesched/project/ProjectTimeTest.java).
