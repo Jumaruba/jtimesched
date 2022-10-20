@@ -189,7 +189,7 @@ Converts the number of seconds to the equivalent time in hours, minutes and seco
 - E1: s >= `Integer.MIN_VALUE` and s < 0;
 - E2: s >= 0 and s < 60; 
 - E3: s >= 60 and s < 3600;
-- E4: s >= 3600 and s < 86400; 
+- E4: s >= 3600 and s < 86400;  
 - E5: s >= 86400 and s < `Integer.MAX_VALUE`; 
 
 ### Boundary testing 
@@ -260,7 +260,7 @@ As checked while executing the software, some fields are not supposed to be **ed
 - `column`;
 - `isRunning`;
 
-2. **Characteristics of each parameter**: Let's look at what are the ranges of each parameter and explain them. 
+2. **Characteristics of each parameter**: Let's identify the ranges of each parameter and explain them. 
 - `row`: is an integer, thus belongs to the range [-Integer.MIN_VALUE`, `Integer.MAX_VALUE`]. It represents the project position in the rows;
 - `column`: is an integer and belongs to the range [-Integer.MIN_VALUE`, `Integer.MAX_VALUE`]. It represents the column identification number;
 - `isRunning`: can be true or false. **It's not received by the function**, but we set it at the creation of the `Project` class which is added to the  `ProjectTableModel`. It defines if the counter is running or not; 
@@ -272,10 +272,10 @@ While the timer is not counting (`isRunning == false`), all the columns are edit
  - `COLUMN_ACTION_STARTPAUSE` *(col == 7)*; 
  - `COLUMN_COUNT` *(col == 8)*; 
 
-Therefore, when `isRunning` is false, the constraints that makes the function return true are: 
+Therefore, when `isRunning` is false, the constraints that make the function return true are: 
  - `col >= 1 and col <= 6`
 
-If the program is running (`isRunning == true`), however, it was analysed in the GUI that the following columns are not editable: 
+If the program is running (`isRunning == true`), however, we noticed that, in the GUI, the following columns are not editable: 
  - `COLUMN_ACTION_DELETE` *(col == 0)*; 
  - `COLUMN_TIMEOVERALL` *(col == 5)*; 
  - `COLUMN_TIMETODAY` *(col == 6)*; 
@@ -286,13 +286,12 @@ Then, when `isRunning` is true, the constraints that makes the function return t
  - `col >= 1 and col <= 4`
 
 Some important notes are: 
-- It wasn't possible to know for sure which column  `COLUMN_COUNT` refers to in the GUI. Thus, it was considered that this column can't be modified by the user and for this reason, it's not editable. 
+- It wasn't possible to know for sure which column `COLUMN_COUNT` refers to in the GUI. Thus, it was considered that this column can't be modified by the user and, for this reason, it's not editable. 
 - The columns `COLUMN_ACTION_DELETE` and `COLUMN_ACTION_STARTPAUSE` are not editable, since these columns trigger control actions and are not related to personalization. Therefore, they are considered not editable. 
 
 To test the function with some consistency, the `row` parameter needs to be set to a fixed value, since all tests will be executed against a specific `row` position.  
 However, some values of `row` should not be accepted, should not crash the program and must return false: negative values and a `row` position that doesn't exist. Thus, given an arbitrary number *n* of *projects* available in the program, we have the following constraints over `row`: 
 - `row > -1 and row < n` 
-
 
 4. **Input combination/ Unit test**: 
 Let's analyse the partitions of each input: 
@@ -300,7 +299,7 @@ Let's analyse the partitions of each input:
 	- E1: col >= `Integer.MIN_VALUE` and col < 1;
 	- E2: col >= 1 and col <= 6;
 	- E3: col > 6 and col <= `Integer.MAX_VALUE`; 
-- `isRunning`: false 
+- `isRunning`: true
 	- E4: col >= `Integer.MIN_VALUE` and col < 1;
 	- E5: col >= 1 and col <= 4; 
 	- E6: col > 4 and col <= `Integer.MAX_VALUE`; 
@@ -330,7 +329,7 @@ Considering the partitions defined in the previous section, let's define the on-
 	- {col >= `Integer.MIN_VALUE`}: an extreme point **PERGUNTAR AO PROFESSOR**. 
 	- {col < 1, col >=  1}: 
 		- on-point: 1 (E5) 
-		- off-pointt: 0 (E4) 
+		- off-point: 0 (E4) 
 	- {col <= 4, col > 4}: 
 		- on-point: 4 (E5)
 		- off-point: 5 (E6)
@@ -383,7 +382,7 @@ public void isEditableTemplate(boolean isRunning, int column, boolean expected){
 ```
 
 Each test, call this function, which receives as parameter a `boolean isRunning`, which tells if the 
-counter is running or not, the `colummn` of the row and the expected result value. 
+counter is running or not, the `column` of the row and the expected result value. 
 
 All the tests look really similar: they are all `@ParameterizedTest`, which receives the column 
 as parameter and by a `@ValueSource` and internally they only call the `isEditableTemplate`.
