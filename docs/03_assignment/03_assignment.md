@@ -260,19 +260,19 @@ As checked while executing the software, some fields are not supposed to be **ed
 - `column`;
 - `isRunning`;
 
-2. **Characteristics of each parameter**: Let's first undertand what are the ranges of each paramater/input. 
-- `row`: is an integer, thus belongs to the range [-Integer.MIN_VALUE`, `Integer.MAX_VALUE`]. It represents the project position in the row;
+2. **Characteristics of each parameter**: Let's look at what are the ranges of each parameter and explain them. 
+- `row`: is an integer, thus belongs to the range [-Integer.MIN_VALUE`, `Integer.MAX_VALUE`]. It represents the project position in the rows;
 - `column`: is an integer and belongs to the range [-Integer.MIN_VALUE`, `Integer.MAX_VALUE`]. It represents the column identification number;
-- `isRunning`: can be true or false. **It's not received by the function**, but set at the creation of the class. It defines if the counter is running or not; 
+- `isRunning`: can be true or false. **It's not received by the function**, but we set it at the creation of the `Project` class which is added to the  `ProjectTableModel`. It defines if the counter is running or not; 
 
 3. **Constraints**: 
 
 While the timer is not counting (`isRunning == false`), all the columns are editable except:
  - `COLUMN_ACTION_DELETE` (`col == 0`); 
- - `COLUMN_ACTION_STARTPAUSE` (`col == 7`), 
- - `COLUMN_COUNT` (`col == 8`). 
+ - `COLUMN_ACTION_STARTPAUSE` (`col == 7`);
+ - `COLUMN_COUNT` (`col == 8`);
 
-When `isRunning` is false, the constraints that makes the function return true are: 
+Therefore, when `isRunning` is false, the constraints that makes the function return true are: 
  - `col >= 1 and col <= 6`
 
 If the program is running (`isRunning == true`), however, it was analysed in the GUI that the following columns are not editable: 
@@ -282,15 +282,15 @@ If the program is running (`isRunning == true`), however, it was analysed in the
  - `COLUMN_ACTION_STARTPAUSE` (`col == 7`), 
  - `COLUMN_COUNT` (`col == 8`). 
  
-Then when `isRunning` is true, the constraints that makes the function return true are: 
+Then, when `isRunning` is true, the constraints that makes the function return true are: 
  - `col >= 1 and col <= 4`
 
 Some important notes are: 
-- It wasn't possible to know for sure which column  `COLUMN_COUNT` refers to in the GUI. Thus, it was considered that this column can't be modified by the user and for this reason, not editable. 
+- It wasn't possible to know for sure which column  `COLUMN_COUNT` refers to in the GUI. Thus, it was considered that this column can't be modified by the user and for this reason, it's not editable. 
 - The columns `COLUMN_ACTION_DELETE` and `COLUMN_ACTION_STARTPAUSE` are not editable, since these columns trigger control actions and are not related to personalization. Therefore, they are considered not editable. 
 
-To test the function with some consistency, the `row` parameter needs to be set at a fixed value, since all tests will be executed against a specific `row` position.  
-However, some values of `row` should not be accepted: negative values and a `row` position that doesn't exist. Thus, given an arbitrary number *n* of *projects* available in the program, we have the following constrants over `row`: 
+To test the function with some consistency, the `row` parameter needs to be set to a fixed value, since all tests will be executed against a specific `row` position.  
+However, some values of `row` should not be accepted and should not crash the program: negative values and a `row` position that doesn't exist. Thus, given an arbitrary number *n* of *projects* available in the program, we have the following constraints over `row`: 
 - `row > -1 and row < n` 
 
 
@@ -317,11 +317,37 @@ Let's analyse the partitions of each input:
 Considering the partitions defined in the previous section, let's define the on-points and off-points, making sure these points are covered by the tests. 
 
 - `isRunning == false`: 
-  - on-point = `false` (E1)
-  - off-point = `true` (E2) 
+	- {col >= `Integer.MIN_VALUE`}: an extreme point **PERGUNTAR AO PROFESSOR**. 
+	- {col < 1, col >=  1}: 
+		- on-point: 1 (E2) 
+		- off-point: 0 (E1) 
+	- {col > 6, col <= 6}: 
+		- on-point: 6 (E1) 
+		- off-point: 7 (E2) 
+	- {col <= `Integer.MAX_VALUE}: an extreme point **PERGUNTAR AO PROFESSOR**.  
 
+- `isRunning == true`: 
+	- {col >= `Integer.MIN_VALUE`}: an extreme point **PERGUNTAR AO PROFESSOR**. 
+	- {col < 1, col >=  1}: 
+		- on-point: 1 (E5) 
+		- off-pointt: 0 (E4) 
+	- {col <= 4, col > 4}: 
+		- on-point: 4 (E5)
+		- off-point: 5 (E6)
+	- {col <= `Integer.MAX_VALUE}: an extreme point **PERGUNTAR AO PROFESSOR**.  
+
+- `row`, with n == 1: 
+	- {row >= `Integer.MIN_VALUE`}: an extreme point **PERGUNTAR AO PROFESSOR**. 
+	- {row <= -1, row > -1}: 
+		- on-point: -1 (E7) 
+		- off-point: 0 (E8) 
+	- {row < 1, row >= 1} 
+		- on-point: 1 (E9)
+		- off-point: 0 (E9) 
+	- {col <= `Integer.MAX_VALUE}: an extreme point **PERGUNTAR AO PROFESSOR**.  
 
 ### Unit Tests and Outcome
+
 The tests used for this function can be found [here](../../src/test/java/de/dominik_geyer/jtimesched/project/ProjectTableModelTest.java).
 
 Before starting each test the following function is executed: 
