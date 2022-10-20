@@ -367,6 +367,8 @@ After finishing each test the following function is executed:
   }
 ```
 
+#### Testing `col` parameter
+
 The main function around the tests is the following: 
 ```java
 public void isEditableTemplate(boolean isRunning, int column, boolean expected){
@@ -388,6 +390,9 @@ as parameter and by a `@ValueSource` and internally they only call the `isEditab
 
 All tests regarding the `col` variable passes. 
 
-By the other hand, the tests regarding the `row` parameter
+####  Testing `row` parameter 
+The goal of this test is to make sure that the function `isCellEditable` doesn't return an `IndexOutOfBoundsException`. 
+Many tests failed, since the program probably doesn't handle this scenario. 
 
-Although these might look simple, the lack of documentation overcomplicated the process of understanding the function, since this is a `BlackBox` test approach. The meaning and the goal of the function had to be deducted and the function had to be executed in isolation, to distinguish by tries and mistakes the meaning of the parameters.
+
+Both the `row` and `col` tests includes the off and on-points discussed in the boundary tests section. 
