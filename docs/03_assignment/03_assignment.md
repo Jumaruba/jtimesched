@@ -268,19 +268,19 @@ As checked while executing the software, some fields are not supposed to be **ed
 3. **Constraints**: 
 
 While the timer is not counting (`isRunning == false`), all the columns are editable except:
- - `COLUMN_ACTION_DELETE` (`col == 0`); 
- - `COLUMN_ACTION_STARTPAUSE` (`col == 7`);
- - `COLUMN_COUNT` (`col == 8`);
+ - `COLUMN_ACTION_DELETE` *(col == 0)*; 
+ - `COLUMN_ACTION_STARTPAUSE` *(col == 7)*; 
+ - `COLUMN_COUNT` *(col == 8)*; 
 
 Therefore, when `isRunning` is false, the constraints that makes the function return true are: 
  - `col >= 1 and col <= 6`
 
 If the program is running (`isRunning == true`), however, it was analysed in the GUI that the following columns are not editable: 
- - `COLUMN_ACTION_DELETE` (`col == 0`); 
- - `COLUMN_TIMEOVERALL` (`col == 5`);
- - `COLUMN_TIMETODAY` (`col == 6`);
- - `COLUMN_ACTION_STARTPAUSE` (`col == 7`), 
- - `COLUMN_COUNT` (`col == 8`). 
+ - `COLUMN_ACTION_DELETE` *(col == 0)*; 
+ - `COLUMN_TIMEOVERALL` *(col == 5)*; 
+ - `COLUMN_TIMETODAY` *(col == 6)*; 
+ - `COLUMN_ACTION_STARTPAUSE` *(col == 7)*, 
+ - `COLUMN_COUNT` *(col == 8)*. 
  
 Then, when `isRunning` is true, the constraints that makes the function return true are: 
  - `col >= 1 and col <= 4`
@@ -290,7 +290,7 @@ Some important notes are:
 - The columns `COLUMN_ACTION_DELETE` and `COLUMN_ACTION_STARTPAUSE` are not editable, since these columns trigger control actions and are not related to personalization. Therefore, they are considered not editable. 
 
 To test the function with some consistency, the `row` parameter needs to be set to a fixed value, since all tests will be executed against a specific `row` position.  
-However, some values of `row` should not be accepted and should not crash the program: negative values and a `row` position that doesn't exist. Thus, given an arbitrary number *n* of *projects* available in the program, we have the following constraints over `row`: 
+However, some values of `row` should not be accepted, should not crash the program and must return false: negative values and a `row` position that doesn't exist. Thus, given an arbitrary number *n* of *projects* available in the program, we have the following constraints over `row`: 
 - `row > -1 and row < n` 
 
 
