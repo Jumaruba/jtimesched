@@ -384,22 +384,10 @@ Each test, call this function, which receives as parameter a `boolean isRunning`
 counter is running or not, the `colummn` of the row and the expected result value. 
 
 All the tests look really similar: they are all `@ParameterizedTest`, which receives the column 
-as parameter and by a `@ValueSource` and internally they only call the `isEditableTemplate`. 
-```java
-@ParameterizedTest
-@ValueSource(ints = {
-      ProjectTableModel.COLUMN_CHECK,
-      ProjectTableModel.COLUMN_TITLE,
-      ProjectTableModel.COLUMN_COLOR,
-      ProjectTableModel.COLUMN_CREATED,
-      ProjectTableModel.COLUMN_TIMEOVERALL,
-      ProjectTableModel.COLUMN_TIMETODAY})
-@Tag("not_running")
-public void isCellEditableRunningFalse1(int column) {
-isEditableTemplate(false, column, true);
-}
-```
+as parameter and by a `@ValueSource` and internally they only call the `isEditableTemplate`.
 
-All tests passed with success. 
+All tests regarding the `col` variable passes. 
+
+By the other hand, the tests regarding the `row` parameter
 
 Although these might look simple, the lack of documentation overcomplicated the process of understanding the function, since this is a `BlackBox` test approach. The meaning and the goal of the function had to be deducted and the function had to be executed in isolation, to distinguish by tries and mistakes the meaning of the parameters.

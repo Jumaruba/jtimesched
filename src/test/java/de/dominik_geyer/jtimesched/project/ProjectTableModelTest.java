@@ -70,10 +70,8 @@ public class ProjectTableModelTest {
     public void testPartitionE6(int col) {
         isEditableTemplate(true, col, false);
     }
-
-    @ParameterizedTest
-    @ValueSource(ints = {Integer.MIN_VALUE, -2, -1})
-    public void testPartitionE7(int row) {
+    
+    public void testRowParameter(int row){
         try {
             // Given
             // row
@@ -85,8 +83,26 @@ public class ProjectTableModelTest {
             // accept
         } catch (IndexOutOfBoundsException e){
             System.out.println(e.getClass());
-            Assertions.fail("Returning an exception");
+            Assertions.fail("This test should not return this kind of exception");
         }
+    }
+    
+    @ParameterizedTest
+    @ValueSource(ints = {Integer.MIN_VALUE, -2, -1})
+    public void testPartitionE7(int row) {
+        testRowParameter(row);
+    }
+
+
+    @Test
+    public void testPartitionE8() {
+        testRowParameter(0);
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {Integer.MAX_VALUE, 1, 2})
+    public void testPartitionE9(int row) {
+        testRowParameter(row);
     }
 }
 
