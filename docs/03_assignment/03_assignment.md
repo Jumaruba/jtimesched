@@ -289,8 +289,10 @@ Some important notes are:
 - It wasn't possible to know for sure which column  `COLUMN_COUNT` refers to in the GUI. Thus, it was considered that this column can't be modified by the user and for this reason, not editable. 
 - The columns `COLUMN_ACTION_DELETE` and `COLUMN_ACTION_STARTPAUSE` are not editable, since these columns trigger control actions and are not related to personalization. Therefore, they are considered not editable. 
 
+To test the function with some consistency, the `row` parameter needs to be set at a fixed value, since all tests will be executed against a specific `row` position.  
+However, some values of `row` should not be accepted: negative values and a `row` position that doesn't exist. Thus, given an arbitrary number *n* of *projects* available in the program, we have the following constrants over `row`: 
+- `row > -1 and row < n` 
 
-In contrary of `column`, the `row` parameter doesn't depend on th e
 
 4. **Input combination/ Unit test**: 
 Let's analyse the partitions of each input: 
@@ -300,8 +302,14 @@ Let's analyse the partitions of each input:
 	- E3: col > 6 and col <= `Integer.MAX_VALUE`; 
 - `isRunning`: false 
 	- E4: col >= `Integer.MIN_VALUE` and col < 1;
-	- E5: col >= 1 and col <= 4 
-	- E6: col > 4 and col <= `Integer.MAX_VALUE`
+	- E5: col >= 1 and col <= 4; 
+	- E6: col > 4 and col <= `Integer.MAX_VALUE`; 
+
+- `row`, with n == 1: 
+	- E7: row > `Integer.MIN_INTEGER` and row <= -1; 
+	- E8: row > - 1 and row < 1; 
+	- E9: row >= 1 and row < `Integer.MAX_INTEGER`; 
+
 
 
 ### Boundary testing 
