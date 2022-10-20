@@ -252,44 +252,66 @@ As checked while executing the software, some fields are not supposed to be **ed
   COLUMN_ACTION_STARTPAUSE=7;
   COLUMN_COUNT=8;
 ```
-
-While the timer is not counting, all the columns are editable except `COLUMN_ACTION_DELETE`, 
-`COLUMN_ACTION_STARTPAUSE`, `COLUMN_COUNT`. 
-
-If the program is running, however, it was analysed in the GUI that the
-`COLUMN_TIMEOVERALL` and `COLUMN_TIMETODAY` columns are not editable.
-
-In addition to that, it wasn't possible to know for sure which column  `COLUMN_COUNT` refers to in the GUI. Thus, it was considered that this column can't be modified by the user and for this reason, not editable. 
-
-The columns `COLUMN_ACTION_DELETE` and `COLUMN_ACTION_START_PAUSE` are not editable, since these columns trigger control actions and are not related to personalization. Therefore, they are considered not editable. 
-
 ### Category-Partition
 
 1. **Parameters/Input**:
 
-- `row`: an `int`, representing the project position in the row;
-- `column`: an `int`, representing the column identification number;
-- `isRunning`: a `boolean` that defines if the program will be counting during the test.
+- `row`;
+- `column`;
+- `isRunning`;
 
-2. **Characteristics of each parameter**: Given that the `column` is an integer, it can be any integer in the range [`Integer.MIN_VALUE`, `Integer.MAX_VALUE`]. To simplify the test, the row only infers to the first project in the `arProj` list, since the goal is not to check if the function can retrieve the project from a position correctly, but verify if a cell is editable or not.
+2. **Characteristics of each parameter**: Let's first undertand what are the ranges of each paramater/input. 
+- `row`: is an integer, thus belongs to the range [-Integer.MIN_VALUE`, `Integer.MAX_VALUE`]. It represents the project position in the row;
+- `column`: is an integer and belongs to the range [-Integer.MIN_VALUE`, `Integer.MAX_VALUE`]. It represents the column identification number;
+- `isRunning`: can be true or false. **It's not received by the function**, but set at the creation of the class. It defines if the counter is running or not; 
 
-The `isRunning` input varies between `false` and `positive`.
+3. **Constraints**: 
 
-3. **Constraints**: The only constraint valid in this test is the maximum and minimum value of integer.
-4. **Input combination/ Unit test**: The tests analysis 7 situations:
-  - `isRunning = false`
-      - `column: [1,6]`. All the types of column should be editable, except `COLUMN_COUNT`.
-      - `column: {0,7,8}`. As explained before, these columns are not considered editable and the 
-    function should return false upon receiving a `column` parameter with one of these values. 
-      - `column: [-Integer.MIN_VALUE, -1]`. No negative value should be accepted editable.
-      - `column: [9, Integer.MAX_VALUE]`. All numbers higher than 7 should not be modified,
-        since the column doesn't exist.
-  - `isRunning = true`
-      - `column: [1,4]`. Can be modified while the counter is counting.
-      - `column: [5,8] U [0,0]`. These columns are blocked to be modified while the counter is in execution 
-    or are not editable by default.
-      - `column: [-Integer.MIN_VALUE, -1]`. No negative value should be accepted editable.
-      - `column: [9, Integer.MAX_VALUE]`. All numbers higher than 7 should not be modified.
+While the timer is not counting (`isRunning == false`), all the columns are editable except:
+ - `COLUMN_ACTION_DELETE` (`col == 0`); 
+ - `COLUMN_ACTION_STARTPAUSE` (`col == 7`), 
+ - `COLUMN_COUNT` (`col == 8`). 
+
+When `isRunning` is false, the constraints that makes the function return true are: 
+ - `col >= 1 and col <= 6`
+
+If the program is running (`isRunning == true`), however, it was analysed in the GUI that the following columns are not editable: 
+ - `COLUMN_ACTION_DELETE` (`col == 0`); 
+ - `COLUMN_TIMEOVERALL` (`col == 5`);
+ - `COLUMN_TIMETODAY` (`col == 6`);
+ - `COLUMN_ACTION_STARTPAUSE` (`col == 7`), 
+ - `COLUMN_COUNT` (`col == 8`). 
+ 
+Then when `isRunning` is true, the constraints that makes the function return true are: 
+ - `col >= 1 and col <= 4`
+
+Some important notes are: 
+- It wasn't possible to know for sure which column  `COLUMN_COUNT` refers to in the GUI. Thus, it was considered that this column can't be modified by the user and for this reason, not editable. 
+- The columns `COLUMN_ACTION_DELETE` and `COLUMN_ACTION_STARTPAUSE` are not editable, since these columns trigger control actions and are not related to personalization. Therefore, they are considered not editable. 
+
+
+In contrary of `column`, the `row` parameter doesn't depend on th e
+
+4. **Input combination/ Unit test**: 
+Let's analyse the partitions of each input: 
+- `isRunning`: false 
+	- E1: col >= `Integer.MIN_VALUE` and col < 1;
+	- E2: col >= 1 and col <= 6;
+	- E3: col > 6 and col <= `Integer.MAX_VALUE`; 
+- `isRunning`: false 
+	- E4: col >= `Integer.MIN_VALUE` and col < 1;
+	- E5: col >= 1 and col <= 4 
+	- E6: col > 4 and col <= `Integer.MAX_VALUE`
+
+
+### Boundary testing 
+
+Considering the partitions defined in the previous section, let's define the on-points and off-points, making sure these points are covered by the tests. 
+
+- `isRunning == false`: 
+  - on-point = `false` (E1)
+  - off-point = `true` (E2) 
+
 
 ### Unit Tests and Outcome
 The tests used for this function can be found [here](../../src/test/java/de/dominik_geyer/jtimesched/project/ProjectTableModelTest.java).
