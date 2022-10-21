@@ -21,7 +21,7 @@ Likewise, for the valid cases (when the parameter respects the format) we will t
     All the categories correspond to a case where:
     - `strTime` is `null`;
     - `strTime` is empty;
-    - `strTime`doesn't respect the expected format;
+    - `strTime` doesn't respect the expected format;
     - `strTime` has the expected format.  
 &emsp;
 
@@ -83,9 +83,9 @@ Likewise, for the valid cases (when the parameter respects the format) we will t
         - H3: `hours` < 0
         - H4: `hours.len` <= 0 (there is no negative length so this category only includes the case where `hours.len` == 0)
         - H5: `hours` component doesn't exist *e.g. "4:4"*
+&emsp;
 
-&nbsp;&nbsp;&nbsp;&nbsp;
-: By combining all the categories above, we arrive to the following categories:      
+    By combining all the categories above, we arrive to the following categories: 
     - E1: `strTime` is `null`;  
     - E2: `strTime` is an empty `String`;  
     - `strTime` has a valid format:  
