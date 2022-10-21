@@ -14,6 +14,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 public class ProjectTimeTest {
 
+  // parseSeconds tests
   // Boundary Tests
   @ParameterizedTest
   @MethodSource("parseSecondsInvalidBoundaries")
@@ -100,6 +101,7 @@ public class ProjectTimeTest {
   }
 
 
+  // formatSeconds tests
   public void testFormatSeconds(int s, String expected){
     // Given 'seconds'
 
