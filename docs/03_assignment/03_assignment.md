@@ -136,30 +136,37 @@ Converts a time `String` in the format "\d+:[0-5]?\d:[0-5]?\d" (hours:minutes:se
 3. **Constraints**: Given that the parameter is a `String`, it can assume infinite values, either respecting the requested format or not. Therefore, for the exceptional behavior we will consider only the cases where `strTime` is null, empty or has another format different from the accepted one. 
 Likewise, for the valid cases (when the parameter respects the format) we will take into account the domain of time itself in order to define our corner cases, testing if the conversion works well with time Strings that have seconds, minutes, hours and more hours than a single day.
 4. **Input combinations / Tests**: This function only has one parameter (`strTime`), so we are going to test it considering the possible values of this parameter. 
+    ![](https://i.imgur.com/PHfTDQ2.png)  
     All the categories correspond to a case where:
     - `strTime` is `null`;
     - `strTime` is empty;
     - `strTime`doesn't respect the expected format;
-    - `strTime` has the expected format.
-  
+    - `strTime` has the expected format.  
+&emsp;
+
     To define the categories, we deal with the seconds, minutes and hours like they were different parameters (`seconds`, `minutes` and `hours`). 
+
     First, if we consider their time domains, we know that:
     - 0 <= `seconds` < 60
     - 0 <= `minutes` < 60
     - 0 <= `hours`
+&emsp;
 
     As we want to make sure this function is able to covert a time `String`, even when it exceeds the duration of a day (24 hours), we will consider the cases where:
     - 0 <= `hours` <= 24
     - 24 < `hours`
+&emsp;
 
     Then, if we take into account the regular expression, we can identify the following conditions:
     - 0 < `seconds.len` < 3 *i.e. we can have "1:2:3" or "1:2:03", but not "1:2:003"*
     - 0 < `minutes.len` < 3 *i.e. we can have "1:2:3" or "1:02:3", but not "1:002:3"*
     - 0 < `hours.len` *i.e. we can have "1:2:3","01:2:3", "001:2:3", ...*
-  
+&emsp;
+
     Finally, we want to test if the expression works without hours, minutes or seconds, that is, if it accepts formats like: "04:05" or "5". From the function's description, we know that this cases should be invalid, which leads us to the following conditions:
     - `hours` component exists *i.e: "4:4" is invalid*
     - `minutes` component exists *i.e: "4" is invalid*
+&emsp;
 
     Having all of these conditions in mind, we started by defining the categories for each "parameter". 
     &nbsp;&nbsp;&nbsp;&nbsp;
@@ -174,6 +181,7 @@ Likewise, for the valid cases (when the parameter respects the format) we will t
         - **S3**: `seconds` < 0
         - **S4**: `seconds.len` <= 0 (there is no negative length so this category only includes the case where `seconds.len` == 0)
         - **S5**: `seconds.len` >= 3
+&emsp;
 
     - **Categories for `minutes`:**
         - Valid:
@@ -184,7 +192,8 @@ Likewise, for the valid cases (when the parameter respects the format) we will t
           - **M4**: `minutes.len` <= 0 (there is no negative length so this category only includes the case where `minutes.len` == 0)
           - **M5**: `minutes.len` >= 3
           - **M6**: `minutes` component doesn't exist *e.g. "4"*
-      
+&emsp;
+
     - **Categories for `hours`:**
       - Valid:
         - **H1**: `hours` >= 0 AND `hours` <= 24 AND `hours.len` > 0
@@ -196,35 +205,37 @@ Likewise, for the valid cases (when the parameter respects the format) we will t
 
 &nbsp;&nbsp;&nbsp;&nbsp;
 : By combining all the categories above, we arrive to the following categories:      
-    - **E1**: `strTime` is `null`;
-    - **E2**: `strTime` is an empty `String`;
-    - `strTime` has a valid format:
-      - **E3** (**S1** + **M1** + **H1**): 
-        (`seconds` >= 0, `seconds` < 60 AND 0 < `seconds.len` < 3) AND 
-        (`minutes` >= 0 AND `minutes` < 60 AND 0 < `minutes.len` < 3 ) AND
-        (`hours` >= 0 AND `hours` <= 24 AND `hours.len` > 0)
-        *e.g. "22:15:48"*
-      - **E4** (**S1** + **M1** + **H2**): 
-        (`seconds` >= 0, `seconds` < 60 AND 0 < `seconds.len` < 3) AND 
-        (`minutes` >= 0 AND `minutes` < 60 AND 0 < `minutes.len` < 3 ) AND
-        (`hours` > 24)
-        *e.g. "36:15:48"*
-    - `strTime` is not `null` nor empty, but it doesn't respect the format: Any category that results from combining at least one of the categories that represent an invalid format for the `hours`, `minutes` or `seconds` will also represent an invalid format here. Therefore, to reduce the number of tests, we will consider each invalid format separately, as we explained in the note above.
-        - **E5** (**S2**): `seconds` >= 60 *e.g. "0:07:60"*;
-        - **E6** (**M2**): `minutes` >= 60 *e.g. "0:90:05"*
-        - **E7** (**S3**): `seconds` < 0 *e.g. "2:02:-1"*;
-        - **E8** (**M3**): `minutes` < 0 *e.g. "2:&#8203;-1:05"*
-        - **E9** (**H3**): `hours` < 0 *e.g. "-1:09:05"*
-        - **E10** (**S4**): `seconds.len` <= 0 *e.g. "0:07:"* (there is no negative length so this category only includes the case where `seconds.len` == 0)
-        - **E11** (**M4**): `minutes.len` <= 0 *e.g. "0::02"* (there is no negative length so this category only includes the case where `minutes.len` == 0)
-        - **E12** (**H4**): `hours.len` <= 0 *e.g. ":6:54"* (there is no negative length so this category only includes the case where `hours.len` == 0)
-        - **E13** (**S5**): `seconds.len` >= 3 *e.g. "0:6:054"*
-        - **E14** (**M5**): `minutes.len` >= 3 *e.g. "0:007:05"*      
-        - **E15** (**M6**): `minutes`component doesn't exist *e.g. "2"*
-        - **E16** (**H5**): `hours` component doesn't exist *e.g. "6:54"*
+    - **E1**: `strTime` is `null`;  
+    - **E2**: `strTime` is an empty `String`;  
+    - `strTime` has a valid format:  
+      - **E3** (**S1** + **M1** + **H1**):   
+        (`seconds` >= 0, `seconds` < 60 AND 0 < `seconds.len` < 3) AND     
+        (`minutes` >= 0 AND `minutes` < 60 AND 0 < `minutes.len` < 3 ) AND  
+        (`hours` >= 0 AND `hours` <= 24 AND `hours.len` > 0)    
+        *e.g. "22:15:48"*   
+      - **E4** (**S1** + **M1** + **H2**):  
+        (`seconds` >= 0, `seconds` < 60 AND 0 < `seconds.len` < 3) AND  
+        (`minutes` >= 0 AND `minutes` < 60 AND 0 < `minutes.len` < 3 ) AND  
+        (`hours` > 24)    
+        *e.g. "36:15:48"*  
+    - `strTime` is not `null` nor empty, but it doesn't respect the format: Any category that results from combining at least one of the categories that represent an invalid format for the `hours`, `minutes` or `seconds` will also represent an invalid format here. Therefore, to reduce the number of tests, we will consider each invalid format separately, as we explained in the note above.  
+        - **E5** (**S2**): `seconds` >= 60 *e.g. "0:07:60"*;  
+        - **E6** (**M2**): `minutes` >= 60 *e.g. "0:90:05"*  
+        - **E7** (**S3**): `seconds` < 0 *e.g. "2:02:-1"*;  
+        - **E8** (**M3**): `minutes` < 0 *e.g. "2:&#8203;-1:05"*  
+        - **E9** (**H3**): `hours` < 0 *e.g. "-1:09:05"*  
+        - **E10** (**S4**): `seconds.len` <= 0 *e.g. "0:07:"* (there is no negative length so this category only includes the case where `seconds.len` == 0)  
+        - **E11** (**M4**): `minutes.len` <= 0 *e.g. "0::02"* (there is no negative length so this category only includes the case where `minutes.len` == 0)  
+        - **E12** (**H4**): `hours.len` <= 0 *e.g. ":6:54"* (there is no negative length so this category only includes the case where `hours.len` == 0)  
+        - **E13** (**S5**): `seconds.len` >= 3 *e.g. "0:6:054"*  
+        - **E14** (**M5**): `minutes.len` >= 3 *e.g. "0:007:05"*        
+        - **E15** (**M6**): `minutes`component doesn't exist *e.g. "2"*  
+        - **E16** (**H5**): `hours` component doesn't exist *e.g. "6:54"*  
 
 ### Boundary Analysis
 > Note: the category to which each on-point an off-point belongs is identified between parentheses.
+
+
 
 **Boundary Analyses for E1**: `strTime` is `null`
 - On-point: `null` (**E1**)
