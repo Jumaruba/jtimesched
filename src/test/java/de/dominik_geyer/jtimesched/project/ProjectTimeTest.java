@@ -75,10 +75,10 @@ public class ProjectTimeTest {
   public void formatSecondsBoundary(int s, String expected) {
     testFormatSeconds(s, expected);
   }
+
   public static Stream<Arguments> genFormatSecondsPartition() {
     return Stream.of(
         Arguments.of(-2, "0:00:00"),
-        Arguments.of(0, "0:00:00"),
         Arguments.of(5, "0:00:05"),
         Arguments.of(65, "0:01:05"),
         Arguments.of(4215, "1:10:15"),
