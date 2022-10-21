@@ -1,120 +1,6 @@
-# Assignment 2 - Category-Partition
+# Assignment 3 - Boundary testing
 
-## Test 1 - project.ProjectSerializer.addXmlElement
-
-### Why test this function?
-
-This application persists the task's information in an XML file, allowing the user to keep his tasks from one usage of the tool to another. Given that the application tracks both the overall and the current day's active time of each task, it is essential that the information is correctly stored and retrieved when we shut down the app and relaunch it later, in the same or in different days. For this reason, we decided to test the function that is mostly used to write the information in XML format. In the `writeXml` method of the `ProjectSerializer` class, the static method `addXmlElement` is called 9 times for each project, in order to add the details about each project to an XML element. Therefore, it is essential that this function does what is expected, otherwise, when the data is restored with the `readXml` method, it could fail to be restored or load incorrect information about the projects.
-
-### Function Description
-
-```java
-protected static void addXmlElement(TransformerHandler hd, String element, AttributesImpl atts, Object data) throws SAXException;
-```
-
-Adds to the `hd` transformer an xml element with the tag `element`, the attributes `atts` and the data `data`, represented as a `String`. A `SAXException` is thrown when an error occurs when generating the Xml.
-
-e.g. The following XML content would be the result of adding an element named "note" with the attribute "author" and the data "This is a note".
-
-```XML
-<?xml version="1.0" encoding="UTF-8"?>
-<note author="John Doe">This is a note</note>
-```
-
-### Category-Partition
-
-1. **Parameters/Input**:
-  - `hd`, a `TransformerHandler` used to build the Xml;
-  - `element`, a `String` representing the name of the element (tag);
-  - `atts`, a `AttributesImpl` instance representing the attributes of the `element`;
-  - `data`, the content of the `element`;
-
-2. **Characteristics of each parameter**:
-  - the `element` and `data` parameters must respect [Xml's syntactic rules](https://www.w3schools.com/xml/xml_syntax.asp). Given that an element may be empty, `data` may be `null`. However, if `data` is not `null`, it must be an object that implements the `toString()` method, because the content of an Xml element is textual. The name of the element must not be empty;
-  - the existence of attributes (`atts`) must not be mandatory, as Xml elements don't always have them;
-  - the `TranformerHandler` `hd` may be either "new" i.e. when no elements were added yet; or it may already have elements i.e. when we wish to add multiple nested elements. If it is `null`, no element can, of course, be added.
-
-3. **Constraints**: Given that, in the particular case of this application, we only want to store simple details about each `Project`, the `data` parameter just needs to tolerate numeric values (to store times), `String` values (for the title, notes, among others), and, of course, it must support `null` values, in the case of empty Xml elements.
-4. **Input combinations / Tests**: By combining the characteristics of the four parameters we get the following combinations:
-  - new `hd` (doesn't store the representation of any other elements), attributes and no data;
-  - new `hd`, attributes and textual data;
-  - new `hd`, attributes and numeric data;
-  - new `hd`, no attributes and no data;
-  - non-empty `hd`, with or without attributes and data, because we only need to check the case where the `TransformerHandler` already stores the representation of other Xml elements i.e. to build an element with multiple child elements;
-  - `null` `hd`, with or without attributes and data, because it should give an exception either way;
-  - unnamed element, with or without attributes and data, because it should give an exception either way;
-  - `null` element, with or without attributes and data, because it should give an exception either way.
-
-### Unit Tests & Outcome
-
-The tests implemented can be found [here](../../src/test/java/de/dominik_geyer/jtimesched/project/ProjectSerializerTest.java).
-
-The first 5 tests described above, which represent cases in which the method is used with valid inputs, achieve the expected results i.e. they all pass. To check if the Xml was being generated as expected, we decided to use a `StringWriter` and test if its value was the expected Xml represented by the parameters.
-
-The 6th test, where the function is called with a `null` `TransformerHandler` throws a `NullPointerException` as expected. This function doesn't have a return value, it changes the content of the `TransformerHandler` that is passed in the arguments. Therefore, the `TransformerHandler` must be initialized before using this function, which facilitates its usage to build an Xml document with nested elements.
-
-The remaining tests, which test the usage of an empty or `null` `element`, fail. We were expecting to get a `SAXException`, given that an XML element/tag must not be empty. However, the function throws a `NullPointerException` when the element is `null`, and it also accepts elements without a name, which is invalid. Considering that this parameters disrespect the syntax of XML, we believe that the code should be modified to throw a `SAXException` in these cases.
-
----
-
-## Test 2 - project.Project.setSecondsToday
-
-### Why test this function?
-*"Never trust user input"*.  
-Unit tests not only improve the product quality, but also increase its security. The test tries to focus on these two aspects and therefore, given that the user can modify the `secondsToday` field using the GUI, the question that raises is:
-> Is the user able to crash the program with some input? 
-
-### Function Description
-```java 
-public void setSecondsToday(int secondsToday); 
-```
-By the name of the function, it's clear that it changes the value of a variable called `secondsToday`, which handles the value of the column `Today Time` in the program GUI. 
-
-### Category-Partition
-1. **Parameters/Input**:
-- `seconds` - the function input, representing the time.
-2. **Characteristics of each parameter** :  Given that `seconds` is an integer, it can assume the following values:
-- `seconds` is positive
-- `seconds` is 0
-- `seconds` is negative
-3. **Constraints**: The only constraint valid in this test in the maximum value of integer. 
-4. **Unit test**: The possible values tested for the `seconds` parameter are:
-- `seconds` is maximum positive number valid;
-- `seconds` is a positive number higher than 60;
-- `seconds` is 60; 
-- `seconds` is a positive number less than 60; 
-- `seconds` is 0; 
-- `seconds` is the minimum negative number valid; 
-- `seconds` is a negative number less than -60; 
-- `seconds` is -60;
-- `seconds` is a negative number higher than -60; 
-
-Since negative numbers are not possible, it's expected that negative numbers are handled and are equal to zero. 
-
-### Unit Tests & Outcome
-The tests implemented can be found [here](../../src/test/java/de/dominik_geyer/jtimesched/project/ProjectTest.java).
-
-```java 
-@ParameterizedTest
-@MethodSource("genSetSecondsToday")
-public void setSecondsTodayTest(int seconds, int expected);
-```
-
-The `setSecondsTodayTest` is a `@ParameterizedTest` that receives the input from a
-function called `genSetSecondsToday`, which is defined as below: 
-
-```java
-public static Stream<Arguments> genSetSecondsToday(); 
-```
-
-The test passes for all the given inputs. 
-It's important highlight that although the tests don't have a wild variate of inputs, quantity is 
-not a synonym of quality: the inputs tests specific cases that approaches scenarios where 
-the test might fail. Adding more input indistinctly is not recommended. 
-
---- 
-
-## Test 3 - project.ProjectTime.parseSeconds
+## Test 1 - project.ProjectTime.parseSeconds
 
 ### Why test this function?
 This application allows the user to manually change the overall time of a task and the time spent doing that same task in the current day. When that manually configuration is performed, this function is used to convert the input of the user into the correspondent time in seconds, which is then used to update the state of the application. For this reason, it is crucial that this function handles the user input as expected, either by performing the right conversion when possible or by throwing the expected exception. 
@@ -234,8 +120,6 @@ Likewise, for the valid cases (when the parameter respects the format) we will t
 
 ### Boundary Analysis
 > Note: the category to which each on-point an off-point belongs is identified between parentheses.
-
-
 
 **Boundary Analyses for E1**: `strTime` is `null`
 - On-point: `null` (**E1**)
@@ -363,7 +247,7 @@ Both tests passed successfully for all the input values, which means that the me
 
 ---  
 
-## Test 4 - project.ProjectTime.formatSeconds
+## Test 2 - project.ProjectTime.formatSeconds
 
 ### Why test this function?
 Given the character of the application, whose main feature is to track the time of tasks and projects, it is essential that the functions used to format the time in a human readable way work as expected. Furthermore, this method is used at least 15 times in 5 different classes of the source code: `JTimeSchedFrame`, `TimeCellComponent`, ... and therefore it may generate multiple points of failure if it doesn't work as expected.
@@ -430,7 +314,7 @@ As well as tested in the partition tests, the test fails for negative values, su
 
 --- 
 
-## Test 5 - project.ProjectTableModel.isCellEditable
+## Test 3 - project.ProjectTableModel.isCellEditable
 
 ### Why test this function?
 
