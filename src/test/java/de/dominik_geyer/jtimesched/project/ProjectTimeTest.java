@@ -118,4 +118,5 @@ public class ProjectTimeTest {
         Arguments.of(90065, "25:01:05"),
         Arguments.of(-1, "0:00:00"));
   }
+
 }
