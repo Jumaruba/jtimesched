@@ -5,11 +5,6 @@
 ### Why test this function?
 This application allows the user to manually change the overall time of a task and the time spent doing that same task in the current day. When that manually configuration is performed, this function is used to convert the input of the user into the correspondent time in seconds, which is then used to update the state of the application. For this reason, it is crucial that this function handles the user input as expected, either by performing the right conversion when possible or by throwing the expected exception. 
 
-As checked while executing the software, some fields are not supposed to be
-**edited/changed** while the timer is counting: `Time Overall` and `Time Today`.
-However, it's still necessary to check if the function works as expected in other scenarios
-inside the domain.
-
 ### Function Description
 ```java
 public static int parseSeconds(String strTime) throws ParseException;
@@ -61,62 +56,62 @@ Likewise, for the valid cases (when the parameter respects the format) we will t
 
     - **Categories for `seconds`**:
       - Valid:
-        - **S1**: `seconds` >= 0 AND `seconds` < 60 AND 0 < `seconds.len` < 3 
+        - S1: `seconds` >= 0 AND `seconds` < 60 AND 0 < `seconds.len` < 3 
       - Invalid:
-        - **S2**: `seconds` >= 60
-        - **S3**: `seconds` < 0
-        - **S4**: `seconds.len` <= 0 (there is no negative length so this category only includes the case where `seconds.len` == 0)
-        - **S5**: `seconds.len` >= 3
+        - S2: `seconds` >= 60
+        - S3: `seconds` < 0
+        - S4: `seconds.len` <= 0 (there is no negative length so this category only includes the case where `seconds.len` == 0)
+        - S5: `seconds.len` >= 3
 &emsp;
 
     - **Categories for `minutes`:**
         - Valid:
-          - **M1**: `minutes` >= 0 AND `minutes` < 60 AND 0 < `minutes.len` < 3 
+          - **M1: `minutes` >= 0 AND `minutes` < 60 AND 0 < `minutes.len` < 3 
         - Invalid:
-          - **M2**: `minutes` >= 60
-          - **S3**: `minutes` < 0
-          - **M4**: `minutes.len` <= 0 (there is no negative length so this category only includes the case where `minutes.len` == 0)
-          - **M5**: `minutes.len` >= 3
-          - **M6**: `minutes` component doesn't exist *e.g. "4"*
+          - M2: `minutes` >= 60
+          - M3: `minutes` < 0
+          - M4: `minutes.len` <= 0 (there is no negative length so this category only includes the case where `minutes.len` == 0)
+          - M5: `minutes.len` >= 3
+          - M6: `minutes` component doesn't exist *e.g. "4"*
 &emsp;
 
     - **Categories for `hours`:**
       - Valid:
-        - **H1**: `hours` >= 0 AND `hours` <= 24 AND `hours.len` > 0
-        - **H2**: `hours` > 24 (`hours.len` is necessarily higher than 0)
+        - H1: `hours` >= 0 AND `hours` <= 24 AND `hours.len` > 0
+        - H2: `hours` > 24 (`hours.len` is necessarily higher than 0)
       - Invalid:
-        - **H3**: `hours` < 0
-        - **H4**: `hours.len` <= 0 (there is no negative length so this category only includes the case where `hours.len` == 0)
-        - **H5**: `hours` component doesn't exist *e.g. "4:4"*
+        - H3: `hours` < 0
+        - H4: `hours.len` <= 0 (there is no negative length so this category only includes the case where `hours.len` == 0)
+        - H5: `hours` component doesn't exist *e.g. "4:4"*
 
 &nbsp;&nbsp;&nbsp;&nbsp;
 : By combining all the categories above, we arrive to the following categories:      
-    - **E1**: `strTime` is `null`;  
-    - **E2**: `strTime` is an empty `String`;  
+    - E1: `strTime` is `null`;  
+    - E2: `strTime` is an empty `String`;  
     - `strTime` has a valid format:  
-      - **E3** (**S1** + **M1** + **H1**):   
+      - E3 (S1 + M1 + H1):   
         (`seconds` >= 0, `seconds` < 60 AND 0 < `seconds.len` < 3) AND     
         (`minutes` >= 0 AND `minutes` < 60 AND 0 < `minutes.len` < 3 ) AND  
         (`hours` >= 0 AND `hours` <= 24 AND `hours.len` > 0)    
         *e.g. "22:15:48"*   
-      - **E4** (**S1** + **M1** + **H2**):  
+      - E4 (S1 + M1 + H2):  
         (`seconds` >= 0, `seconds` < 60 AND 0 < `seconds.len` < 3) AND  
         (`minutes` >= 0 AND `minutes` < 60 AND 0 < `minutes.len` < 3 ) AND  
         (`hours` > 24)    
         *e.g. "36:15:48"*  
     - `strTime` is not `null` nor empty, but it doesn't respect the format: Any category that results from combining at least one of the categories that represent an invalid format for the `hours`, `minutes` or `seconds` will also represent an invalid format here. Therefore, to reduce the number of tests, we will consider each invalid format separately, as we explained in the note above.  
-        - **E5** (**S2**): `seconds` >= 60 *e.g. "0:07:60"*;  
-        - **E6** (**M2**): `minutes` >= 60 *e.g. "0:90:05"*  
-        - **E7** (**S3**): `seconds` < 0 *e.g. "2:02:-1"*;  
-        - **E8** (**M3**): `minutes` < 0 *e.g. "2:&#8203;-1:05"*  
-        - **E9** (**H3**): `hours` < 0 *e.g. "-1:09:05"*  
-        - **E10** (**S4**): `seconds.len` <= 0 *e.g. "0:07:"* (there is no negative length so this category only includes the case where `seconds.len` == 0)  
-        - **E11** (**M4**): `minutes.len` <= 0 *e.g. "0::02"* (there is no negative length so this category only includes the case where `minutes.len` == 0)  
-        - **E12** (**H4**): `hours.len` <= 0 *e.g. ":6:54"* (there is no negative length so this category only includes the case where `hours.len` == 0)  
-        - **E13** (**S5**): `seconds.len` >= 3 *e.g. "0:6:054"*  
-        - **E14** (**M5**): `minutes.len` >= 3 *e.g. "0:007:05"*        
-        - **E15** (**M6**): `minutes`component doesn't exist *e.g. "2"*  
-        - **E16** (**H5**): `hours` component doesn't exist *e.g. "6:54"*  
+        - E5 (S2): `seconds` >= 60 *e.g. "0:07:60"*;  
+        - E6 (M2): `minutes` >= 60 *e.g. "0:90:05"*  
+        - E7 (S3): `seconds` < 0 *e.g. "2:02:-1"*;  
+        - E8 (M3): `minutes` < 0 *e.g. "2:&#8203;-1:05"*  
+        - E9 (H3): `hours` < 0 *e.g. "-1:09:05"*  
+        - E10 (S4): `seconds.len` <= 0 *e.g. "0:07:"* (there is no negative length so this category only includes the case where `seconds.len` == 0)  
+        - E11 (M4): `minutes.len` <= 0 *e.g. "0::02"* (there is no negative length so this category only includes the case where `minutes.len` == 0)  
+        - E12 (H4): `hours.len` <= 0 *e.g. ":6:54"* (there is no negative length so this category only includes the case where `hours.len` == 0)  
+        - E13 (S5): `seconds.len` >= 3 *e.g. "0:6:054"*  
+        - E14 (M5): `minutes.len` >= 3 *e.g. "0:007:05"*        
+        - E15 (M6): `minutes`component doesn't exist *e.g. "2"*  
+        - E16 (H5): `hours` component doesn't exist *e.g. "6:54"*  
 
 ### Boundary Analysis
 > Note: the category to which each on-point an off-point belongs is identified between parentheses.
@@ -226,17 +221,20 @@ Similarly to the last category, **E4** combines categories **S1**, **M1** and **
 - On-point: "0:0" (**E16**)
 - Off-point: "0:0:0" (**E3**)
 
-### Unit Tests & Outcome
+### Unit Tests & Outcome  
+
 The tests implemented can be found [here](../../src/test/java/de/dominik_geyer/jtimesched/project/ProjectTimeTest.java).
 
-**Category-Partition Tests**
+#### Category-Partition Tests 
+
 To test the invalid parameters described above, we used the `@ParametrizedTest` `parseSecondsInvalidTest` with a `@MethodSource` that feeds all the invalid parameters to be tested, mainly `null`, empty string and all the other cases that don't respect the expected format. The test passes for all the invalid inputs, throwing a `ParseException`, except when the input is `null`. In that case, the test fails because a `NullPointerException` is thrown. We believe that this exception should be handled in order to avoid unexpected behavior i.e. by throwing a `ParseException` instead.
 
 Even though the specification considered above does not tolerate formats such as "06:54" and "2", we believe that this method could be improved in order to support such cases.
 
 To test the other partitions, we created the `@ParametrizedTest` `parseSecondsValidTest` with a `@MethodSource` that feeds all the valid parameters described above. The test passes successfully for all the valid values, returning the number of seconds that correspond to the `String` parameter.
 
-**Boundary Tests**
+#### Boundary Tests  
+
 Similarly, to test the boundaries, mainly the on-points and off-points, we started by excluding the ones that were already tested in the category-partition tests, such as the `null` and empty String. We then divided them in valid and invalid values, that is, we separated the ones that were supposed to make the function work as expected and the ones that were expected to cause a `ParseException`.
 After that, we created 2 `@ParametrizedTests`, one for the invalid values - `parseSecondsInvalidBoundariesTest`; and another for the valid values - `parseSecondsValidBoundariesTest`.
 
@@ -250,7 +248,7 @@ Both tests passed successfully for all the input values, which means that the me
 ## Test 2 - project.ProjectTime.formatSeconds
 
 ### Why test this function?
-Given the character of the application, whose main feature is to track the time of tasks and projects, it is essential that the functions used to format the time in a human readable way work as expected. Furthermore, this method is used at least 15 times in 5 different classes of the source code: `JTimeSchedFrame`, `TimeCellComponent`, ... and therefore it may generate multiple points of failure if it doesn't work as expected.
+Given the character of the application, whose main feature is to track the time of tasks and projects, it is essential that the functions used to format the time work as expected. Furthermore, this method is used at least 15 times in 5 different classes of the source code: `JTimeSchedFrame`, `TimeCellComponent`, ... and therefore it may generate multiple points of failure if it doesn't work as expected.
 
 ### Function Description
 ```java
@@ -272,7 +270,7 @@ Converts the number of seconds to the equivalent time in hours, minutes and seco
 - E4: s >= 3600 and s < 86400;  
 - E5: s >= 86400; 
 
-### Boundary testing 
+### Boundary Analysis 
 
 Considering the partitions defined in the previous section, let's define the **on-points** and **off-points** and make sure that these are covered by the tests. 
 
@@ -399,7 +397,7 @@ Let's analyse the partitions of each input:
 
 > Note: we didn't test the combination of `row` and `col` parameters in the tests, since the invalid test cases of `row` (E7, E9) should fail regardless of the row value. 
 
-### Boundary testing 
+### Boundary Analysis 
 
 Considering the partitions defined in the previous section, let's define the on-points and off-points, making sure these points are covered by the tests. 
 
