@@ -136,7 +136,11 @@ Converts a time `String` in the format "\d+:[0-5]?\d:[0-5]?\d" (hours:minutes:se
 3. **Constraints**: Given that the parameter is a `String`, it can assume infinite values, either respecting the requested format or not. Therefore, for the exceptional behavior we will consider only the cases where `strTime` is null, empty or has another format different from the accepted one. 
 Likewise, for the valid cases (when the parameter respects the format) we will take into account the domain of time itself in order to define our corner cases, testing if the conversion works well with time Strings that have seconds, minutes, hours and more hours than a single day.
 4. **Input combinations / Tests**: This function only has one parameter (`strTime`), so we are going to test it considering the possible values of this parameter. 
-    All the categories correspond to a case where either `strTime` doesn't respect the expected format or `strTime` has the expected format.
+    All the categories correspond to a case where:
+    - `strTime` is `null`;
+    - `strTime` is empty;
+    - `strTime`doesn't respect the expected format;
+    - `strTime` has the expected format.
   
     To define the categories, we deal with the seconds, minutes and hours like they were different parameters (`seconds`, `minutes` and `hours`). 
     First, if we consider their time domains, we know that:
@@ -191,22 +195,21 @@ Likewise, for the valid cases (when the parameter respects the format) we will t
         - **H5**: `hours` component doesn't exist *e.g. "4:4"*
 
 &nbsp;&nbsp;&nbsp;&nbsp;
-: By combining all the categories above, we arrive to the following categories:
+: By combining all the categories above, we arrive to the following categories:      
+    - **E1**: `strTime` is `null`;
+    - **E2**: `strTime` is an empty `String`;
     - `strTime` has a valid format:
-      - **E1** (**S1** + **M1** + **H1**): 
+      - **E3** (**S1** + **M1** + **H1**): 
         (`seconds` >= 0, `seconds` < 60 AND 0 < `seconds.len` < 3) AND 
         (`minutes` >= 0 AND `minutes` < 60 AND 0 < `minutes.len` < 3 ) AND
         (`hours` >= 0 AND `hours` <= 24 AND `hours.len` > 0)
         *e.g. "22:15:48"*
-      - **E2** (**S1** + **M1** + **H2**): 
+      - **E4** (**S1** + **M1** + **H2**): 
         (`seconds` >= 0, `seconds` < 60 AND 0 < `seconds.len` < 3) AND 
         (`minutes` >= 0 AND `minutes` < 60 AND 0 < `minutes.len` < 3 ) AND
         (`hours` > 24)
         *e.g. "36:15:48"*
-    - `strTime` has an invalid format: Any category that results from combining at least one of the categories that represent an invalid format for the `hours`, `minutes` or `seconds` will also represent an invalid format here. Therefore, to reduce the number of tests, we will consider each invalid format separately, as we explained in the note above.
-      - **E3**: `strTime` is `null`;
-      - **E4**: `strTime` is an empty `String`;
-      - `strTime` is not `null` nor empty, but it doesn't respect the format:
+    - `strTime` is not `null` nor empty, but it doesn't respect the format: Any category that results from combining at least one of the categories that represent an invalid format for the `hours`, `minutes` or `seconds` will also represent an invalid format here. Therefore, to reduce the number of tests, we will consider each invalid format separately, as we explained in the note above.
         - **E5** (**S2**): `seconds` >= 60 *e.g. "0:07:60"*;
         - **E6** (**M2**): `minutes` >= 60 *e.g. "0:90:05"*
         - **E7** (**S3**): `seconds` < 0 *e.g. "2:02:-1"*;
@@ -223,99 +226,102 @@ Likewise, for the valid cases (when the parameter respects the format) we will t
 ### Boundary Analysis
 > Note: the category to which each on-point an off-point belongs is identified between parentheses.
 
-**Boundary Analysis for E1 (S1 + M1 + H1)**:
-Category **E1** combines categories **S1**, **M1** and **H1**, resulting in a logical conjunction of the conditions that characterize a valid `strTime` format. For this reason, we decided to perform the Boundary Analysis on **S1**, **M1** and **H1** individually.
+**Boundary Analyses for E1**: `strTime` is `null`
+- On-point: `null` (**E1**)
+- Off-point: empty string (**E2**)
+Given that a `null` value, in this case, would be caused by passing an uninitialized String to `strTime`, we consider that the value that is closer to the boundary (`null`) corresponds to passing the most basic initialized String(`new String()`) to `strTime`, which results in an empty String. 
+As we are dealing with Strings, even though the condition represents an equality, we only consider one off-point (empty String), as it a subjective analysis. 
+
+**Boundary Analysis for E2**: `strTime` is an empty `String`
+- On-point: empty string (**E2**)
+- Off-point: "0:0:0" (time is zero) (**E3**)
+Based on the logic of the previous boundary analysis (E3), the minimum change that needs to be made in order to create a valid string is to fill the `strTime`with the initial value of the counting seconds.
+
+**Boundary Analysis for E3 (S1 + M1 + H1)**:
+Category **E3** combines categories **S1**, **M1** and **H1**, resulting in a logical conjunction of the conditions that characterize a valid `strTime` format. For this reason, we decided to perform the Boundary Analysis on **S1**, **M1** and **H1** individually.
 - **Boundary Analysis for S1**: `seconds` >= 0 AND `seconds` < 60 AND 0 < `seconds.len` < 3 
   - `seconds` >= 0
-    - On-point: "0:0:0" (**E1**)
+    - On-point: "0:0:0" (**E3**)
     - Off-point: "0:0:-1" (**E7**)
   - `seconds` < 60
     - On-point: "0:0:60" (**E5**)
-    - Off-point: "0:0:59" (**E1**)
+    - Off-point: "0:0:59" (**E3**)
   - `seconds.len` > 0
     - On-point: "0:0:" (**E10**)
-    - Off-point: "0:0:0" (**E1**)
+    - Off-point: "0:0:0" (**E3**)
   - `seconds.len` < 3 
     - On-point: "0:0:000" (**E13**)
-    - Off-point: "0:0:00" (**E1**)
+    - Off-point: "0:0:00" (**E3**)
 - **Boundary Analysis for M1**: `minutes` >= 0 AND `minutes` < 60 AND 0 < `minutes.len` < 3 
   - `minutes` >= 0
-    - On-point: "0:0:0" (**E1**)
+    - On-point: "0:0:0" (**E3**)
     - Off-point: "0:&#8203;-1:0" (**E8**)
   - `minutes` < 60
     - On-point: "0:60:0" (**E6**)
-    - Off-point: "0:59:0" (**E1**)
+    - Off-point: "0:59:0" (**E3**)
   - `minutes.len` > 0
     - On-point: "0::0" (**E11**)
-    - Off-point: "0:0:0" (**E1**)
+    - Off-point: "0:0:0" (**E3**)
   - `minutes.len` < 3 
     - On-point: "0:000:0" (**E14**)
-    - Off-point: "0:00:0" (**E1**)
+    - Off-point: "0:00:0" (**E3**)
 - **Boundary Analysis for H1**: `hours` >= 0 AND `hours` <= 24 AND `hours.len` > 0
   - `hours` >= 0
-    - On-point: "0:0:0" (**E1**)
+    - On-point: "0:0:0" (**E3**)
     - Off-point: "-1:0:0" (**E9**)
   - `hours` <= 24
-    - On-point: "24:0:0" (**E1**)
-    - Off-point: "25:0:0" (**E2**)
+    - On-point: "24:0:0" (**E3**)
+    - Off-point: "25:0:0" (**E4**)
   - `hours.len` > 0
-    - On-point: "0:0:0" (**E1**)
+    - On-point: "0:0:0" (**E3**)
     - Off-point: ":0:0" (**E12**)
   
-**Boundary Analysis for E2 (S1 + M1 + H2)**:
-Similarly to the last category, **E2** combines categories **S1**, **M1** and **H2**, which led us to perform the Boundary Analysis on each of this categories individually. As we already performed this analysis for **S1** and **M1**, the only one left is **H2**.
+**Boundary Analysis for E4 (S1 + M1 + H2)**:
+Similarly to the last category, **E4** combines categories **S1**, **M1** and **H2**, which led us to perform the Boundary Analysis on each of this categories individually. As we already performed this analysis for **S1** and **M1**, the only one left is **H2**.
 - **Boundary Analysis for H2**: `hours` > 24
   - `hours` > 24
-    - On-point: "24:0:0" (**E1**)
-    - Off-point: "25:0:0" (**E2**)
-
-**Boundary Analyses for E3**: `strTime` is `null`
-- On-point: `null` (**E3**)
-- Off-point: empty string --- DOUBT (como é igualdade deveria ser tmb os on-points de todas as outras)
-
-**Boundary Analysis for E4**: `strTime` is an empty `String`
-- On-point: empty string (**E4**)
-- Off-point: "0:0:0" (time is zero) --- DOUBT (como é igualdade deveria ser tmb os on-points de todas as outras)
+    - On-point: "24:0:0" (**E3**)
+    - Off-point: "25:0:0" (**E4**)
 
 **Boundary Analysis for E5**: `seconds` >= 60
 - On-point: "0:0:60" (**E5**)
-- Off-point: "0:0:59" (**E1**)
+- Off-point: "0:0:59" (**E3**)
 
 **Boundary Analysis for E6**: `minutes` >= 60
 - On-point: "0:60:0" (**E6**)
-- Off-point: "0:59:0" (**E1**)
+- Off-point: "0:59:0" (**E3**)
 
 **Boundary Analysis for E7**: `seconds` < 0
-- On-point: "0:0:0" (**E1**)
+- On-point: "0:0:0" (**E3**)
 - Off-point: "0:0:-1" (**E7**)
 
 **Boundary Analysis for E8**: `minutes` < 0
-- On-point: "0:0:0" (**E1**)
+- On-point: "0:0:0" (**E3**)
 - Off-point: "0:&#8203;-1:0" (**E8**)
 
 **Boundary Analysis for E9**: `hours` < 0
-- On-point: "0:0:0" (**E1**)
+- On-point: "0:0:0" (**E3**)
 - Off-point: "-1:0:0" (**E9**)
 
 **Boundary Analysis for E10**: `seconds.len` <= 0
 - On-point: "0:0:" (**E10**)
-- Off-point: "0:0:0" (**E1**)
+- Off-point: "0:0:0" (**E3**)
 
 **Boundary Analysis for E11**: `minutes.len` <= 0
 - On-point: "0::0" (**E11**)
-- Off-points: "0:0:0" (**E1**)
+- Off-points: "0:0:0" (**E3**)
 
 **Boundary Analysis for E12**: `hours.len` <= 0
 - On-point: ":0:0" (**E12**)
-- Off-points: "0:0:0" (**E1**)
+- Off-points: "0:0:0" (**E3**)
 
 **Boundary Analysis for E13**: `seconds.len` >= 3
 - On-point: "0:0:000" (**E13**)
-- Off-point: "0:0:00" (**E1**)
+- Off-point: "0:0:00" (**E3**)
 
 **Boundary Analysis for E14**: `minutes.len` >= 3
 - On-point: "0:000:0" (**E14**)
-- Off-point: "0:00:0" (**E1**)
+- Off-point: "0:00:0" (**E3**)
 
 **Boundary Analysis for E15**: `minutes` component doesn't exist
 - On-point: "0" (**E15**)
@@ -323,7 +329,7 @@ Similarly to the last category, **E2** combines categories **S1**, **M1** and **
 
 **Boundary Analysis for E16**: `hours` component doesn't exist
 - On-point: "0:0" (**E16**)
-- Off-point: "0:0:0"  (**E1**)
+- Off-point: "0:0:0" (**E3**)
 
 ### Unit Tests & Outcome
 The tests implemented can be found [here](../../src/test/java/de/dominik_geyer/jtimesched/project/ProjectTimeTest.java).
