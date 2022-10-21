@@ -381,17 +381,16 @@ public void isEditableTemplate(boolean isRunning, int column, boolean expected){
 }
 ```
 
-Each test, call this function, which receives as parameter a `boolean isRunning`, which tells if the 
-counter is running or not, the `column` of the row and the expected result value. 
+Each test calls this function, which receives as parameter:
+- a `boolean isRunning`, which tells if the counter is running or not;
+- the `column` of the row and the expected result value. 
 
-All the tests look really similar: they are all `@ParameterizedTest`, which receives the column 
-as parameter and by a `@ValueSource` and internally they only call the `isEditableTemplate`.
+All the tests look really similar: they are all `@ParameterizedTest`, which receive the column as parameter through a `@ValueSource`, and,  internally, they only call the `isEditableTemplate`.
 
-All tests regarding the `col` variable passes. 
+All tests regarding the `col` variable pass. 
 
 ####  Testing `row` parameter 
 The goal of this test is to make sure that the function `isCellEditable` doesn't return an `IndexOutOfBoundsException`. 
 Many tests failed, since the program probably doesn't handle this scenario. 
-
 
 Both the `row` and `col` tests includes the off and on-points discussed in the boundary tests section. 
