@@ -2,7 +2,6 @@ package de.dominik_geyer.jtimesched.project;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.ArrayList;
@@ -36,7 +35,7 @@ public class ProjectTableModelTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {Integer.MIN_VALUE, -2, -1, 0})
+    @ValueSource(ints = {-2, -1, 0})
     public void testPartitionE1(int col) {
         isEditableTemplate(false, col, false);
     }
@@ -48,13 +47,13 @@ public class ProjectTableModelTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {7, 8, 9, Integer.MAX_VALUE})
+    @ValueSource(ints = {7, 8, 9})
     public void testPartitionE3(int col) {
         isEditableTemplate(false, col, false);
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {Integer.MIN_VALUE, -1, -2, -3})
+    @ValueSource(ints = {-1, -2, -3})
     public void testPartitionE4(int col) {
         isEditableTemplate(true, col, false);
     }
@@ -66,7 +65,7 @@ public class ProjectTableModelTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {5, 6, 7, 8, 9, Integer.MAX_VALUE})
+    @ValueSource(ints = {5, 6, 7, 8, 9})
     public void testPartitionE6(int col) {
         isEditableTemplate(true, col, false);
     }
@@ -88,11 +87,10 @@ public class ProjectTableModelTest {
     }
     
     @ParameterizedTest
-    @ValueSource(ints = {Integer.MIN_VALUE, -2, -1})
+    @ValueSource(ints = {-2, -1})
     public void testPartitionE7(int row) {
         testRowParameter(row);
     }
-
 
     @Test
     public void testPartitionE8() {
@@ -100,7 +98,7 @@ public class ProjectTableModelTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {Integer.MAX_VALUE, 1, 2})
+    @ValueSource(ints = {1, 2})
     public void testPartitionE9(int row) {
         testRowParameter(row);
     }
