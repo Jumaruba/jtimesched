@@ -306,7 +306,7 @@ public void isEditableTemplate(boolean isRunning, int column, boolean expected){
 ```
 
 Each test, call this function, which receives as parameter a `boolean isRunning`, which tells if the 
-counter is running or not, the `colummn` of the row and the expected result value. 
+counter is running or not, the `colummn` of the row and there expected result value. 
 
 All the tests look really similar: they are all `@ParameterizedTest`, which receives the column 
 as parameter and by a `@ValueSource` and internally they only call the `isEditableTemplate`. 
