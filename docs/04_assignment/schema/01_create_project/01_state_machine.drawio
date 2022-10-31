@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="jvSaRyRy9VlixMWbLIwb" name="Page-1">
-        <mxGraphModel dx="558" dy="505" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="1167" dy="713" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -31,36 +31,36 @@
                         <mxPoint x="10" y="9" as="offset"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="40" style="edgeStyle=none;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="28" target="30">
+                <mxCell id="40" style="edgeStyle=none;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="1" source="28" target="30" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="28" value="JTimeShed Table" style="rounded=1;whiteSpace=wrap;html=1;arcSize=26;" vertex="1" parent="1">
+                <mxCell id="28" value="JTimeShed Table" style="rounded=1;whiteSpace=wrap;html=1;arcSize=26;" parent="1" vertex="1">
                     <mxGeometry x="140" y="610" width="100" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="29" value="&lt;div style=&quot;text-align: left&quot;&gt;&lt;b&gt;Click &quot;Add Project&quot;&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;b&gt;/&lt;/b&gt;create project&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;" vertex="1" parent="1">
+                <mxCell id="29" value="&lt;div style=&quot;&quot;&gt;&lt;b&gt;Click &quot;Add Project&quot;&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;b&gt;/&lt;/b&gt;create project&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;" parent="1" vertex="1">
                     <mxGeometry x="250" y="600" width="120" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="30" value="Title Focused" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                <mxCell id="30" value="Project Title Edition" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
                     <mxGeometry x="380" y="610" width="120" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="31" style="edgeStyle=none;html=1;fontSize=12;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="32" target="28">
+                <mxCell id="31" style="edgeStyle=none;html=1;fontSize=12;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="32" target="28" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <mxPoint x="270" y="599.9999999999999" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="32" value="" style="ellipse;fillColor=#000000;strokeColor=none;" vertex="1" parent="1">
+                <mxCell id="32" value="" style="ellipse;fillColor=#000000;strokeColor=none;" parent="1" vertex="1">
                     <mxGeometry x="80" y="630" width="20" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="34" value="Project Idle" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" vertex="1" parent="1">
+                <mxCell id="34" value="Project Idle" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;" parent="1" vertex="1">
                     <mxGeometry x="380" y="740" width="120" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="35" style="edgeStyle=none;html=1;fontSize=12;" edge="1" parent="1" source="30">
+                <mxCell id="35" style="edgeStyle=none;html=1;fontSize=12;" parent="1" source="30" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <mxPoint x="440" y="790" as="sourcePoint"/>
                         <mxPoint x="440" y="740" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="36" value="&lt;b&gt;Rename project&lt;/b&gt;&lt;br&gt;/project.setTitle(input)" style="edgeLabel;html=1;align=left;verticalAlign=middle;resizable=0;points=[];fontSize=12;" vertex="1" connectable="0" parent="35">
+                <mxCell id="36" value="&lt;b&gt;Save Title&lt;/b&gt;&lt;br&gt;/project.setTitle(input)" style="edgeLabel;html=1;align=left;verticalAlign=middle;resizable=0;points=[];fontSize=12;" parent="35" vertex="1" connectable="0">
                     <mxGeometry x="-0.3167" relative="1" as="geometry">
                         <mxPoint x="10" y="9" as="offset"/>
                     </mxGeometry>

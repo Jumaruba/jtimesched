@@ -23,7 +23,7 @@ What was the use case selected and why.
 
 ### 1.5 Tests developed in QF tool
 
-## 2. 
+## 2. Edit time/quota today
 
 ##  2.1 State diagram 
 
