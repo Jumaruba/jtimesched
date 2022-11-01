@@ -239,30 +239,33 @@ This diagram shows the flow to delete a project in the system perspective.
 
 One might ask why the **play** and **pause** events were represented in this diagram, since they might represent a different use case. The reason behind this analysis, comes from the fact that some actions are forbidden while a project has its counter in execution. Therefore, it's important to check that the `delete` case is not included in the forbidden actions in the **Project Playing** state, given that errors in conditions of this kind are not uncommon. 
 
-![](./figures/03_delete_project/03_state_machine.png.png)
+![](./figures/03_delete_project/03_state_machine.png)
 
 ### 3.2 Transition tree
+
+- We start with the **Project Idle** state (**Project_Idle_0**); 
+- From `Project Idle` we have two transitions: one to it self (**Project_Idle_1**) when deleting a project and another to set a project as playing (**Project_Playing_0**); 
+- From the **Project_Idle_1**, we have the same possibilities of transitions as in **Project_Idle_0**. Since these were already exercised, we set **Project_Idle_1** as a leaf;  
+- **Project_Playing** (**Project_Playing_0**) we can pause the project, which leads to the **Project_Idle** (**Project_Idle_2**) state, or we can delete a project, which leads us to the same **Project_Idle** (**Project_Idle_3**) state. 
+- Since all the outgoing transitions from **Project_Idle** were exercised, we let **Project_Idle_2** and **Project_Idle_3** as the leaves of the tree.  
 
 ![](./figures/03_delete_project/03_transition_tree.png)
 ### 3.3 Transition table 
 
 | States / Events | Delete | Play | Pause | 
+|- | - | - | -  |
 | Project Idle | Project Idle | Project Playing | |  
 | Project Playing | Project Idle | | Project Idle | 
 
-Here there're two sneak paths.   
 
 ### 3.4 Sneak Paths 
 
+Here there're two sneak paths. 
+| (State, Event) | Behavior | Explanation | 
+| - | - | - | 
+| (Project Idle, Pause) | Nothing | If a project is paused and it was paused again, then it should remain in the same state |
+| (Project Playing, Play) | Nothing | Analog to the previous situation. If a counter is already counting, then the final state should be the same, but the counter should not be reseted |  
 ### 3.5 Tests developed in QF-Test tool 
-
-
-
-
-
-
-
-
 
 
 
