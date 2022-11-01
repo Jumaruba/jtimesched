@@ -35,16 +35,16 @@ This diagram represents the creation of projects. Considering that the creation 
 
 ### 1.4 Sneak Paths 
 
-In the section **1.3** the empty cells corresponds to **sneak transitions**. 
+In the section **1.3** the 5 empty cells correspond to **sneak transitions**.
 Let's map the expected behavior of each **sneak transition**. 
 
-| (State, Event) | Behavior | Explanation | 
+| (State1, Event, State2) | Behavior | Explanation | 
 | -------------- | -------- | ----------  | 
-| (No Popup Opened, Valid Keyboard input) | | | 
-| (No Popup Opened, Save title) | | | 
-| (No Popup Opened, Save title & create) | | | 
-| (New Idle Project, Save title & create ) | | | 
-| (Edit Title, Create) | | | 
+| (No Popup Opened, Valid Keyboard input, No Popup Opened) | Nothing | If we type without selecting a specific input, nothing is expected to change in the App, but there is no need to throw an exception either | 
+| (No Popup Opened, Save title, No Popup Opened) | Nothing | If the user doesn't create a project or explicitly selects a title to change, he will not be able to save anything, because there will be no input in title field to save. | 
+| (No Popup Opened, Save title & create, No Popup Opened) | Nothing | Same as the case above | 
+| (New Idle Project, Save title & create, New Idle Project) | Nothing | Without typing or deleting the default title of a project, its value will not be modified, so saving a custom title from this state is not possible. | 
+| (Edit Title, Create, Edit Title) | Nothing | If the user presses the "Add Project" button while he is editing the title, the current changes that he made to the title must be saved, and a new project will be created, which corresponds to the `Save title & create` transition. Therefore, there must not be a scenario where pressing the "Add project" button while editing the title doesn't first save the current changes. | 
 
 ### 1.5 Tests developed in QF-Test tool
 
