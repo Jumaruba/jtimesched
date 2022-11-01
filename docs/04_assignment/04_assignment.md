@@ -109,22 +109,22 @@ For that, ...
 
 JTimeSched's users are able to edit a project in multiple ways: they can change its title, color, creation date, time overall, time today, quota today, quota overall or update its notes. Considering there are many different requirements associated with the edition of a project, we decided to focus on the edition of time fields, which have some interesting peculiarities to consider, in particular, the fact that they don't allow changes to be made while the project is running. As the edit actions that can be accessed through the Time Overall and Time Today cells are very similar, we decided to focus only on the edit functionalities related to the Time Today, mainly the edition of the time spent on a project in the current day.
 
-##  2.1 State diagram 
+###  2.1 State diagram 
 
 ![](./figures/02_edit_time_today/02_state_machine.png)
 
-## 2.2 Transition tree
+### 2.2 Transition tree
 
 ![](./figures/02_edit_time_today/02_transition_tree.png)
 
-## 2.3 Transition table 
+### 2.3 Transition table 
 | States / Events   | Time Today Double Left Click | Save Valid Time Today | Save Invalid Time Today | Save Empty Time Today | Play | Pause |
 |---|---|---|---|---|---|---|
 | Project Idle      | Time Today Edition |  |  |  | Project Playing | |
 | Project Playing   |  |  |  |  | | Project Idle|
 | Time Today Edition|   | Project Idle | Project Idle | Project Idle | | |
 
-## 2.4 Sneak Paths 
+### 2.4 Sneak Paths 
 
 12 sneak paths
 
@@ -132,7 +132,7 @@ To test:
 Project Playing -> Play
 Time Today Edition -> Play
 
-## 2.5 Tests developed in QF-Test tool 
+### 2.5 Tests developed in QF-Test tool 
 
 
 ## 3. Delete Project
