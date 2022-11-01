@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!DOCTYPE RootStep>
 <RootStep id="_0" name="root"
-          signature="36657E7491604382A512EC7CB983F6AD97F320B2"
+          signature="DB4A22113D85C1A3A62AEF0A4C2CE1A50516F369"
           version="6.0.3">
   <include>qfs.qft</include>
   <TestSet id="_1" name="unnamed">
@@ -26,6 +26,7 @@
     </SetupSequence>
     <TestCase id="_2" name="create-project">
       <BasicSequence id="_Q" name="seq1">
+        <comment>no popup opened -&gt;  new idle project -&gt; edit title -&gt; no popup opened </comment>
         <MouseEventStep clicks="1" client="$(client)"
                         component="buttonAdd_project" event="MOUSE_MPRC"
                         id="_R" modifiers="16"/>
@@ -47,6 +48,29 @@
           <text>Projeto1</text>
         </CheckStringStep>
       </BasicSequence>
+      <BasicSequence id="_11" name="seq2">
+        <comment>Test the creation of a project with deault name.
+2. No popup opened -&gt; new idle project -&gt; no popup opened</comment>
+        <MouseEventStep clicks="1" client="$(client)"
+                        component="buttonAdd_project" event="MOUSE_MPRC"
+                        id="_12" modifiers="16"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_13" keychar="10" keycode="10"
+                      modifiers="0"/>
+      </BasicSequence>
+      <BasicSequence id="_15" name="Check project name">
+        <comment>The project name must be "New Project"</comment>
+        <CheckStringStep checktype="item" client="$(client)"
+                         component="frameJTimeSched.table2_projects_|_0:00:00_overall_|_0:00:00_today@Title&amp;1"
+                         id="_16">
+          <text>New project</text>
+        </CheckStringStep>
+      </BasicSequence>
+      <CleanupSequence id="_w" name="clean">
+        <MouseEventStep clicks="2" client="$(client)"
+                        component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today&amp;0&amp;0"
+                        event="MOUSE_DBLCLK" id="_x" modifiers="16"/>
+      </CleanupSequence>
     </TestCase>
   </TestSet>
   <PackageRoot id="_3"/>
@@ -103,6 +127,18 @@
                         state="0">Table</extrafeature>
           <extrafeature name="qfs:label" negate="false" regexp="false"
                         state="1">1 project | 0:00:00 overall | 0:00:00 today</extrafeature>
+          <extrafeature name="qfs:systemclass" negate="false" regexp="false"
+                        state="0">javax.swing.JTable</extrafeature>
+        </ComponentStep>
+        <ComponentStep class="Table" classcount="1" classindex="0"
+                       id="frameJTimeSched.table2_projects_|_0:00:00_overall_|_0:00:00_today"
+                       uid="_14">
+          <extrafeature name="qfs:class" negate="false" regexp="false"
+                        state="0">de.dominik_geyer.jtimesched.gui.table.ProjectTable</extrafeature>
+          <extrafeature name="qfs:genericclass" negate="false" regexp="false"
+                        state="0">Table</extrafeature>
+          <extrafeature name="qfs:label" negate="false" regexp="false"
+                        state="1">2 projects | 0:00:00 overall | 0:00:00 today</extrafeature>
           <extrafeature name="qfs:systemclass" negate="false" regexp="false"
                         state="0">javax.swing.JTable</extrafeature>
         </ComponentStep>
