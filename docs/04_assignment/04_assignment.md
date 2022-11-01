@@ -48,8 +48,10 @@ Let's map the expected behavior of each **sneak transition**.
 
 ### 1.5 Tests developed in QF-Test tool
 
-<!-- Dizer para apagar a pasta config -->
+**Requirements**: This test set assumes you have no previous configuration saved (no projects stored in memory). Please delete the `conf` folder before testing.
+
 <!-- Dizer que notamos que o comportamente não é o esperado aquando da criação do 6º projeto-->
+<!-- Brief description of the outcome of each test and whether any test results in a failure (and why). -->
 
 #### 1. Create project and save custom title
 
@@ -58,16 +60,14 @@ For the first test, we decided to combine the paths shown below in order to test
 ![](./figures/01_create_project/01_path3_1.png)
 ![](./figures/01_create_project/01_path4.png)
 
-**Requirements**: This test assumes you have no previous configuration saved (no projects stored in memory). Please delete the `conf` folder before testing.
-
 The test case `create-project` was the one used to test this scenario.
 First, we recorded a sequence that represents all the states and transitions:
-- The sequence starts at the main window of the JTimeSched tool, without any popup open - `No Popup Opened` state; and without any projects.
+- The sequence starts at the main window of the JTimeSched tool, without any popup open - `No Popup Opened` state.
 - Click "Add Project" (which represents the `Create` transition from `No Popup Opened` to `New Idle Project`);
 - Type "Project1" has the name of the project (which represents both the transition from `New Idle Project` to `Edit title`, and the self transition of the `Edit title` state);
 - Press "Enter" (`Save title` transition from `Edit title` to `No Popup Opened`);
 Then, we recorded the sequence `Check project name`, a check that verifies if the name of the recently added project is effectively "Project1".
-Another check (`Check number of projects`) was used to verify if the number of project was one.
+Another check (`Check number of projects`) was used to verify if the number of projects was one.
 Finally, a cleanup sequence was used to delete the newly created project.
 
 #### 2. Create project and accept default title
@@ -78,7 +78,14 @@ Here we test the case where the user creates a new project and accepts the defau
 
 ![](./figures/01_create_project/01_path1.png)
 
-For that, ...
+The test case `create-project-default` was the one used to test this scenario.
+First, we recorded a sequence that represents all the states and transitions:
+- The sequence starts at the main window of the JTimeSched tool, without any popup open - `No Popup Opened` state.
+- Click "Add Project" (which represents the `Create` transition from `No Popup Opened` to `New Idle Project`);
+- Press "Enter" (`Save title` transition from `New Idle Project` to `No Popup Opened`);
+Then, we recorded the sequence `Check Project Name`, a check that verifies if the name of the recently added project is the default - "New Project".
+Another check (`Check number of projects`) was used to verify if the number of projects was one.
+Finally, a cleanup sequence was used to delete the newly created project.
 
 
 #### 3. Create two new projects consecutively
@@ -89,30 +96,65 @@ Here we test the case where the user creates a project and, without making any c
 
 ![](./figures/01_create_project/01_path2.png)
 
-For that, ...
+The test case `create-project-add-project` was the one used to test this scenario.
+First, we recorded a sequence that represents all the states and transitions:
+- The sequence starts at the main window of the JTimeSched tool, without any popup open - `No Popup Opened` state.
+- Click "Add Project" (which represents the `Create` transition from `No Popup Opened` to `New Idle Project`);
+- Click "Add Project" again (which represents the `Create` self transition of the `New Idle Project` state);
+- Press "Enter" (`Save title` transition from `New Idle Project` to `No Popup Opened`);
+Then, we recorded the sequences `Check project name 1` and `Check project name 2`, which verify if the titles of both projects are the default - "New Project".
+Another check (`Check number of projects`) was used to verify if the number of projects was two.
+Finally, a cleanup sequence was used to delete both projects.
 
 
 #### 4. Create project and discard title changes
 
 > `No Popup Opened` -> `New Idle Project` -> `Edit title` -> `No Popup Opened` (com Discard)
 
-For the second test, we also combined the paths shown above, but this time we wanted to test the case where, after the user changes the title, he discards the changes by pressing the "Esc" key, for example. The final title of the new project should be "New Project", which is the default.
+For the second test, we combined the paths shown above, but this time we wanted to test the case where, after the user changes the title, he discards the changes by pressing the "Esc" key, for example. The final title of the new project should be "New Project", which is the default.
 
 ![](./figures/01_create_project/01_path3_2.png)
 ![](./figures/01_create_project/01_path4.png)
 
-For that, ...
+The test case `create-project-discard-name` was the one used to test this scenario.
+First, we recorded a sequence that represents all the states and transitions:
+- The sequence starts at the main window of the JTimeSched tool, without any popup open - `No Popup Opened` state.
+- Click "Add Project" (which represents the `Create` transition from `No Popup Opened` to `New Idle Project`);
+- Type "MyProject" has the name of the project (which represents both the transition from `New Idle Project` to `Edit title`, and the self transition of the `Edit title` state);
+- Press "Enter" (`Save title` transition from `Edit title` to `No Popup Opened`);
+Then, we recorded the sequence `Check project name`, a check that verifies if the name of the recently added project is "New project", meaning that the changes were discarded.
+Another check (`Check number of projects`) was used to verify if the number of projects was one.
+Finally, a cleanup sequence was used to delete the newly created project.
 
 #### 5. Create a new project, change the title and create another project 
 
 > `No Popup Opened` -> `New Idle Project` -> `Edit Title` -> `Create`
 
-In this test we experiment the scenario in which the user creates a new project, changes the title of the project and, without hitting "Enter" to save the changes, he presses the "Add Project" button to add yet another project.
-In this case we want to make sure that the title changes are made and that both projects are effectively created.
+In this test we experiment the scenario in which the user creates a new project, changes the title of the project and, without hitting "Enter" to save the changes, he presses the "Add Project" button again to add yet another project.
+In this case we want to make sure that the title changes are kept and that both projects are effectively created.
 
 ![](./figures/01_create_project/01_path5.png)
 
-For that, ...
+The test case `create-project-title-add-project` was the one used to test this scenario.
+First, we recorded a sequence that represents all the states and transitions:
+- The sequence starts at the main window of the JTimeSched tool, without any popup open - `No Popup Opened` state.
+- Click "Add Project" (which represents the `Create` transition from `No Popup Opened` to `New Idle Project`);
+- Type "MyProject" has the name of the project (which represents both the transition from `New Idle Project` to `Edit title`, and the self transition of the `Edit title` state);
+- Press "Add Project" (`Save title & Create` transition from `Edit title` to `New Idle Project`);
+The test case `create-project-discard-name` was the one used to test this scenario.
+First, we recorded a sequence that represents all the states and transitions:
+- The sequence starts at the main window of the JTimeSched tool, without any popup open - `No Popup Opened` state.
+- Click "Add Project" (which represents the `Create` transition from `No Popup Opened` to `New Idle Project`);
+- Type "MyProject" has the name of the project (which represents both the transition from `New Idle Project` to `Edit title`, and the self transition of the `Edit title` state);
+- Press "Enter" (`Save title` transition from `New Idle Project` to `No Popup Opened`).
+Then, we recorded the sequence `Check project name`, a check that verifies if the name of the recently added project is "New project", meaning that the changes were discarded.
+Another check (`Check number of projects`) was used to verify if the number of projects was one.
+Finally, a cleanup sequence was used to delete the newly created project.
+
+Then, we recorded the sequences `Check project name 1` and `Check project name 2`, to check that the name of the first project was saved as "MyProject" and that the second kept the default title "New Project".
+Another check (`Check number of projects`) was used to verify if the number of projects was two.
+Finally, a cleanup sequence was used to delete both projects.
+
 
 ## 2. Edit time/quota today
 
