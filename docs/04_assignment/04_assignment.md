@@ -226,6 +226,8 @@ As we explained above, the play/pause use case was also included here. Here, we 
 
 ## 3. Delete Project
 
+As mentioned before, JTimeSched's main goal is to allow users to track the time of their projects. As well as create a project, to manage the software the user also must be able to delete the projects.   
+The mal-functioning of the delete use case not only would cause chaos in the administration of information, but probably would comprimise the program usage in a long term. For this reason, the crucial.  
 
 ###  3.1 State diagram 
 
@@ -235,6 +237,12 @@ As we explained above, the play/pause use case was also included here. Here, we 
 
 ![](./figures/03_delete_project/03_transition_tree.png)
 ### 3.3 Transition table 
+
+| States / Events | Delete | Play | Pause | 
+| Project Idle | Project Idle | Project Playing | |  
+| Project Playing | Project Idle | | Project Idle | 
+
+Here there're two sneak paths.   
 
 ### 3.4 Sneak Paths 
 
