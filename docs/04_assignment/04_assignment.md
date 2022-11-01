@@ -5,6 +5,7 @@
 JTimeSched's main goal is to allow users to track the time of certain projects. For that, the user must first create a "new project" and set its name, which allows him to distinguish between different tasks that he may want to track. For this reason, we decided to use `QF-Test` to perform Model-based testing on one of the simplest requirements of this tool, which is exactly to create a new project. 
 
 ### 1.1 State diagram
+<!-- Maybe change new idle project state name -->
 
 ![](./figures/01_create_project/01_state_machine.png)
 
