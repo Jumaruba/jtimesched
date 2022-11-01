@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE RootStep>
+<RootStep id="_0" name="root"
+          signature="2FCA5CD7F4E68173100BB17235DB87A14EF0C150"
+          version="6.0.3">
+  <include>qfs.qft</include>
+  <TestSet id="_1" name="unnamed">
+    <SetupSequence id="_6" name="Launch jtimesched">
+      <SetGlobalStep id="_7" varname="client">
+        <default>jtimesched</default>
+      </SetGlobalStep>
+      <ClientWaiter client="$(client)" id="_8" local="true" raise="false"
+                    resvarname="isSUTRunning" timeout="1">
+        <comment>This node checks whether the SUT is already running. The result of this check will be stored in the variable isSUTRunning. The variable itself can contain true if SUT is already running or false if SUT is not running. This variable will be used in the following 'If' node.</comment>
+      </ClientWaiter>
+      <IfSequence id="_9" name="Launch SUT if not running"
+                  test="not $(isSUTRunning)">
+        <JavaClientStarter client="$(client)"
+                           directory="/home/maruba/Documents/jtimesched"
+                           executable="${qftest:java}" id="_A">
+          <parameter>-jar</parameter>
+          <parameter>/home/maruba/Documents/jtimesched/target/jtimesched-1.2-SNAPSHOT-jar-with-dependencies.jar</parameter>
+        </JavaClientStarter>
+        <ClientWaiter client="$(client)" id="_B"/>
+      </IfSequence>
+    </SetupSequence>
+    <TestCase id="_2" name="create-project">
+      <BasicSequence id="_Q">
+        <comment>no popup opened -&gt;  new idle project -&gt; edit title -&gt; no popup opened </comment>
+        <MouseEventStep clicks="1" client="$(client)"
+                        component="buttonAdd_project" event="MOUSE_MPRC"
+                        id="_R" modifiers="16"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_S" keychar="8" keycode="8"
+                      modifiers="0"/>
+        <TextInputStep clear="true" client="$(client)"
+                       component="frameJTimeSched.text" id="_T">
+          <text>Projeto1</text>
+        </TextInputStep>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_U" keychar="10" keycode="10"
+                      modifiers="0"/>
+      </BasicSequence>
+      <BasicSequence id="_u" name="Check project name">
+        <comment>Check the project name: "Projeto1"</comment>
+        <CheckStringStep checktype="item" client="$(client)"
+                         component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today@Title&amp;0"
+                         id="_v">
+          <text>Projeto1</text>
+        </CheckStringStep>
+      </BasicSequence>
+      <BasicSequence id="_2z" name="Check number of projects">
+        <CheckStringStep client="$(client)"
+                         component="label1_project_|_0:00:00_overall_|_0:00:00_today"
+                         id="_2+">
+          <text>1 project | 0:00:00 overall | 0:00:00 today</text>
+        </CheckStringStep>
+      </BasicSequence>
+      <CleanupSequence id="_2b">
+        <MouseEventStep clicks="2" client="$(client)"
+                        component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today&amp;0&amp;0"
+                        event="MOUSE_DBLCLK" id="_2c" modifiers="16"/>
+      </CleanupSequence>
+    </TestCase>
+    <TestCase id="_1x" name="create-project-default">
+      <comment>Creates a project with "New Project" name. </comment>
+      <BasicSequence id="_2o">
+        <comment>Add Project -&gt; Enter</comment>
+        <MouseEventStep clicks="1" client="$(client)"
+                        component="buttonAdd_project" event="MOUSE_MPRC"
+                        id="_2p" modifiers="16"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_2q" keychar="10" keycode="10"
+                      modifiers="0"/>
+      </BasicSequence>
+      <BasicSequence id="_2v" name="Check Project Name">
+        <CheckStringStep checktype="item" client="$(client)"
+                         component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today@Title&amp;0"
+                         id="_2w">
+          <text>New project</text>
+        </CheckStringStep>
+      </BasicSequence>
+      <BasicSequence id="_2x" name="Check number of projects">
+        <CheckStringStep client="$(client)"
+                         component="label1_project_|_0:00:00_overall_|_0:00:00_today"
+                         id="_2y">
+          <text>1 project | 0:00:00 overall | 0:00:00 today</text>
+        </CheckStringStep>
+      </BasicSequence>
+      <CleanupSequence id="_2h">
+        <MouseEventStep clicks="2" client="$(client)"
+                        component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today&amp;0&amp;0"
+                        event="MOUSE_DBLCLK" id="_2i" modifiers="16"/>
+      </CleanupSequence>
+    </TestCase>
+    <TestCase id="_1+" name="create-project-add-project">
+      <comment>Click add project twice
+</comment>
+      <BasicSequence id="_2-">
+        <comment>Create default project using "Add Project"</comment>
+        <MouseEventStep clicks="1" client="$(client)"
+                        component="buttonAdd_project" event="MOUSE_MPRC"
+                        id="_30" modifiers="16"/>
+        <MouseEventStep clicks="1" client="$(client)"
+                        component="buttonAdd_project" event="MOUSE_MPRC"
+                        id="_31" modifiers="16"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_32" keychar="10" keycode="10"
+                      modifiers="0"/>
+      </BasicSequence>
+      <BasicSequence id="_36" name="Check project name 1">
+        <CheckStringStep checktype="item" client="$(client)"
+                         component="frameJTimeSched.table2_projects_|_0:00:00_overall_|_0:00:00_today@Title&amp;0"
+                         id="_37">
+          <text>New project</text>
+        </CheckStringStep>
+      </BasicSequence>
+      <BasicSequence id="_38" name="Check project name 2">
+        <CheckStringStep checktype="item" client="$(client)"
+                         component="frameJTimeSched.table2_projects_|_0:00:00_overall_|_0:00:00_today@Title&amp;1"
+                         id="_39">
+          <text>New project</text>
+        </CheckStringStep>
+      </BasicSequence>
+      <BasicSequence id="_3B" name="Check number of projects">
+        <CheckStringStep client="$(client)"
+                         component="label2_projects_|_0:00:00_overall_|_0:00:00_today"
+                         id="_3C">
+          <text>2 projects | 0:00:00 overall | 0:00:00 today</text>
+        </CheckStringStep>
+      </BasicSequence>
+      <CleanupSequence id="_3D">
+        <MouseEventStep clicks="2" client="$(client)"
+                        component="frameJTimeSched.table2_projects_|_0:00:00_overall_|_0:00:00_today&amp;0&amp;0"
+                        event="MOUSE_DBLCLK" id="_3E" modifiers="16"/>
+        <MouseEventStep clicks="2" client="$(client)"
+                        component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today&amp;0&amp;0"
+                        event="MOUSE_DBLCLK" id="_3F" modifiers="16"/>
+      </CleanupSequence>
+    </TestCase>
+    <TestCase id="_23" name="create-project-discard-name">
+      <BasicSequence id="_3G">
+        <MouseEventStep clicks="1" client="$(client)"
+                        component="buttonAdd_project" event="MOUSE_MPRC"
+                        id="_3H" modifiers="16"/>
+        <TextInputStep clear="true" client="$(client)"
+                       component="frameJTimeSched.text" id="_3I">
+          <text>MyProject</text>
+        </TextInputStep>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_3J" keychar="27" keycode="27"
+                      modifiers="0"/>
+      </BasicSequence>
+      <BasicSequence id="_3K" name="Check project name">
+        <CheckStringStep checktype="item" client="$(client)"
+                         component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today@Title&amp;0"
+                         id="_3L">
+          <text>New project</text>
+        </CheckStringStep>
+      </BasicSequence>
+      <BasicSequence id="_3M" name="Check number of projects">
+        <CheckStringStep client="$(client)"
+                         component="label1_project_|_0:00:00_overall_|_0:00:00_today"
+                         id="_3N">
+          <text>1 project | 0:00:00 overall | 0:00:00 today</text>
+        </CheckStringStep>
+      </BasicSequence>
+      <CleanupSequence id="_3O">
+        <MouseEventStep clicks="2" client="$(client)"
+                        component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today&amp;0&amp;0"
+                        event="MOUSE_DBLCLK" id="_3P" modifiers="16"/>
+      </CleanupSequence>
+    </TestCase>
+    <TestCase id="_3Q" name="create-project-title-add-project">
+      <BasicSequence id="_3R">
+        <MouseEventStep clicks="1" client="$(client)"
+                        component="buttonAdd_project" event="MOUSE_MPRC"
+                        id="_3S" modifiers="16"/>
+        <TextInputStep clear="true" client="$(client)"
+                       component="frameJTimeSched.text" id="_3T">
+          <text>MyProject</text>
+        </TextInputStep>
+        <MouseEventStep clicks="1" client="$(client)"
+                        component="buttonAdd_project" event="MOUSE_MPRC"
+                        id="_3U" modifiers="16"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_3V" keychar="10" keycode="10"
+                      modifiers="0"/>
+      </BasicSequence>
+      <BasicSequence id="_3W" name="Check project name 1">
+        <CheckStringStep checktype="item" client="$(client)"
+                         component="frameJTimeSched.table2_projects_|_0:00:00_overall_|_0:00:00_today@Title&amp;0"
+                         id="_3X">
+          <text>MyProject</text>
+        </CheckStringStep>
+      </BasicSequence>
+      <BasicSequence id="_3a" name="Check project name 2">
+        <CheckStringStep checktype="item" client="$(client)"
+                         component="frameJTimeSched.table2_projects_|_0:00:00_overall_|_0:00:00_today@Title&amp;1"
+                         id="_3b">
+          <text>New project</text>
+        </CheckStringStep>
+      </BasicSequence>
+      <BasicSequence id="_3c" name="Check number of projects">
+        <CheckStringStep client="$(client)"
+                         component="label2_projects_|_0:00:00_overall_|_0:00:00_today"
+                         id="_3d">
+          <text>2 projects | 0:00:00 overall | 0:00:00 today</text>
+        </CheckStringStep>
+      </BasicSequence>
+      <CleanupSequence id="_3e">
+        <MouseEventStep clicks="2" client="$(client)"
+                        component="frameJTimeSched.table2_projects_|_0:00:00_overall_|_0:00:00_today&amp;0&amp;0"
+                        event="MOUSE_DBLCLK" id="_3f" modifiers="16"/>
+        <MouseEventStep clicks="2" client="$(client)"
+                        component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today&amp;0&amp;0"
+                        event="MOUSE_DBLCLK" id="_3g" modifiers="16"/>
+      </CleanupSequence>
+    </TestCase>
+  </TestSet>
+  <PackageRoot id="_3"/>
+  <ExtraSequence id="_4"/>
+  <WindowList id="_5">
+    <WindowStep class="Window" feature="jTimeSched" height="150"
+                id="frameJTimeSched" uid="_C" width="590" x="610" y="316">
+      <extrafeature name="qfs:class" negate="false" regexp="false" state="0">de.dominik_geyer.jtimesched.gui.JTimeSchedFrame</extrafeature>
+      <extrafeature name="qfs:genericclass" negate="false" regexp="false"
+                    state="0">Window</extrafeature>
+      <extrafeature name="qfs:label" negate="false" regexp="false" state="1">jTimeSched</extrafeature>
+      <extrafeature name="qfs:systemclass" negate="false" regexp="false"
+                    state="0">javax.swing.JFrame</extrafeature>
+      <ComponentStep class="Button" classcount="9" classindex="4"
+                     feature="Add project" height="27" id="buttonAdd_project"
+                     uid="_D" width="123" x="0" y="121">
+        <extrafeature name="imagehash" negate="false" regexp="false"
+                      state="1">276999105</extrafeature>
+        <extrafeature name="qfs:class" negate="false" regexp="false"
+                      state="0">javax.swing.JButton</extrafeature>
+        <extrafeature name="qfs:genericclass" negate="false" regexp="false"
+                      state="0">Button</extrafeature>
+        <extrafeature name="qfs:label" negate="false" regexp="false"
+                      state="1">Add project</extrafeature>
+        <extrafeature name="qfs:systemclass" negate="false" regexp="false"
+                      state="0">javax.swing.JButton</extrafeature>
+      </ComponentStep>
+      <ComponentStep class="Panel" classcount="11" classindex="4" height="93"
+                     id="frameJTimeSched.scroll" uid="_E" width="590" x="0"
+                     y="28">
+        <extrafeature name="qfs:class" negate="false" regexp="false"
+                      state="0">javax.swing.JScrollPane</extrafeature>
+        <extrafeature name="qfs:genericclass" negate="false" regexp="false"
+                      state="0">Panel</extrafeature>
+        <extrafeature name="qfs:systemclass" negate="false" regexp="false"
+                      state="0">javax.swing.JScrollPane</extrafeature>
+        <extrafeature name="qfs:type" negate="false" regexp="false" state="0">Panel:ScrollPanel</extrafeature>
+        <ComponentStep class="TextField" classcount="1" classindex="0"
+                       height="21" id="frameJTimeSched.text" uid="_F"
+                       width="223" x="50" y="22">
+          <extrafeature name="qfs:class" negate="false" regexp="false"
+                        state="0">javax.swing.JTextField</extrafeature>
+          <extrafeature name="qfs:genericclass" negate="false" regexp="false"
+                        state="0">TextField</extrafeature>
+          <extrafeature name="qfs:systemclass" negate="false" regexp="false"
+                        state="0">javax.swing.JTextField</extrafeature>
+        </ComponentStep>
+        <ComponentStep class="Table" classcount="1" classindex="0"
+                       id="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today"
+                       uid="_G">
+          <extrafeature name="qfs:class" negate="false" regexp="false"
+                        state="0">de.dominik_geyer.jtimesched.gui.table.ProjectTable</extrafeature>
+          <extrafeature name="qfs:genericclass" negate="false" regexp="false"
+                        state="0">Table</extrafeature>
+          <extrafeature name="qfs:label" negate="false" regexp="false"
+                        state="1">1 project | 0:00:00 overall | 0:00:00 today</extrafeature>
+          <extrafeature name="qfs:systemclass" negate="false" regexp="false"
+                        state="0">javax.swing.JTable</extrafeature>
+        </ComponentStep>
+        <ComponentStep class="Table" classcount="1" classindex="0"
+                       id="frameJTimeSched.table2_projects_|_0:00:00_overall_|_0:00:00_today"
+                       uid="_14">
+          <extrafeature name="qfs:class" negate="false" regexp="false"
+                        state="0">de.dominik_geyer.jtimesched.gui.table.ProjectTable</extrafeature>
+          <extrafeature name="qfs:genericclass" negate="false" regexp="false"
+                        state="0">Table</extrafeature>
+          <extrafeature name="qfs:label" negate="false" regexp="false"
+                        state="1">2 projects | 0:00:00 overall | 0:00:00 today</extrafeature>
+          <extrafeature name="qfs:systemclass" negate="false" regexp="false"
+                        state="0">javax.swing.JTable</extrafeature>
+        </ComponentStep>
+        <ComponentStep class="Table" classcount="1" classindex="0"
+                       id="frameJTimeSched.table4_projects_|_0:00:00_overall_|_0:00:00_today"
+                       uid="_17">
+          <extrafeature name="qfs:class" negate="false" regexp="false"
+                        state="0">de.dominik_geyer.jtimesched.gui.table.ProjectTable</extrafeature>
+          <extrafeature name="qfs:genericclass" negate="false" regexp="false"
+                        state="0">Table</extrafeature>
+          <extrafeature name="qfs:label" negate="false" regexp="false"
+                        state="1">4 projects | 0:00:00 overall | 0:00:00 today</extrafeature>
+          <extrafeature name="qfs:systemclass" negate="false" regexp="false"
+                        state="0">javax.swing.JTable</extrafeature>
+        </ComponentStep>
+        <ComponentStep class="Table" classcount="1" classindex="0"
+                       id="frameJTimeSched.table6_projects_|_0:00:00_overall_|_0:00:00_today"
+                       uid="_1Q">
+          <extrafeature name="qfs:class" negate="false" regexp="false"
+                        state="0">de.dominik_geyer.jtimesched.gui.table.ProjectTable</extrafeature>
+          <extrafeature name="qfs:genericclass" negate="false" regexp="false"
+                        state="0">Table</extrafeature>
+          <extrafeature name="qfs:label" negate="false" regexp="false"
+                        state="1">6 projects | 0:00:00 overall | 0:00:00 today</extrafeature>
+          <extrafeature name="qfs:systemclass" negate="false" regexp="false"
+                        state="0">javax.swing.JTable</extrafeature>
+        </ComponentStep>
+        <ComponentStep class="Table" classcount="1" classindex="0"
+                       id="frameJTimeSched.table5_projects_|_0:00:00_overall_|_0:00:00_today"
+                       uid="_1W">
+          <extrafeature name="qfs:class" negate="false" regexp="false"
+                        state="0">de.dominik_geyer.jtimesched.gui.table.ProjectTable</extrafeature>
+          <extrafeature name="qfs:genericclass" negate="false" regexp="false"
+                        state="0">Table</extrafeature>
+          <extrafeature name="qfs:label" negate="false" regexp="false"
+                        state="1">5 projects | 0:00:00 overall | 0:00:00 today</extrafeature>
+          <extrafeature name="qfs:systemclass" negate="false" regexp="false"
+                        state="0">javax.swing.JTable</extrafeature>
+        </ComponentStep>
+        <ComponentStep class="Table" classcount="1" classindex="0"
+                       id="frameJTimeSched.table3_projects_|_0:00:00_overall_|_0:00:00_today"
+                       uid="_1X">
+          <extrafeature name="qfs:class" negate="false" regexp="false"
+                        state="0">de.dominik_geyer.jtimesched.gui.table.ProjectTable</extrafeature>
+          <extrafeature name="qfs:genericclass" negate="false" regexp="false"
+                        state="0">Table</extrafeature>
+          <extrafeature name="qfs:label" negate="false" regexp="false"
+                        state="1">3 projects | 0:00:00 overall | 0:00:00 today</extrafeature>
+          <extrafeature name="qfs:systemclass" negate="false" regexp="false"
+                        state="0">javax.swing.JTable</extrafeature>
+        </ComponentStep>
+      </ComponentStep>
+      <ComponentStep class="Label" classcount="1" classindex="0"
+                     feature="6 projects | 0:00:00 overall | 0:00:00 today"
+                     height="17"
+                     id="label6_projects_|_0:00:00_overall_|_0:00:00_today"
+                     uid="_1R" width="238" x="174" y="176">
+        <extrafeature name="qfs:class" negate="false" regexp="false"
+                      state="0">javax.swing.JLabel</extrafeature>
+        <extrafeature name="qfs:genericclass" negate="false" regexp="false"
+                      state="0">Label</extrafeature>
+        <extrafeature name="qfs:label" negate="false" regexp="false"
+                      state="1">6 projects | 0:00:00 overall | 0:00:00 today</extrafeature>
+        <extrafeature name="qfs:systemclass" negate="false" regexp="false"
+                      state="0">javax.swing.JLabel</extrafeature>
+      </ComponentStep>
+      <ComponentStep class="Label" classcount="1" classindex="0"
+                     feature="1 project | 0:00:00 overall | 0:00:00 today"
+                     height="17"
+                     id="label1_project_|_0:00:00_overall_|_0:00:00_today"
+                     uid="_2r" width="232" x="177" y="176">
+        <extrafeature name="qfs:class" negate="false" regexp="false"
+                      state="0">javax.swing.JLabel</extrafeature>
+        <extrafeature name="qfs:genericclass" negate="false" regexp="false"
+                      state="0">Label</extrafeature>
+        <extrafeature name="qfs:label" negate="false" regexp="false"
+                      state="1">1 project | 0:00:00 overall | 0:00:00 today</extrafeature>
+        <extrafeature name="qfs:systemclass" negate="false" regexp="false"
+                      state="0">javax.swing.JLabel</extrafeature>
+      </ComponentStep>
+      <ComponentStep class="Label" classcount="1" classindex="0"
+                     feature="2 projects | 0:00:00 overall | 0:00:00 today"
+                     height="17"
+                     id="label2_projects_|_0:00:00_overall_|_0:00:00_today"
+                     uid="_3A" width="238" x="174" y="176">
+        <extrafeature name="qfs:class" negate="false" regexp="false"
+                      state="0">javax.swing.JLabel</extrafeature>
+        <extrafeature name="qfs:genericclass" negate="false" regexp="false"
+                      state="0">Label</extrafeature>
+        <extrafeature name="qfs:label" negate="false" regexp="false"
+                      state="1">2 projects | 0:00:00 overall | 0:00:00 today</extrafeature>
+        <extrafeature name="qfs:systemclass" negate="false" regexp="false"
+                      state="0">javax.swing.JLabel</extrafeature>
+      </ComponentStep>
+    </WindowStep>
+    <WindowStep class="EmbeddedWindow" height="22" id="frame" uid="_Z"
+                width="22" x="0" y="0">
+      <extrafeature name="qfs:class" negate="false" regexp="false" state="0">sun.awt.X11.XTrayIconPeer$$XTrayIconEmbeddedFrame</extrafeature>
+      <extrafeature name="qfs:genericclass" negate="false" regexp="false"
+                    state="0">EmbeddedWindow</extrafeature>
+      <extrafeature name="qfs:systemclass" negate="false" regexp="false"
+                    state="0">java.awt.Frame</extrafeature>
+      <extrafeature name="qfs:type" negate="false" regexp="false" state="0">Window:EmbeddedWindow</extrafeature>
+      <ComponentStep class="java.awt.Canvas" classcount="1" classindex="0"
+                     id="canvas" uid="_a" x="0" y="0">
+        <extrafeature name="qfs:class" negate="false" regexp="false"
+                      state="0">sun.awt.X11.XTrayIconPeer$$TrayIconCanvas</extrafeature>
+        <extrafeature name="qfs:systemclass" negate="false" regexp="false"
+                      state="0">java.awt.Canvas</extrafeature>
+      </ComponentStep>
+    </WindowStep>
+  </WindowList>
+</RootStep>

@@ -38,13 +38,13 @@ This diagram represents the creation of projects. Considering that the creation 
 In the section **1.3** the 5 empty cells correspond to **sneak transitions**.
 Let's map the expected behavior of each **sneak transition**. 
 
-| (State1, Event, State2) | Behavior | Explanation | 
+| (State, Event) | Behavior | Explanation | 
 | -------------- | -------- | ----------  | 
-| (No Popup Opened, Valid Keyboard input, No Popup Opened) | Nothing | If we type without selecting a specific input, nothing is expected to change in the App, but there is no need to throw an exception either | 
-| (No Popup Opened, Save title, No Popup Opened) | Nothing | If the user doesn't create a project or explicitly selects a title to change, he will not be able to save anything, because there will be no input in title field to save. | 
-| (No Popup Opened, Save title & create, No Popup Opened) | Nothing | Same as the case above | 
-| (New Idle Project, Save title & create, New Idle Project) | Nothing | Without typing or deleting the default title of a project, its value will not be modified, so saving a custom title from this state is not possible. | 
-| (Edit Title, Create, Edit Title) | Nothing | If the user presses the "Add Project" button while he is editing the title, the current changes that he made to the title must be saved, and a new project will be created, which corresponds to the `Save title & create` transition. Therefore, there must not be a scenario where pressing the "Add project" button while editing the title doesn't first save the current changes. | 
+| (No Popup Opened, Valid Keyboard input) | Nothing | If we type without selecting a specific input, nothing is expected to change in the App, but there is no need to throw an exception either | 
+| (No Popup Opened, Save title) | Nothing | If the user doesn't create a project or explicitly selects a title to change, he will not be able to save anything, because there will be no input in title field to save. | 
+| (No Popup Opened, Save title & create) | Nothing | Same as the case above | 
+| (New Idle Project, Save title & create) | Nothing | Without typing or deleting the default title of a project, its value will not be modified, so saving a custom title from this state is not possible. | 
+| (Edit Title, Create) | Nothing | If the user presses the "Add Project" button while he is editing the title, the current changes that he made to the title must be saved, and a new project will be created, which corresponds to the `Save title & create` transition. Therefore, there must not be a scenario where pressing the "Add project" button while editing the title doesn't first save the current changes. | 
 
 ### 1.5 Tests developed in QF-Test tool
 
@@ -267,7 +267,18 @@ Here there're two sneak paths.
 | (Project Playing, Play) | Nothing | Analog to the previous situation. If a counter is already counting, then the final state should be the same, but the counter should not be reseted |  
 ### 3.5 Tests developed in QF-Test tool 
 
+#### 3.5.1 Start and pause a project
+<!-- TODO: justify this -->
+![](./figures/03_delete_project/03_path1.png)
 
+#### 3.5.2 Play and delete a project
+Here we initialize the counter of a project and delete this same project. This should lead us with another idle project selected.  
+![](./figures/03_delete_project/03_path2.png)
+
+#### Delete a project  
+In this scenario we simply try to delete a project that is not in execution. Still in this case there are two subscenarios: delete one single project and the other is to delete two or more projects in sequence.   
+
+![](./figures/03_delete_project/03_path3.png)
 
 ## QF-Test tool feedback 
 
