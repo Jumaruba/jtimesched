@@ -70,17 +70,16 @@ Then, we recorded the sequence `Check project name`, a check that verifies if th
 Another check (`Check number of projects`) was used to verify if the number of project was one.
 Finally, a cleanup sequence was used to delete the newly created project.
 
+#### 2. Create project and accept default title
 
-#### 2. Create project and discard title changes
+> `No Popup Opened` -> `New Idle Project` -> `Create` -> `New Idle Project`
 
-> `No Popup Opened` -> `New Idle Project` -> `Edit title` -> `No Popup Opened` (com Discard)
+Here we test the case where the user creates a new project and accepts the default title by pressing "Enter", for example.
 
-For the second test, we also combined the paths shown above, but this time we wanted to test the case where, after the user changes the title, he discards the changes by pressing the "Esc" key, for example. The final title of the new project should be "New Project", which is the default.
-
-![](./figures/01_create_project/01_path3_2.png)
-![](./figures/01_create_project/01_path4.png)
+![](./figures/01_create_project/01_path1.png)
 
 For that, ...
+
 
 #### 3. Create two new projects consecutively
 
@@ -92,16 +91,17 @@ Here we test the case where the user creates a project and, without making any c
 
 For that, ...
 
-#### 4. Create project and accept default title
 
-> `No Popup Opened` -> `New Idle Project` -> `Create` -> `New Idle Project`
+#### 4. Create project and discard title changes
 
-Here we test the case where the user creates a new project and accepts the default title by pressing "Enter", for example.
+> `No Popup Opened` -> `New Idle Project` -> `Edit title` -> `No Popup Opened` (com Discard)
 
-![](./figures/01_create_project/01_path1.png)
+For the second test, we also combined the paths shown above, but this time we wanted to test the case where, after the user changes the title, he discards the changes by pressing the "Esc" key, for example. The final title of the new project should be "New Project", which is the default.
+
+![](./figures/01_create_project/01_path3_2.png)
+![](./figures/01_create_project/01_path4.png)
 
 For that, ...
-
 
 #### 5. Create a new project, change the title and create another project 
 
