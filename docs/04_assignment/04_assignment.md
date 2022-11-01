@@ -48,15 +48,62 @@ Let's map the expected behavior of each **sneak transition**.
 
 ### 1.5 Tests developed in QF-Test tool
 
-#### 1. no popup opened ->  new idle project -> edit title -> no popup opened 
+<!-- Dizer que notamos que o comportamente não é o esperado aquando da criação do 6º projeto-->
+
+#### 1. Create project and save custom title
+
+> `No Popup Opened` ->  `New Idle Project` -> `Edit title` -> `No Popup Opened` (com Save)
+
+For the first test, we decided to combine the paths shown below in order to test the full flow of creating a project, setting a custom title and saving it. We need to make sure that the title of the new project is the one typed by the user.
+
 ![](./figures/01_create_project/01_path3_1.png)
 ![](./figures/01_create_project/01_path4.png)
 
-#### 2. 
+For that, we used the "Setup" started by creating ...
 
-#### 3. No popup opened -> new idle project - create -> new idle project
 
-#### 4. Save and create 
+#### 2. Create project and discard title changes
+
+> `No Popup Opened` -> `New Idle Project` -> `Edit title` -> `No Popup Opened` (com Discard)
+
+For the second test, we also combined the paths shown above, but this time we wanted to test the case where, after the user changes the title, he discards the changes by pressing the "Esc" key, for example. The final title of the new project should be "New Project", which is the default.
+
+![](./figures/01_create_project/01_path3_2.png)
+![](./figures/01_create_project/01_path4.png)
+
+For that, ...
+
+#### 3. Create two new projects consecutively
+
+> `No Popup Opened` -> `New Idle Project` -> `Create` -> `New Idle Project`
+
+Here we test the case where the user creates a project and, without making any changes to the default title, he presses the "Add project" button again. The first project should have the default name and a second project should be created.
+
+![](./figures/01_create_project/01_path2.png)
+
+For that, ...
+
+#### 4. Create project and accept default title
+
+> `No Popup Opened` -> `New Idle Project` -> `Create` -> `New Idle Project`
+
+Here we test the case where the user creates a new project and accepts the default title by pressing "Enter", for example.
+
+![](./figures/01_create_project/01_path1.png)
+
+For that, ...
+
+
+#### 5. Create a new project, change the title and create another project 
+
+> `No Popup Opened` -> `New Idle Project` -> `Edit Title` -> `Create`
+
+In this test we experiment the scenario in which the user creates a new project, changes the title of the project and, without hitting "Enter" to save the changes, he presses the "Add Project" button to add yet another project.
+In this case we want to make sure that the title changes are made and that both projects are effectively created.
+
+![](./figures/01_create_project/01_path5.png)
+
+For that, ...
 
 ## 2. Edit time/quota today
 
