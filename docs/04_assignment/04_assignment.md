@@ -192,6 +192,30 @@ Time Today Edition -> Play
 
 ### 2.5 Tests developed in QF-Test tool 
 
+#### 1. Save Time Today
+![](./figures/02_edit_time_today/02_path2_1.png)
+![](./figures/02_edit_time_today/02_path3.png)
+
+##### 1.1. Valid Time Today
+
+##### 1.2. Empty Time Today
+
+
+#### 2. Discard Time Today
+![](./figures/02_edit_time_today/02_path2_2.png)
+![](./figures/02_edit_time_today/02_path3.png)
+
+##### 2.1. Invalid Time Today
+
+##### 2.2. Discard Time Today
+
+#### 3. Play/Pause 
+
+![](./figures/02_edit_time_today/02_path1.png)
+
+#### 4. (Sneak Path 1) Play while editing time today 
+
+#### 4. (Sneak Path 2) Edit time today while playing 
 
 ## 3. Delete Project
 
