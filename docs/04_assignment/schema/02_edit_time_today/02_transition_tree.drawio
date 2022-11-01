@@ -1,10 +1,10 @@
 <mxfile host="65bd71144e">
     <diagram id="hUVOVU6jRG6KGF_iUACn" name="Page-1">
-        <mxGraphModel dx="1609" dy="1529" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="2209" dy="1716" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
-                <mxCell id="122" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=none;strokeWidth=0;" vertex="1" parent="1">
+                <mxCell id="122" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=none;strokeWidth=0;" parent="1" vertex="1">
                     <mxGeometry x="-670" y="-480" width="570" height="300" as="geometry"/>
                 </mxCell>
                 <mxCell id="88" style="edgeStyle=none;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#000000;" parent="1" source="84" target="85" edge="1">
@@ -14,7 +14,7 @@
                         </Array>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="124" style="edgeStyle=none;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#000000;" edge="1" parent="1" source="84" target="86">
+                <mxCell id="124" style="edgeStyle=none;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#000000;" parent="1" source="84" target="86" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <Array as="points">
                             <mxPoint x="-375" y="-430"/>
@@ -37,7 +37,7 @@
                         <mxPoint x="-363.25" y="-270" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="144" style="edgeStyle=none;html=1;exitX=0.75;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontColor=#000000;strokeColor=#000000;" edge="1" parent="1" source="86" target="143">
+                <mxCell id="144" style="edgeStyle=none;html=1;exitX=0.75;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontColor=#000000;strokeColor=#000000;" parent="1" source="86" target="143" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <Array as="points">
                             <mxPoint x="-342" y="-290"/>
@@ -54,7 +54,7 @@
                 <mxCell id="118" value="&lt;b&gt;&lt;font&gt;Project_Idle_3&lt;/font&gt;&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#FF9933;fontColor=#1A1A1A;strokeColor=#000000;" parent="1" vertex="1">
                     <mxGeometry x="-435" y="-270" width="120" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="143" value="Time_Today_Edition_1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7DD16D;strokeColor=#000000;fontColor=#1A1A1A;fontStyle=1" vertex="1" parent="1">
+                <mxCell id="143" value="Time_Today_Edition_1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7DD16D;strokeColor=#000000;fontColor=#1A1A1A;fontStyle=1" parent="1" vertex="1">
                     <mxGeometry x="-290" y="-270" width="140" height="60" as="geometry"/>
                 </mxCell>
             </root>

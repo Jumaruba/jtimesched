@@ -53,7 +53,7 @@ Let's map the expected behavior of each **sneak transition**.
 <!-- Dizer que notamos que o comportamente não é o esperado aquando da criação do 6º projeto-->
 <!-- Brief description of the outcome of each test and whether any test results in a failure (and why). -->
 
-#### 1. Create project and save custom title
+#### 1.5.1 Create project and save custom title
 
 For the first test, we decided to combine the paths shown below in order to test the full flow of creating a project, setting a custom title and saving it. We need to make sure that the title of the new project is the one typed by the user.
 
@@ -70,7 +70,7 @@ Then, we recorded the sequence `Check project name`, a check that verifies if th
 Another check (`Check number of projects`) was used to verify if the number of projects was one.
 Finally, a cleanup sequence was used to delete the newly created project.
 
-#### 2. Create project and accept default title
+#### 1.5.2 Create project and accept default title
 
 Here we test the case where the user creates a new project and accepts the default title by pressing "Enter", for example.
 
@@ -86,7 +86,7 @@ Another check (`Check number of projects`) was used to verify if the number of p
 Finally, a cleanup sequence was used to delete the newly created project.
 
 
-#### 3. Create two new projects consecutively
+#### 1.5.3. Create two new projects consecutively
 
 Here we test the case where the user creates a project and, without making any changes to the default title, he presses the "Add project" button again. The first project should have the default name and a second project should be created.
 
@@ -103,7 +103,7 @@ Another check (`Check number of projects`) was used to verify if the number of p
 Finally, a cleanup sequence was used to delete both projects.
 
 
-#### 4. Create project and discard title changes
+#### 1.5.4. Create project and discard title changes
 
 For the second test, we combined the paths shown above, but this time we wanted to test the case where, after the user changes the title, he discards the changes by pressing the "Esc" key, for example. The final title of the new project should be "New Project", which is the default.
 
@@ -120,7 +120,7 @@ Then, we recorded the sequence `Check project name`, a check that verifies if th
 Another check (`Check number of projects`) was used to verify if the number of projects was one.
 Finally, a cleanup sequence was used to delete the newly created project.
 
-#### 5. Create a new project, change the title and create another project 
+#### 1.5.5. Create a new project, change the title and create another project 
 
 In this test we experiment the scenario in which the user creates a new project, changes the title of the project and, without hitting "Enter" to save the changes, he presses the "Add Project" button again to add yet another project.
 In this case we want to make sure that the title changes are kept and that both projects are effectively created.
@@ -176,11 +176,16 @@ JTimeSched's users are able to edit a project in multiple ways: they can change 
 
 ### 2.4 Sneak Paths 
 
-12 sneak paths
+In total there are 12 sneak paths. But only two were selected to be tested:   
 
-To test:
-Project Playing -> Play
-Time Today Edition -> Play
+1. (Project Playing, Play)  
+2. (Time Today Edition, Play)   
+
+In the first sneak path, it's necessary to assess that if the project is playing: 
+- The available button references the stop action.   
+- By pressing the stop/play button, the project that is already running must stop.  
+
+In the second action it's necessary to verify that if the project is running, then the "TimeToday" field can't be edited.  
 
 ### 2.5 Tests developed in QF-Test tool 
 
@@ -225,6 +230,7 @@ As we explained above, the play/pause use case was also included here. Here, we 
 ###  3.1 State diagram 
 
 ![](./figures/03_delete_project/2022-11-01_14-15.png)
+
 ### 3.2 Transition tree
 
 ### 3.3 Transition table 
