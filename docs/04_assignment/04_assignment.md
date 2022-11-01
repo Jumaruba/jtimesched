@@ -229,10 +229,11 @@ As we explained above, the play/pause use case was also included here. Here, we 
 
 ###  3.1 State diagram 
 
-![](./figures/03_delete_project/2022-11-01_14-15.png)
+![](./figures/03_delete_project/03_state_machine.png.png)
 
 ### 3.2 Transition tree
 
+![](./figures/03_delete_project/03_transition_tree.png)
 ### 3.3 Transition table 
 
 ### 3.4 Sneak Paths 
