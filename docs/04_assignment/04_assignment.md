@@ -72,8 +72,6 @@ Finally, a cleanup sequence was used to delete the newly created project.
 
 #### 2. Create project and accept default title
 
-> `No Popup Opened` -> `New Idle Project` -> `Create` -> `New Idle Project`
-
 Here we test the case where the user creates a new project and accepts the default title by pressing "Enter", for example.
 
 ![](./figures/01_create_project/01_path1.png)
@@ -89,8 +87,6 @@ Finally, a cleanup sequence was used to delete the newly created project.
 
 
 #### 3. Create two new projects consecutively
-
-> `No Popup Opened` -> `New Idle Project` -> `Create` -> `New Idle Project`
 
 Here we test the case where the user creates a project and, without making any changes to the default title, he presses the "Add project" button again. The first project should have the default name and a second project should be created.
 
@@ -109,8 +105,6 @@ Finally, a cleanup sequence was used to delete both projects.
 
 #### 4. Create project and discard title changes
 
-> `No Popup Opened` -> `New Idle Project` -> `Edit title` -> `No Popup Opened` (com Discard)
-
 For the second test, we combined the paths shown above, but this time we wanted to test the case where, after the user changes the title, he discards the changes by pressing the "Esc" key, for example. The final title of the new project should be "New Project", which is the default.
 
 ![](./figures/01_create_project/01_path3_2.png)
@@ -127,8 +121,6 @@ Another check (`Check number of projects`) was used to verify if the number of p
 Finally, a cleanup sequence was used to delete the newly created project.
 
 #### 5. Create a new project, change the title and create another project 
-
-> `No Popup Opened` -> `New Idle Project` -> `Edit Title` -> `Create`
 
 In this test we experiment the scenario in which the user creates a new project, changes the title of the project and, without hitting "Enter" to save the changes, he presses the "Add Project" button again to add yet another project.
 In this case we want to make sure that the title changes are kept and that both projects are effectively created.
@@ -193,15 +185,23 @@ Time Today Edition -> Play
 ### 2.5 Tests developed in QF-Test tool 
 
 #### 1. Save Time Today
+
+In these tests we exercise the scenario in which the user updates the `Time Today` to a valid time i.e. a time that respects the regular expression "\d+:[0-5]?\d:[0-5]?\d"; or submits an empty input. To test this, we decided to combine the paths shown below and to create two different tests: one where the input is a valid time string and another where the input is empty. In the end, we must check if the `Time Today`of the project was effectively changed.
+
 ![](./figures/02_edit_time_today/02_path2_1.png)
 ![](./figures/02_edit_time_today/02_path3.png)
 
 ##### 1.1. Valid Time Today
+The test case `?` was the one used to test this scenario.
+First, we recorded a sequence that represents all the states and transitions:
+- The sequence starts at the main window of the JTimeSched tool, with a project already available....
 
 ##### 1.2. Empty Time Today
 
 
 #### 2. Discard Time Today
+
+Here we test the cases where the user submits an invalid `Time Today` i.e. a time that doesn't respects the regular expression "\d+:[0-5]?\d:[0-5]?\d"; or presses "Esc" to discard his changes. In the end, we expect that the `Time Today` value remains the same.
 ![](./figures/02_edit_time_today/02_path2_2.png)
 ![](./figures/02_edit_time_today/02_path3.png)
 
@@ -210,6 +210,8 @@ Time Today Edition -> Play
 ##### 2.2. Discard Time Today
 
 #### 3. Play/Pause 
+
+As we explained above, the play/pause use case was also included here. Here, we want to check that it is possible to play and pause a project if no popup windows are opened.
 
 ![](./figures/02_edit_time_today/02_path1.png)
 
