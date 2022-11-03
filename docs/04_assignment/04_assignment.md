@@ -2,55 +2,52 @@
 
 ## 1. Create project
 
-JTimeSched's main goal is to allow users to track the time of certain projects. For that, the user must first create a "new project" and set its name, which allows him to distinguish between different tasks that he may want to track. For this reason, we decided to use `QF-Test` to perform Model-based testing on one of the simplest requirements of this tool, which is exactly to create a new project. 
+JTimeSched's main goal is to allow users to track the time of certain projects. For that, the user must first create a "new project" and set its name, which allows him to distinguish between different tasks that he may want to track. For this reason, we decided to use `QF-Test` to perform Model-based testing on one of the simplest requirements of this tool, which is exactly to **create a new project**. 
 
 ### 1.1 State diagram
 
-This diagram represents the creation of projects. Considering that the creation of the project triggers the edition of its title, we will also represent this part of the creation flow. However, we will not cover the case where the user updates a title of a project that was created in a previous interaction.
-
-**Initial State**: In order to create a new project, no popup window can be opened in the application i.e. the user may not click the "Add Project" button while he is editing the quotas or changing the category of a project. For this reason, the initial state of this state machine is the `No Popup Opened` state.
-**Transitions from `No Popup Opened`**: From the initial state, if the user presses the "Add Project" button, a new project with the default title of "New Project" will be created, thence the number of projects (`n`) is incremented by one (`n = n + 1`). The  new project will be in the idle state, that is, its counter is paused. 
-**Transitions from `New Idle Project`**: After created i.e. when in the `New Idle Project` state; the user may change the default title of the project by typing at least one valid character or by deleting the default title from the input field, which is represented by the `Valid Keyboard Input` transition to the `Edit Title` state. On the other hand, the user may also decide to keep the default title, either by hitting "Enter", which will lead back to the `No Popup Opened` state, or by pressing the "Add Project" button, which will lead to the creation of yet another new project, represented by the `Create` self transition of the `New Idle Project` state.
-**Transitions from `Edit Title`**: While the user is modifying the title of the project the state is kept in the same state. From there, the user may decide to discard his changes by pressing the "Esc" key or he may save his changes by clicking the "Enter" key, for example. Both this transitions will lead back to the `No Popup Opened` state. Instead, the user may decide to add a new project by pressing the "Add Project" button while he is editing the title. By doing so, the title changes will be saved and a new project will be created, which is represented by the `Save title & Create` transition that goes to the `New Idle Project` state.
+The diagram shown below represents the creation of projects. Given that the creation of a project triggers the edition of its title, we also represent this part of the creation flow in the diagram. However, we will not cover the case where the user updates a title by double clicking the title field, as it is not part of the "project creation" requirement.
 
 ![](./figures/01_create_project/01_state_machine.png)
 
+**Initial State**: In order to create a new project, no popup window can be opened in the application i.e. the user may not click the "Add Project" button while he is editing the quotas or changing the category of a project. If that is the case, we consider that the App is "Idle". We consider that the App is "Playing" if no popup is opened but there is a project "playing". As we can only create a new project if the App is on any of these two states, our initial state is `App Idle or Playing`.
+**Transitions from `App Idle or Playing`**: From the initial state, if the user presses the "Add Project" button, a new project with the default title of "New Project" will be created, thence the number of projects (`n`) is incremented by one (`n = n + 1`), as we can see in the action of the `Create` transition. This leads to a state where the new project will be in the idle state, that is, its counter is paused. 
+**Transitions from `Project Created`**: After created i.e. when in the `Project Created` state; the user may edit the default title of the project - `Edit Title`; or he may decide to keep the default title, by pressing "Enter", for example, which will lead back to the initial state.
+**Transitions from `Project Title Edition`**: While the user is modifying the title of the project, the state is kept in the `Project Title Edition`. From there, the user may decide to discard his changes by pressing the "Esc" key, or he may `Submit` his changes by clicking the "Enter" key, for example.
+**Transitions from `Project Title Edited`**: After the user submits his input, the title of the new project is saved - `Save Title`; leading back to the initial state.
+
 ### 1.2 Transition tree 
 
-- We start with the initial state, named `No Popup Open`;
-- From the initial state we only have an outgoing transition to `New Idle Project`, which results from the creation of a new project;
-- From the `New Idle Project` state we have three outgoing edges to `No Popup Open`, `Edit Title` and `New Idle Project`. The only state where we haven't been before is the `Edit Title`. From this state the user may go to the `No Popup Open`, `Edit Title` or `New Idle Project`.
+- We start with the initial state, named `App Idle or Playing`;
+- From the initial state, we only have an outgoing transition to `Project Created`, which results from the creation of a new project;
+- From the `Created` state we have two outgoing edges, one to `Project Title Edition` and another to `App Idle or Playing`. The only state where we haven't been before is the `Project Title Edition`. From this state the user may go to the `Project Title Edition`, `App Idle or Playing` or `Project Title Edited`. Finally, from the `Project Title Edited` we can only go to the `App IDle or Playing` state.
 From this tree, we can derive the test paths, which will be explored in the QF-Test tool and further explained in section 1.5: 
-- `No Popup Opened` -> `New Idle Project` -> `No Popup Opened`
-- `No Popup Opened` -> `New Idle Project` -> `New Idle Project`
-- `No Popup Opened` -> `New Idle Project` -> `Edit Title`
-- `No Popup Opened` -> `New Idle Project` -> `Edit Title` -> `No Popup Opened`
-- `No Popup Opened` -> `New Idle Project` -> `Edit Title` -> `New Idle Project`
-- `No Popup Opened` -> `New Idle Project` -> `Edit Title` -> `Edit Title`
+- `App Idle or Playing` -> `Project Created` -> `App Idle or Playing`
+- `App Idle or Playing` -> `Project Created` -> `Project Title Edition`
+- `App Idle or Playing` -> `Project Created` -> `Project Title Edition` -> `Project Title Edition`
+- `App Idle or Playing` -> `Project Created` -> `Project Title Edition` -> `Project Title Edited` -> `App Idle or Playing`
 
 ![](./figures/01_create_project/01_transition_tree.png)
 
 ### 1.3 Transition table  
 
-| States / Events | Create | Valid Keyboard input | Save title | Save title & create |   
-| - | - | - | - | - | 
-| No Popup Opened |  New Idle Project | | | | 
-| New Idle Project | New Idle Project | Edit Title | No Popup Opened | | 
-| Edit Title | | Edit Title | No Popup Opened | New Idle Project | 
+| States / Events | Create | Edit Title | Submit | Valid Keyboard Input | Save Title | Discard Title |   
+| - | - | - | - | - | - | - |
+| App Idle or Playing |  Project Created ||||||
+| Project Created || Project Title Edition ||| App Idle or Playing ||
+| Project Title Edition ||| Project Title Edited | Project Title Edition || App Idle or Playing |
+| Project Title Edited | | | | | App Idle or Playing || 
 
 
 ### 1.4 Sneak Paths 
 
-In the section **1.3** the 5 empty cells correspond to **sneak transitions**.
-Let's map the expected behavior of each **sneak transition**. 
+In section **1.3**, the 17 empty cells correspond to **sneaky transitions**.
+Let's map the expected behavior of each **sneaky transition**. 
 
-| (State, Event) | Behavior | Explanation | 
-| -------------- | -------- | ----------  | 
-| (No Popup Opened, Valid Keyboard input) | Nothing | If we type without selecting a specific input, nothing is expected to change in the App, but there is no need to throw an exception either | 
-| (No Popup Opened, Save title) | Nothing | If the user doesn't create a project or explicitly selects a title to change, he will not be able to save anything, because there will be no input in title field to save. | 
-| (No Popup Opened, Save title & create) | Nothing | Same as the case above | 
-| (New Idle Project, Save title & create) | Nothing | Without typing or deleting the default title of a project, its value will not be modified, so saving a custom title from this state is not possible. | 
-| (Edit Title, Create) | Nothing | If the user presses the "Add Project" button while he is editing the title, the current changes that he made to the title must be saved, and a new project will be created, which corresponds to the `Save title & create` transition. Therefore, there must not be a scenario where pressing the "Add project" button while editing the title doesn't first save the current changes. | 
+- From the initial state (`App Idle or Playing`) it is clear that the `Edit Title`, `Save Title`, `Discard Title`, `Submit` and `Valid Keyboard Input` events are not  expected to generate any change of state. For instance, if we type without selecting a specific input, nothing is expected to change in the App, but there is no need to throw an exception either. Also, if the user doesn't create a project or explicitly selects a title to change, he will not be able to edit/save/discard anything, because there will be no title field selected.
+- From the `Project Created` state the user is not able to `Submit` or `Discard` his input because this actions may only be triggered in a state where an input is being edited, which is not the case, as this state only represents that the project was successfully created. For the same reason, any keyboard input that doesn't trigger the acceptance of the default project title - `Valid Keyboard Input`; should be ignored in this state. Furthermore, a new `Create` event should never happen before the title of the current project is set with the default. If it is, maybe an exception should be thrown. 
+
+Considering the explanation above, if this sneaky transitions occur, the events that generated them can be safely ignored.
 
 ### 1.5 Tests developed in QF-Test tool
 
