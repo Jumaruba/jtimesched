@@ -1,10 +1,10 @@
 <mxfile host="65bd71144e">
     <diagram id="hUVOVU6jRG6KGF_iUACn" name="Page-1">
-        <mxGraphModel dx="1735" dy="501" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="2209" dy="616" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
-                <mxCell id="259" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=none;strokeWidth=0;" vertex="1" parent="1">
+                <mxCell id="259" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=none;strokeWidth=0;" parent="1" vertex="1">
                     <mxGeometry x="-750" y="545" width="600" height="335" as="geometry"/>
                 </mxCell>
                 <mxCell id="221" value="Project Idle" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#000000;fillColor=none;strokeColor=#000000;" parent="1" vertex="1">
@@ -21,6 +21,13 @@
                 </mxCell>
                 <mxCell id="224" value="&lt;b&gt;Time Today Double Left Click&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#000000;" parent="1" vertex="1">
                     <mxGeometry x="-535" y="677" width="182" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="260" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#000000;" parent="1" source="225" target="234" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="-280" y="830"/>
+                        </Array>
+                    </mxGeometry>
                 </mxCell>
                 <mxCell id="225" value="Time Today Edition" style="rounded=1;whiteSpace=wrap;html=1;fontColor=#000000;fillColor=none;strokeColor=#000000;" parent="1" vertex="1">
                     <mxGeometry x="-340" y="690" width="120" height="60" as="geometry"/>
@@ -43,6 +50,9 @@
                         </Array>
                         <mxPoint x="-324" y="690" as="sourcePoint"/>
                     </mxGeometry>
+                </mxCell>
+                <mxCell id="263" value="" style="edgeStyle=none;html=1;strokeColor=#000000;" edge="1" parent="1" source="228" target="230">
+                    <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="228" value="&lt;div&gt;&lt;b&gt;&lt;font style=&quot;font-size: 12px&quot;&gt;Discard Time Today&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;&lt;span style=&quot;font-size: 11px&quot;&gt;&lt;br&gt;&lt;/span&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#000000;" parent="1" vertex="1">
                     <mxGeometry x="-500" y="630" width="180" height="30" as="geometry"/>
@@ -92,6 +102,15 @@
                 </mxCell>
                 <mxCell id="258" value="&lt;b&gt;Valid &lt;br&gt;Keyboard &lt;br&gt;input&lt;/b&gt;&lt;br&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontColor=#000000;" parent="1" vertex="1">
                     <mxGeometry x="-221.5" y="640" width="70" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="261" value="&lt;div&gt;&lt;font&gt;&lt;b style=&quot;font-size: 12px&quot;&gt;Save Time Today&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;[empty time]&amp;nbsp;&lt;/font&gt;&lt;/font&gt;&lt;span style=&quot;font-size: 11px&quot;&gt;/secondsToday = 0&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;[valid time]&amp;nbsp;&lt;/font&gt;&lt;span style=&quot;font-size: 11px&quot;&gt;/secondsToday = input&lt;/span&gt;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#000000;" parent="1" vertex="1">
+                    <mxGeometry x="-480" y="780" width="170" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="262" value="&amp;lt;&amp;lt; Remover discard? &amp;gt;&amp;gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+                    <mxGeometry x="-605" y="920" width="150" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="266" value="&lt;span&gt;&amp;lt;&amp;lt;estados intermedios de verificação&amp;gt;&amp;gt;&amp;nbsp;&lt;/span&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1" vertex="1" parent="1">
+                    <mxGeometry x="-421.5" y="915" width="270" height="30" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>

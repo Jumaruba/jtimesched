@@ -5,7 +5,6 @@
 JTimeSched's main goal is to allow users to track the time of certain projects. For that, the user must first create a "new project" and set its name, which allows him to distinguish between different tasks that he may want to track. For this reason, we decided to use `QF-Test` to perform Model-based testing on one of the simplest requirements of this tool, which is exactly to create a new project. 
 
 ### 1.1 State diagram
-<!-- Maybe change new idle project state name -->
 
 This diagram represents the creation of projects. Considering that the creation of the project triggers the edition of its title, we will also represent this part of the creation flow. However, we will not cover the case where the user updates a title of a project that was created in a previous interaction.
 
@@ -175,21 +174,22 @@ JTimeSched's users are able to edit a project in multiple ways: they can change 
 - We start with the initial state, `Project Idle`;
 - From the initial state we only have two possible outgoing transitions, one to `Project Playing`, triggered by pressing the "Play" button of the respective project, and another to the `Time Today Edition` state, which is triggered by a double left click on the `Time Today ` field of the project.
 - From the `Project Playing` state the only possible transition results from pressing the "Pause" button and leads back to the initial state, which was already explored. 
-- From the `Time Today Edition` state we can either go back to the `Project Idle` state when we have finished editing or we can keep in the `Time Today Edition` state, while we are inserting valid input in the field.
+- From the `Time Today Edition` state, we can go back to the `Project Idle` state when we have finished editing, we can keep in the `Time Today Edition` state, while we are inserting valid input in the field, or we can press the "Play" button and simultaneously save the current input, if valid, and 
 As we have already expanded every possible state, the transition tree is complete.
 From this tree, we can derive the test paths, which will be explored in the QF-Test tool and further explained in section 2.5: 
 - `Project Idle` -> `Project Playing` -> `Project Idle`
 - `Project Idle` -> `Time Today Edition` -> `Project Idle`
 - `Project Idle` -> `Time Today Edition` -> `Time Today Edition`
+- `Project Idle` -> `Time Today Edition` -> `Project Playing`
 
 ![](./figures/02_edit_time_today/02_transition_tree.png)
 
 ### 2.3 Transition table 
-| States / Events   | Time Today Double Left Click | Save Valid Time Today | Save Invalid Time Today | Save Empty Time Today | Play | Pause |
+| States / Events   | Time Today Double Left Click | Save Time Today | Play | Pause |
 |---|---|---|---|---|---|---|
-| Project Idle      | Time Today Edition |  |  |  | Project Playing | |
-| Project Playing   |  |  |  |  | | Project Idle|
-| Time Today Edition|   | Project Idle | Project Idle | Project Idle | | |
+| Project Idle      | Time Today Edition | | Project Project Playing | |
+| Project Playing   |  |  | | Idle |
+| Time Today Edition|   |  | | |
 
 ### 2.4 Sneak Paths 
 
@@ -208,7 +208,7 @@ In the second action it's necessary to verify that if the project is running, th
 
 #### 1. Save Time Today
 
-In these tests we exercise the scenario in which the user updates the `Time Today` to a valid time i.e. a time that respects the regular expression "\d+:[0-5]?\d:[0-5]?\d"; or submits an empty input. To test this, we decided to combine the paths shown below and to create two different tests: one where the input is a valid time string and another where the input is empty. In the end, we must check if the `Time Today`of the project was effectively changed.
+In these tests we exercise the scenario in which the user updates the `Time Today` to a valid time i.e. a time that respects the regular expression "\d+:[0-5]?\d:[0-5]?\d"; or submits an empty input. To test this, we decided to combine the paths shown below and to create two different tests: one where the input is a valid time string and another where the input is empty. In the end, we must check if the `Time Today` of the project was effectively changed.
 
 ![](./figures/02_edit_time_today/02_path2_1.png)
 ![](./figures/02_edit_time_today/02_path3.png)
@@ -237,9 +237,7 @@ As we explained above, the play/pause use case was also included here. Here, we 
 
 ![](./figures/02_edit_time_today/02_path1.png)
 
-#### 4. (Sneak Path 1) Play while editing time today 
-
-#### 4. (Sneak Path 2) Edit time today while playing 
+#### 4. (Sneak Path 1) Edit time today while playing 
 
 ## 3. Delete Project
 
@@ -286,16 +284,24 @@ Here there're two sneak paths.
 
 #### 3.5.1 Start and pause a project
 <!-- TODO: justify this -->
+After starting and pausing a project, the user must be able to delete it. In the test 3.5.3 we verify that if the project is idle, then it must be possible to delete it. 
+This test, thus, verifies that if the project was started it also must be able to stop and return to the correct state. If the state is correct, the test **3.5.3** assess whether it will be able to stop it.  
+
 ![](./figures/03_delete_project/03_path1.png)
 
 #### 3.5.2 Play and delete a project
 Here we initialize the counter of a project and delete this same project. This should lead us with another idle project selected.  
 ![](./figures/03_delete_project/03_path2.png)
 
-#### Delete a project  
+#### 3.5.3 Delete a project  
 In this scenario we simply try to delete a project that is not in execution. Still in this case there are two subscenarios: delete one single project and the other is to delete two or more projects in sequence.   
 
 ![](./figures/03_delete_project/03_path3.png)
 
+## 3.5.4 Sneak Path 
+
 ## QF-Test tool feedback 
 
+The tool is really intuitive, however: 
+- It was hard to understand if a specific test has passed. There is a small on the bottom right corner. It would be better to also have a message similar to the JUnit tool, that represents if a test has passed or failed in a clear way. This might not make difference to old users, but it improve the experience of new users.   
+- The design is another point. It wouldn't make difference to old customers that are already clients of the tool, but improving the design would make more attractive.  
