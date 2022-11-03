@@ -241,16 +241,15 @@ As we explained above, the play/pause use case was also included here. Here, we 
 
 ## 3. Delete Project
 
-As mentioned before, JTimeSched's main goal is to allow users to track the time of their projects. As well as create a project, to manage the software the user also must be able to delete the projects.   
-The mal-functioning of the delete use case not only would cause chaos in the administration of information, but probably would comprimise the program usage in a long term. For this reason, it's crucial.  
+As mentioned before, JTimeSched's main goal is to allow users to track the time of their projects. As well as creating a project, to manage the software the user also must be able to delete the projects.   
+The malfunctioning of the delete use case not only would cause chaos in the administration of information but probably would compromise the program usage in a long term. For this reason, it's crucial.  
 
 ###  3.1 State diagram   
 
 This diagram shows the flow to delete a project in the system perspective.  
 
-- **Initial State**. In the initial state, concider that the application contains `n` projects, where `n > 0`. In this state, the project counter of the selected project is not in execution, thence the project is idle. Not only idle, but there are also no popups opened in the software.   
-- **Transitions from Project Idle**: From the initial state the user can either initialize the counter and transite to the **Project Playing state** or he can delete the project. By deleting the project, the total number of projects is decremented. This action can be repeated, while the total number of projects is higher than zero.  
-- **Transition from Projet Playing**: Even if the counter is in execution, this doesn't prevent any project in execution to be deleted. If a project is deleted, then another projects becomes selected/highlighted if the number of projects is still higher than zero. Not only delete, but pausing the project is also possible in this state, which intuitively transits the actual state to the **Project Idle**. 
+- **App Idle or Playing**: In this initial state the software can be idle or not. 
+- **Project Selected**: A project selected is one that is highlighted in blue. This action can be performed by a click. 
 
 One might ask why the **play** and **pause** events were represented in this diagram, since they might represent a different use case. The reason behind this analysis, comes from the fact that some actions are forbidden while a project has its counter in execution. Therefore, it's important to check that the `delete` case is not included in the forbidden actions in the **Project Playing** state, given that errors in conditions of this kind are not uncommon. 
 
