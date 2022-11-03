@@ -47,109 +47,65 @@ Let's map the expected behavior of each **sneaky transition**.
 - From the initial state (`App Idle or Playing`) it is clear that the `Edit Title`, `Save Title`, `Discard Title`, `Submit` and `Valid Keyboard Input` events are not  expected to generate any change of state. For instance, if we type without selecting a specific input, nothing is expected to change in the App, but there is no need to throw an exception either. Also, if the user doesn't create a project or explicitly selects a title to change, he will not be able to edit/save/discard anything, because there will be no title field selected.
 - From the `Project Created` state the user is not able to `Submit` or `Discard` his input because this actions may only be triggered in a state where an input is being edited, which is not the case, as this state only represents that the project was successfully created. For the same reason, any keyboard input that doesn't trigger the acceptance of the default project title - `Valid Keyboard Input`; should be ignored in this state. Furthermore, a new `Create` event should never happen before the title of the current project is set with the default. If it is, maybe an exception should be thrown. 
 
-Considering the explanation above, if this sneaky transitions occur, the events that generated them can be safely ignored.
-
 ### 1.5 Tests developed in QF-Test tool
+
+For the creation requirement we used the `Creation` test-set that can be found in the QF-Test test-suite,  available in the qf-test directory.
 
 **Requirements**: This test set assumes you have no previous configuration saved (no projects stored in memory). Please delete the `conf` folder before testing.
 
-<!-- Dizer que notamos que o comportamente não é o esperado aquando da criação do 6º projeto-->
-<!-- Brief description of the outcome of each test and whether any test results in a failure (and why). -->
+**Outcome**: All of the test-cases that are described below were successful. However, while building the test-set, we also tested a setup with which the tests failed due to a bug in the App. In particular, if we have 5 projects already created and we create a new one, the title of that project will not be focused just like it happens when we create the previous and next projects. We believe this happens because this is the first project that goes beyond the vertical space of the App (requires scroll).
 
-#### 1.5.1 Create project and save custom title
+#### 1.5.1. Create project and discard title changes
 
-For the first test, we decided to combine the paths shown below in order to test the full flow of creating a project, setting a custom title and saving it. We need to make sure that the title of the new project is the one typed by the user.
+For the first test, we combined the paths shown below, to test the case where, after the user creates a project and edits its title, he discards the changes by pressing the "Esc" key, for example. The final title of the new project should be "New Project", which is the default.
 
-![](./figures/01_create_project/01_path3_1.png)
-![](./figures/01_create_project/01_path4.png)
+![](./figures/01_create_project/01_path1.png)
+![](./figures/01_create_project/01_path3.png)
 
-The test case `create-project` was the one used to test this scenario.
-First, we recorded a sequence that represents all the states and transitions:
-- The sequence starts at the main window of the JTimeSched tool, without any popup open - `No Popup Opened` state.
-- Click "Add Project" (which represents the `Create` transition from `No Popup Opened` to `New Idle Project`);
-- Type "Project1" has the name of the project (which represents both the transition from `New Idle Project` to `Edit title`, and the self transition of the `Edit title` state);
-- Press "Enter" (`Save title` transition from `Edit title` to `No Popup Opened`);
-Then, we recorded the sequence `Check project name`, a check that verifies if the name of the recently added project is effectively "Project1".
-Another check (`Check number of projects`) was used to verify if the number of projects was one.
-Finally, a cleanup sequence was used to delete the newly created project.
+The test case `01_create-and-discard-title` was the one used to test this scenario:
+- It starts at the main window of the JTimeSched tool, after the App is launched, where, by default, there is no popup opened and the App is "Idle" - `App Idle or Playing` state. Considering that the requirements that we described above were respected, there are no projects in the App yet;
+- Click "Add Project" (which represents the `Create` transition from `App Idle or Playing` to `Project Created`);
+- Check if the project was created by verifying that there is only one project;
+- Type "Project1" as the name of the project - `Project Title Edition`;
+- Press "Esc" - `Discard title`;
+- Check that the title was discarded by verifying that it was set to the default value - "New Project";
+- Finally, a cleanup sequence was used to delete the newly created project.
+
 
 #### 1.5.2 Create project and accept default title
 
 Here we test the case where the user creates a new project and accepts the default title by pressing "Enter", for example.
 
-![](./figures/01_create_project/01_path1.png)
-
-The test case `create-project-default` was the one used to test this scenario.
-First, we recorded a sequence that represents all the states and transitions:
-- The sequence starts at the main window of the JTimeSched tool, without any popup open - `No Popup Opened` state.
-- Click "Add Project" (which represents the `Create` transition from `No Popup Opened` to `New Idle Project`);
-- Press "Enter" (`Save title` transition from `New Idle Project` to `No Popup Opened`);
-Then, we recorded the sequence `Check Project Name`, a check that verifies if the name of the recently added project is the default - "New Project".
-Another check (`Check number of projects`) was used to verify if the number of projects was one.
-Finally, a cleanup sequence was used to delete the newly created project.
-
-
-#### 1.5.3. Create two new projects consecutively
-
-Here we test the case where the user creates a project and, without making any changes to the default title, he presses the "Add project" button again. The first project should have the default name and a second project should be created.
-
 ![](./figures/01_create_project/01_path2.png)
 
-The test case `create-project-add-project` was the one used to test this scenario.
-First, we recorded a sequence that represents all the states and transitions:
-- The sequence starts at the main window of the JTimeSched tool, without any popup open - `No Popup Opened` state.
-- Click "Add Project" (which represents the `Create` transition from `No Popup Opened` to `New Idle Project`);
-- Click "Add Project" again (which represents the `Create` self transition of the `New Idle Project` state);
-- Press "Enter" (`Save title` transition from `New Idle Project` to `No Popup Opened`);
-Then, we recorded the sequences `Check project name 1` and `Check project name 2`, which verify if the titles of both projects are the default - "New Project".
-Another check (`Check number of projects`) was used to verify if the number of projects was two.
-Finally, a cleanup sequence was used to delete both projects.
+The test case `02_create-and-enter` was the one used to test this scenario:
+- It starts at the main window of the JTimeSched tool, after the App is launched, where, by default, there is no popup opened and the App is "Idle" - `App Idle or Playing` state. Considering that the requirements that we described above were respected, there are no projects in the App yet;
+- Click "Add Project" (which represents the `Create` transition from `App Idle or Playing` to `Project Created`);
+- Check if the project was created by verifying if the number of projects is one;
+- Press "Enter" (`Save title` transition from `Project Created` to `App Idle or Playing`);
+- Check that the name of the recently added project is the default - "New Project";
+- Finally, a cleanup sequence was used to delete the newly created project.
 
+#### 1.5.3 Create project and save custom title
 
-#### 1.5.4. Create project and discard title changes
+For this test, we decided to combine the paths shown below, in order to test the full flow of creating a project, setting a custom title and saving it. We need to make sure that the title of the new project is the one typed by the user.
 
-For the second test, we combined the paths shown above, but this time we wanted to test the case where, after the user changes the title, he discards the changes by pressing the "Esc" key, for example. The final title of the new project should be "New Project", which is the default.
-
-![](./figures/01_create_project/01_path3_2.png)
+![](./figures/01_create_project/01_path1.png)
 ![](./figures/01_create_project/01_path4.png)
 
-The test case `create-project-discard-name` was the one used to test this scenario.
-First, we recorded a sequence that represents all the states and transitions:
-- The sequence starts at the main window of the JTimeSched tool, without any popup open - `No Popup Opened` state.
-- Click "Add Project" (which represents the `Create` transition from `No Popup Opened` to `New Idle Project`);
-- Type "MyProject" has the name of the project (which represents both the transition from `New Idle Project` to `Edit title`, and the self transition of the `Edit title` state);
-- Press "Enter" (`Save title` transition from `Edit title` to `No Popup Opened`);
-Then, we recorded the sequence `Check project name`, a check that verifies if the name of the recently added project is "New project", meaning that the changes were discarded.
-Another check (`Check number of projects`) was used to verify if the number of projects was one.
-Finally, a cleanup sequence was used to delete the newly created project.
+The test case `03_create_type_and_save` was the one used to test this scenario:
+- It starts at the main window of the JTimeSched tool, after the App is launched, where, by default, there is no popup opened and the App is "Idle" - `App Idle or Playing` state. Considering that the requirements that we described above were respected, there are no projects in the App yet;
+- Click "Add Project" (which represents the `Create` transition from `App Idle or Playing` to `Project Created`);
+- Check if the project was created by verifying that there is only one project;
+- Type "Project1" as the name of the project - `Project Title Edition`;
+- Check if the input was changed to "Project1";
+- Press "Enter" (`Save title` transition from `Project Title Edited` to `App Idle or Playing`);
+- Check if the project title was changed to "Project1";
+- Finally, a cleanup sequence was used to delete the newly created project.
 
-#### 1.5.5. Create a new project, change the title and create another project 
+#### 1.5.4. Sneak Path - ??
 
-In this test we experiment the scenario in which the user creates a new project, changes the title of the project and, without hitting "Enter" to save the changes, he presses the "Add Project" button again to add yet another project.
-In this case we want to make sure that the title changes are kept and that both projects are effectively created.
-
-![](./figures/01_create_project/01_path5.png)
-
-The test case `create-project-title-add-project` was the one used to test this scenario.
-First, we recorded a sequence that represents all the states and transitions:
-- The sequence starts at the main window of the JTimeSched tool, without any popup open - `No Popup Opened` state.
-- Click "Add Project" (which represents the `Create` transition from `No Popup Opened` to `New Idle Project`);
-- Type "MyProject" has the name of the project (which represents both the transition from `New Idle Project` to `Edit title`, and the self transition of the `Edit title` state);
-- Press "Add Project" (`Save title & Create` transition from `Edit title` to `New Idle Project`);
-The test case `create-project-discard-name` was the one used to test this scenario.
-First, we recorded a sequence that represents all the states and transitions:
-- The sequence starts at the main window of the JTimeSched tool, without any popup open - `No Popup Opened` state.
-- Click "Add Project" (which represents the `Create` transition from `No Popup Opened` to `New Idle Project`);
-- Type "MyProject" has the name of the project (which represents both the transition from `New Idle Project` to `Edit title`, and the self transition of the `Edit title` state);
-- Press "Enter" (`Save title` transition from `New Idle Project` to `No Popup Opened`).
-Then, we recorded the sequence `Check project name`, a check that verifies if the name of the recently added project is "New project", meaning that the changes were discarded.
-Another check (`Check number of projects`) was used to verify if the number of projects was one.
-Finally, a cleanup sequence was used to delete the newly created project.
-
-Then, we recorded the sequences `Check project name 1` and `Check project name 2`, to check that the name of the first project was saved as "MyProject" and that the second kept the default title "New Project".
-Another check (`Check number of projects`) was used to verify if the number of projects was two.
-Finally, a cleanup sequence was used to delete both projects.
-
+TODO
 
 ## 2. Edit time 
 
