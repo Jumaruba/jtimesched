@@ -21,6 +21,13 @@ This diagram represents the creation of projects. Considering that the creation 
 - We start with the initial state, named `No Popup Open`;
 - From the initial state we only have an outgoing transition to `New Idle Project`, which results from the creation of a new project;
 - From the `New Idle Project` state we have three outgoing edges to `No Popup Open`, `Edit Title` and `New Idle Project`. The only state where we haven't been before is the `Edit Title`. From this state the user may go to the `No Popup Open`, `Edit Title` or `New Idle Project`.
+From this tree, we can derive the test paths, which will be explored in the QF-Test tool and further explained in section 1.5: 
+- `No Popup Opened` -> `New Idle Project` -> `No Popup Opened`
+- `No Popup Opened` -> `New Idle Project` -> `New Idle Project`
+- `No Popup Opened` -> `New Idle Project` -> `Edit Title`
+- `No Popup Opened` -> `New Idle Project` -> `Edit Title` -> `No Popup Opened`
+- `No Popup Opened` -> `New Idle Project` -> `Edit Title` -> `New Idle Project`
+- `No Popup Opened` -> `New Idle Project` -> `Edit Title` -> `Edit Title`
 
 ![](./figures/01_create_project/01_transition_tree.png)
 
@@ -164,6 +171,16 @@ JTimeSched's users are able to edit a project in multiple ways: they can change 
 ![](./figures/02_edit_time_today/02_state_machine.png)
 
 ### 2.2 Transition tree
+
+- We start with the initial state, `Project Idle`;
+- From the initial state we only have two possible outgoing transitions, one to `Project Playing`, triggered by pressing the "Play" button of the respective project, and another to the `Time Today Edition` state, which is triggered by a double left click on the `Time Today ` field of the project.
+- From the `Project Playing` state the only possible transition results from pressing the "Pause" button and leads back to the initial state, which was already explored. 
+- From the `Time Today Edition` state we can either go back to the `Project Idle` state when we have finished editing or we can keep in the `Time Today Edition` state, while we are inserting valid input in the field.
+As we have already expanded every possible state, the transition tree is complete.
+From this tree, we can derive the test paths, which will be explored in the QF-Test tool and further explained in section 2.5: 
+- `Project Idle` -> `Project Playing` -> `Project Idle`
+- `Project Idle` -> `Time Today Edition` -> `Project Idle`
+- `Project Idle` -> `Time Today Edition` -> `Time Today Edition`
 
 ![](./figures/02_edit_time_today/02_transition_tree.png)
 
