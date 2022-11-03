@@ -304,3 +304,6 @@ In this scenario we simply try to delete a project that is not in execution. Sti
 The tool is really intuitive, however: 
 - It was hard to understand if a specific test has passed. There is a small on the bottom right corner. It would be better to also have a message similar to the JUnit tool, that represents if a test has passed or failed in a clear way. This might not make difference to old users, but it improve the experience of new users.   
 - The design is another point. It wouldn't make difference to old customers that are already clients of the tool, but improving the design would make more attractive.  
+- Selecting a table cell ..................
+- Doesn't show where the error was?
+- input selecionado ou nao
