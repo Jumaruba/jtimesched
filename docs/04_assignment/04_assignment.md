@@ -41,12 +41,11 @@ From this tree, we can derive the test paths, which will be explored in the QF-T
 ### 1.4 Sneak Paths 
 
 In section **1.3**, the 17 empty cells correspond to **sneaky transitions**.
-Let's map the expected behavior of each **sneaky transition**. 
+But only one was selected to be tested: 
 
-<!-- TODO -->
-
-- From the initial state (`App Idle or Playing`), it is clear that the `Edit Title`, `Save Title`, `Discard Title`, `Submit` and `Valid Keyboard Input` events are not expected to generate any change of state. For instance, if we type without selecting a specific input, nothing is expected to change in the App, but there is no need to throw an exception either. Also, if the user doesn't create a project or explicitly selects a title to change, he will not be able to edit/save/discard anything, because there will be no title field selected, so these events should not generate any change of state.
-- From the `Project Created` state, the user is not able to `Submit` or `Discard` his input because these actions may only be triggered in a state where an input is being edited, which is not the case, as this state only represents that the project was successfully created. For the same reason, any keyboard input that doesn't trigger the acceptance of the default project title - `Valid Keyboard Input`; should be ignored in this state. Furthermore, a new `Create` event should never happen before the title of the current project is set with the default. If it is, maybe an exception should be thrown. 
+1. (App Idle or Playing, Valid Keyboard Input)
+ 
+We expect that the events that generate sneak paths in their respective states, generate a default behavior equivalent to nothing. For example, from the initial state (`App Idle or Playing`), it is clear that the `Edit Title`, `Save Title`, `Discard Title`, `Submit` and `Valid Keyboard Input` events are not expected to generate any change of state. For instance, if we type without selecting a specific input, nothing is expected to change in the App, but there is no need to throw an exception either. However, as we will see in section **1.5.4** this doesn't actually happen.
 
 ### 1.5 Tests developed in QF-Test tool
 
@@ -116,7 +115,7 @@ In this sneak path, we want to **assess** that if the event  `Valid Keyboard Inp
 The test `04_sneak_path` was performed in the following way: 
 - Firstly, we bring the App to the initial state;
 - Then a project is created; 
-- It's checked if the project was created with success in the `Project Created` State; 
+- It's checked if the project was created with success in the `App Idle or Playing` State; 
 - The "Enter" key is pressed to accept the default title of the project, which brings us back to the `App Idle or Playing` state;
 - We induce a `Valid Keyboard Input` from this state; 
 - Upon the input of a `Valid Keyboard input` **the test fails**, since it transits to the `Project Title Edition`. In other words, by clicking in any letter in the keyboard, or any `Valid Keyboard Input`, the edition of the project title is automatically started. 

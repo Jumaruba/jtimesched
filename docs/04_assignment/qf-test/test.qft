@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!DOCTYPE RootStep>
 <RootStep id="_0" name="root"
-          signature="BD9D396187686C1D2EDAF8CD026E724E8464A459"
+          signature="CBF67271AD8DF4CD800A9B224F83B4ACE0F0D677"
           version="6.0.3">
   <include>qfs.qft</include>
   <TestSet id="_1" name="Creation">
@@ -156,18 +156,14 @@
     <TestCase id="_63s" name="04_sneak_path">
       <comment>Name can't chanve without double click
 </comment>
-      <BasicSequence id="_65q" name="create">
+      <SetupSequence id="_65u" name="create-project">
         <MouseEventStep clicks="1" client="$(client)"
                         component="buttonAdd_project" event="MOUSE_MPRC"
-                        id="_65r" modifiers="16"/>
-      </BasicSequence>
-      <BasicSequence id="_65s" name="project-created">
-        <CheckStringStep client="$(client)"
-                         component="label1_project_|_0:00:00_overall_|_0:00:00_today"
-                         id="_65t">
-          <text>1 project | 0:00:00 overall | 0:00:00 today</text>
-        </CheckStringStep>
-      </BasicSequence>
+                        id="_65v" modifiers="16"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_65w" keychar="10" keycode="10"
+                      modifiers="0"/>
+      </SetupSequence>
       <BasicSequence id="_659" name="edit-title">
         <KeyEventStep client="$(client)"
                       component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today"
