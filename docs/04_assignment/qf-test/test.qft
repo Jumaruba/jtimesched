@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!DOCTYPE RootStep>
 <RootStep id="_0" name="root"
-          signature="CBF67271AD8DF4CD800A9B224F83B4ACE0F0D677"
+          signature="952FF39369587B507D0155CB6D413447963BE160"
           version="6.0.3">
   <include>qfs.qft</include>
   <TestSet id="_1" name="Creation">
@@ -901,16 +901,7 @@ It uses the method JTable.getRowCount() to get the number.</comment>
       </Package>
     </Package>
   </PackageRoot>
-  <ExtraSequence id="_4">
-    <SetupSequence id="_64J" name="create-project">
-      <MouseEventStep clicks="1" client="$(client)"
-                      component="buttonAdd_project" event="MOUSE_MPRC"
-                      id="_64K" modifiers="16"/>
-      <KeyEventStep client="$(client)" component="frameJTimeSched.text"
-                    event="KEY_PTR" id="_64L" keychar="10" keycode="10"
-                    modifiers="0"/>
-    </SetupSequence>
-  </ExtraSequence>
+  <ExtraSequence id="_4"/>
   <WindowList id="_5">
     <WindowStep class="Window" feature="jTimeSched" height="150"
                 id="frameJTimeSched" uid="_C" width="590" x="610" y="316">

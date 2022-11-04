@@ -6,7 +6,7 @@ JTimeSched's main goal is to allow users to track the time of certain projects. 
 
 ### 1.1 State diagram
 
-The diagram shown below represents the creation of projects. Given that the creation of a project triggers the edition of its title, we also represent this part of the creation flow in the diagram. However, we will not cover the case where the user updates a title by double clicking the title field, as it is not part of the "project creation" requirement.
+The diagram shown below represents the creation of projects. Given that the creation of a project triggers the edition of its title, we also represent this part of the creation flow in the diagram. However, we will not cover the case where the user updates a title by double-clicking the title field, as it is not part of the "project creation" requirement.
 
 ![](./figures/01_create_project/01_state_machine.png)
 
@@ -22,7 +22,7 @@ The diagram shown below represents the creation of projects. Given that the crea
 
 - We start with the initial state, named `App Idle or Playing`;
 - From the initial state, we only have an outgoing transition to `Project Created`, which results from the creation of a new project;
-- From the `Created` state, we have two outgoing edges, one to `Project Title Edition` and another to `App Idle or Playing`. The only state where we haven't been before is the `Project Title Edition`. From this state, the user may go to the `Project Title Edition`, `App Idle or Playing` or `Project Title Edited`. Finally, from the `Project Title Edited` state, we can only go to the `App Idle or Playing` state.
+- From the `Created` state, we have two outgoing edges, one to `Project Title Edition` and another to `App Idle or Playing`. The only state where we haven't been before is the `Project` Title Edition`. From this state, the user may go to the `Project Title Edition`, `App Idle or Playing` or `Project Title Edited`. Finally, from the `Project Title Edited` state, we can only go to the `App Idle or Playing` state.
 From this tree, we can derive the test paths, which will be explored in the QF-Test tool and further explained in section 1.5: 
 - `App Idle or Playing` -> `Project Created` -> `App Idle or Playing`
 - `App Idle or Playing` -> `Project Created` -> `Project Title Edition` -> `App Idle or Playing`
@@ -51,7 +51,8 @@ We expect that the events that generate sneak paths in their respective states, 
 
 For the creation requirement we used the `Creation` test-set that can be found in the QF-Test test-suite, available in the qf-test directory.
 
-**Requirements**: This test set assumes you have no previous configuration saved (no projects stored in memory). Please delete the `conf` folder before testing.
+**Requirements**: This test set assumes you have no previous configuration saved (no projects stored in memory). Please delete the conf folder before testing. After that, make sure to change the first Setup node that launches the App. To do so you must run the Quick-start Wizard, select the java archive jtimesched-1.2-SNAPSHOT-jar-with-dependencies.jar, which is stored under the target directory, and select the correct working directory. Replace the old Setup node of the test-set with the new one. 
+
 
 **Outcome**: All but one of the test-cases described below were successful. The outcome of the test that failed - **1.5.4** will be explained in detail in the respective section. Despite the success of the other tests, while building the test-set, we also tested a setup with which the tests failed due to a bug in the App. In particular, if we have 5 projects already created and we create a new one, the title of that project will not become automatically focused, just like it happens when we create the previous and next projects. We believe this happens because this is the first project that goes beyond the vertical space of the App (requires scroll).
 
@@ -178,7 +179,7 @@ The tests developed for this "sneak paths" are explained in detail in sections 2
 
 To test the "Edit Time Today" requirement, we used the `Time-Today-Edition` test-set that can be found in the QF-Test test-suite, available in the qf-test directory.
 
-**Requirements**: This test set assumes you have no previous configuration saved (no projects stored in memory). Please delete the `conf` folder before testing.
+**Requirements**: This test set assumes you have no previous configuration saved (no projects stored in memory). Please delete the conf folder before testing. After that, make sure to change the first Setup node that launches the App. To do so you must run the Quick-start Wizard, select the java archive jtimesched-1.2-SNAPSHOT-jar-with-dependencies.jar, which is stored under the target directory, and select the correct working directory. Replace the old Setup node of the test-set with the new one. 
 
 **Outcome**: There is a total of 7 tests counting with the sneak paths. All of them pass with success.
 
@@ -310,7 +311,7 @@ However, a case that perhaps should display an error message is the `(App Idle o
 
 To test the "Delete Project" requirement, we used the `Delete` test-set that can be found in the QF-Test test-suite, available in the qf-test directory.
 
-**Requirements**: This test set assumes you have no previous configuration saved (no projects stored in memory). Please delete the `conf` folder before testing.
+**Requirements**: This test set assumes you have no previous configuration saved (no projects stored in memory). Please delete the conf folder before testing. After that, make sure to change the first Setup node that launches the App. To do so you must run the Quick-start Wizard, select the java archive jtimesched-1.2-SNAPSHOT-jar-with-dependencies.jar, which is stored under the target directory, and select the correct working directory. Replace the old Setup node of the test-set with the new one. 
 
 **Outcome**: W had planned to be perform two tests in this test-case. However, as explained in the test **3.5.2**, due to limitations associated with the Qf-test tool, it was not possible to test the situation where a project is selected and then unselected.  
 
