@@ -72,6 +72,7 @@ The test case `01_create-and-discard-title` was the one used to test this scenar
 - Check that the title was discarded by verifying that it was set to the default value - "New Project";
 - Finally, a cleanup sequence was used to delete the newly created project.
 
+The test passes with success.
 
 #### 1.5.2 Create project and accept default title
 
@@ -86,6 +87,8 @@ The test case `02_create-and-enter` was the one used to test this scenario:
 - Press "Enter" (`Save title` transition from `Project Created` to `App Idle or Playing`);
 - Check that the name of the recently added project is the default - "New Project";
 - Finally, a cleanup sequence was used to delete the newly created project.
+
+The test passes with success.
 
 #### 1.5.3 Create project and save custom title
 
@@ -104,17 +107,19 @@ The test case `03_create_type_and_save` was the one used to test this scenario:
 - Check if the project title was changed to "Project1";
 - Finally, a cleanup sequence was used to delete the newly created project.
 
+The test passes with success.
+
 #### 1.5.4. Sneak Path - (App Idle or Playing, Valid Keyboard input)  
 
 In this sneak path, we want to **assess** that if the event  `Valid Keyboard Input` occurs, the application doesn't change its state. Changing the state by typing any key is not an intuitive behavior for the user unless this action is a shortcut that was documented. 
 
-The test was performed in the following way: 
+The test `04_sneak_path` was performed in the following way: 
 - Firstly, we bring the App to the initial state;
 - Then a project is created; 
 - It's checked if the project was created with success in the `Project Created` State; 
 - The "Enter" key is pressed to accept the default title of the project, which brings us back to the `App Idle or Playing` state;
-- We induce a **Valid Keyboard Input** from this state; 
-- Upon the input of a **Valid Keyboard input** the test fails, since it transits to the **Project Title Edition**. In other words, by clicking in any letter in the keyboard, or any `Valid Keyboard Input`, the edition of the project title is automatically started. 
+- We induce a `Valid Keyboard Input` from this state; 
+- Upon the input of a `Valid Keyboard input` **the test fails**, since it transits to the `Project Title Edition`. In other words, by clicking in any letter in the keyboard, or any `Valid Keyboard Input`, the edition of the project title is automatically started. 
 
 As mentioned before, this behavior isn't desired, since it is not intuitive for the user, and might cause many undesired editions by accident. Furthermore we noticed that it is inconsistent - sometimes, if we click near other cells of the App, the `Valid Keyboard Input` will trigger the edition of other fields.
 
