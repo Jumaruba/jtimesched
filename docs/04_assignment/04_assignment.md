@@ -10,7 +10,7 @@ The diagram shown below represents the creation of projects. Given that the crea
 
 ![](./figures/01_create_project/01_state_machine.png)
 
-**Initial State**: In order to create a new project, no popup window can be opened in the application i.e. the user may not click the "Add Project" button while he is editing the quotas or changing the category of a project. If that is the case, we consider that the App is "Idle". We consider that the App is "Playing" if no popup is opened but there is a project "playing". As we can only create a new project if the App is on any of these two states, our initial state is `App Idle or Playing`.
+**Initial State**: In order to create a new project, no popup window can be opened in the application i.e. the user may not click the "Add Project" button while he is editing the quotas or changing the category of a project. If that is the case, we consider that the App is "Idle". We consider that the App is "Playing" if no popup is opened but there is a project "playing". As we can only create a new project if the App is in any of these two states, our initial state is `App Idle or Playing`.
 **Transitions from `App Idle or Playing`**: From the initial state, if the user presses the "Add Project" button, a new project with the default title of "New Project" will be created, thence the number of projects (`n`) is incremented by one (`n = n + 1`), as we can see in the action of the `Create` transition. This leads to a state where the new project will be in the idle state, that is, its counter is paused. 
 **Transitions from `Project Created`**: After created i.e. when in the `Project Created` state; the user may edit the default title of the project - `Edit Title`; or he may decide to keep the default title, by pressing "Enter", for example, which will lead back to the initial state.
 **Transitions from `Project Title Edition`**: While the user is modifying the title of the project, the state is kept in the `Project Title Edition`. From there, the user may decide to discard his changes by pressing the "Esc" key, or he may `Submit` his changes by clicking the "Enter" key, for example.
@@ -22,10 +22,10 @@ The diagram shown below represents the creation of projects. Given that the crea
 
 - We start with the initial state, named `App Idle or Playing`;
 - From the initial state, we only have an outgoing transition to `Project Created`, which results from the creation of a new project;
-- From the `Created` state we have two outgoing edges, one to `Project Title Edition` and another to `App Idle or Playing`. The only state where we haven't been before is the `Project Title Edition`. From this state the user may go to the `Project Title Edition`, `App Idle or Playing` or `Project Title Edited`. Finally, from the `Project Title Edited` we can only go to the `App IDle or Playing` state.
+- From the `Created` state, we have two outgoing edges, one to `Project Title Edition` and another to `App Idle or Playing`. The only state where we haven't been before is the `Project Title Edition`. From this state, the user may go to the `Project Title Edition`, `App Idle or Playing` or `Project Title Edited`. Finally, from the `Project Title Edited` state, we can only go to the `App Idle or Playing` state.
 From this tree, we can derive the test paths, which will be explored in the QF-Test tool and further explained in section 1.5: 
 - `App Idle or Playing` -> `Project Created` -> `App Idle or Playing`
-- `App Idle or Playing` -> `Project Created` -> `Project Title Edition`
+- `App Idle or Playing` -> `Project Created` -> `Project Title Edition` -> `App Idle or Playing`
 - `App Idle or Playing` -> `Project Created` -> `Project Title Edition` -> `Project Title Edition`
 - `App Idle or Playing` -> `Project Created` -> `Project Title Edition` -> `Project Title Edited` -> `App Idle or Playing`
 
@@ -39,12 +39,14 @@ From this tree, we can derive the test paths, which will be explored in the QF-T
 | Project Title Edited | | | | | App Idle or Playing || 
 
 ### 1.4 Sneak Paths 
-<!-- TODO: check if it makes sense-->
+
 In section **1.3**, the 17 empty cells correspond to **sneaky transitions**.
 Let's map the expected behavior of each **sneaky transition**. 
 
-- From the initial state (`App Idle or Playing`) it is clear that the `Edit Title`, `Save Title`, `Discard Title`, `Submit` and `Valid Keyboard Input` events are not expected to generate any change of state. For instance, if we type without selecting a specific input, nothing is expected to change in the App, but there is no need to throw an exception either. Also, if the user doesn't create a project or explicitly selects a title to change, he will not be able to edit/save/discard anything, because there will be no title field selected.
-- From the `Project Created` state the user is not able to `Submit` or `Discard` his input because this actions may only be triggered in a state where an input is being edited, which is not the case, as this state only represents that the project was successfully created. For the same reason, any keyboard input that doesn't trigger the acceptance of the default project title - `Valid Keyboard Input`; should be ignored in this state. Furthermore, a new `Create` event should never happen before the title of the current project is set with the default. If it is, maybe an exception should be thrown. 
+<!-- TODO -->
+
+- From the initial state (`App Idle or Playing`), it is clear that the `Edit Title`, `Save Title`, `Discard Title`, `Submit` and `Valid Keyboard Input` events are not expected to generate any change of state. For instance, if we type without selecting a specific input, nothing is expected to change in the App, but there is no need to throw an exception either. Also, if the user doesn't create a project or explicitly selects a title to change, he will not be able to edit/save/discard anything, because there will be no title field selected, so these events should not generate any change of state.
+- From the `Project Created` state, the user is not able to `Submit` or `Discard` his input because these actions may only be triggered in a state where an input is being edited, which is not the case, as this state only represents that the project was successfully created. For the same reason, any keyboard input that doesn't trigger the acceptance of the default project title - `Valid Keyboard Input`; should be ignored in this state. Furthermore, a new `Create` event should never happen before the title of the current project is set with the default. If it is, maybe an exception should be thrown. 
 
 ### 1.5 Tests developed in QF-Test tool
 
@@ -52,7 +54,7 @@ For the creation requirement we used the `Creation` test-set that can be found i
 
 **Requirements**: This test set assumes you have no previous configuration saved (no projects stored in memory). Please delete the `conf` folder before testing.
 
-**Outcome**: All of the test-cases that are described below were successful. However, while building the test-set, we also tested a setup with which the tests failed due to a bug in the App. In particular, if we have 5 projects already created and we create a new one, the title of that project will not be focused just like it happens when we create the previous and next projects. We believe this happens because this is the first project that goes beyond the vertical space of the App (requires scroll).
+**Outcome**: All but one of the test-cases described below were successful. The outcome of the test that failed - **1.5.4** will be explained in detail in the respective section. Despite the success of the other tests, while building the test-set, we also tested a setup with which the tests failed due to a bug in the App. In particular, if we have 5 projects already created and we create a new one, the title of that project will not become automatically focused, just like it happens when we create the previous and next projects. We believe this happens because this is the first project that goes beyond the vertical space of the App (requires scroll).
 
 #### 1.5.1. Create project and discard title changes
 
@@ -102,19 +104,19 @@ The test case `03_create_type_and_save` was the one used to test this scenario:
 - Check if the project title was changed to "Project1";
 - Finally, a cleanup sequence was used to delete the newly created project.
 
-#### 1.5.4. Sneak Path - (Project Created, Valid Keyboard input)  
+#### 1.5.4. Sneak Path - (App Idle or Playing, Valid Keyboard input)  
 
-In this sneak path, we want to **assess** that if given an event of `Valid Keyboard Input`, the application doesn't change its state. Changing the state by typing any key is not an intuitive behavior for the user unless this action is a shortcut that was documented. 
+In this sneak path, we want to **assess** that if the event  `Valid Keyboard Input` occurs, the application doesn't change its state. Changing the state by typing any key is not an intuitive behavior for the user unless this action is a shortcut that was documented. 
 
 The test was performed in the following way: 
-
-- Firstly, a project was created; 
+- Firstly, we bring the App to the initial state;
+- Then a project is created; 
 - It's checked if the project was created with success in the `Project Created` State; 
-- The **Edit Title** action is **NOT** performed. Instead, we induced a **Valid Keyboard Input**; 
-- Upon the input of a **Valid Keyboard input** the test fails, since it transits from the **Project Created** to the **Project Title Edition**. In other words, by clicking in any letter in the keyboard, or any `Valid Keyboard Input`, the edition of the project title is automatically started. 
+- The "Enter" key is pressed to accept the default title of the project, which brings us back to the `App Idle or Playing` state;
+- We induce a **Valid Keyboard Input** from this state; 
+- Upon the input of a **Valid Keyboard input** the test fails, since it transits to the **Project Title Edition**. In other words, by clicking in any letter in the keyboard, or any `Valid Keyboard Input`, the edition of the project title is automatically started. 
 
-As metioned before, this behavior isnt' desired, since it is not intuitive for the user, and might cause many undesired editions by accident. 
-
+As mentioned before, this behavior isn't desired, since it is not intuitive for the user, and might cause many undesired editions by accident. Furthermore we noticed that it is inconsistent - sometimes, if we click near other cells of the App, the `Valid Keyboard Input` will trigger the edition of other fields.
 
 ## 2. Edit time 
 
