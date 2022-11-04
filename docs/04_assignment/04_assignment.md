@@ -131,7 +131,7 @@ JTimeSched's users are able to edit a project in multiple ways: they can change 
 
 **Initial State**: To be able to edit the `Time Today` of a project, no popup window can be opened in the application and the project must not be "playing" - its timer must not be counting. We named this state `Project Idle`. From here, the user can edit the `Time Today` field by performing a double left click on the respective input field. This transition is clear in the diagram and leads to the `Time Today Edition` state. From the idle state, the user may also press the "Play" button and start the timer of the project.
 **Transitions from `Time Today Edition`**: `Time Today Edition` represents the state where the `Time Today` field of the project is focused and the user is able to update it by typing the new value, a behavior represented by the `Valid Keyboard input` self transition. To save the new value, the user can press the "Enter" key, for example, which will lead to the `Validate Time Today` state. However, if the user presses the "Esc" key, his changes will be discarded - `Discard Time Today`.
-**Transitions from `Validate Time Today`**: The input of the user is then validated and saved accordingly. If the user submits an empty value, the time will be set to 0. On the other hand, if the user submits a valid time, the field will be updated with that value. Finally, if the user inserts an invalid time, the `Time Today` will be kept the same. This cases represent the conditions of the `Save Time Today` transition, which leads back to the `Project Idle` state.
+**Transitions from `Validate Time Today`**: The input of the user is then validated and saved accordingly. If the user submits an empty value, the time will be set to 0. On the other hand, if the user submits a valid time, the field will be updated with that value. Finally, if the user inserts an invalid time, the `Time Today` will be kept the same. These cases represent the conditions and actions of the `Save Time Today` transition, which leads back to the `Project Idle` state.
 **Transitions from `Project Playing`**: As we explained above, this diagram also includes the play/pause use case, to show that it is no possible to update the `Time Today` if the project is playing. In the scope of the edition of the `Time Today` field, which is the one we are portraying here, the only possible outgoing transition results from pressing the "Pause" button, which will lead back to the `Project Idle` state.
 
 ### 2.2 Transition tree
@@ -160,22 +160,23 @@ From this tree, we can derive the test paths, which will be explored in the QF-T
 
 ### 2.4 Sneak Paths 
 
-In total there are 21 sneak paths. But only two were selected to be tested:   
+In total there are 21 sneak paths, but only two were selected to be tested:   
 
 1. (Project Playing, Time Today Double Left Click)
 2. (Time Today Edition, Time Today Double Left Click)
 
-In the first sneak path, it mustn't be possible to edit the `Time Today` field while the project is playing. It is expected that the program remains in the same state.  
-In the second case, if the user triggers the `Time Today Double Left Click` the state also must remain the same.   
+In the first sneak path, it must not be possible to edit the `Time Today` field while the project is playing. It is expected that the program remains in the same state.  
+In the second case, if the user triggers the `Time Today Double Left Click`, the state must also remain the same.   
 
+The tests developed for this "sneak paths" are explained in detail in sections 2.5.4 and 2.5.5.
 
 ### 2.5 Tests developed in QF-Test tool 
 
-To tests the "Edit Time Today" requirement, we used the `Time-Today-Edition` test-set that can be found in the QF-Test test-suite, available in the qf-test directory.
+To test the "Edit Time Today" requirement, we used the `Time-Today-Edition` test-set that can be found in the QF-Test test-suite, available in the qf-test directory.
 
 **Requirements**: This test set assumes you have no previous configuration saved (no projects stored in memory). Please delete the `conf` folder before testing.
 
-**Outcome**: There is a total of 7 tests couting with the sneak paths. All of them passes with success. 
+**Outcome**: There is a total of 7 tests counting with the sneak paths. All of them pass with success.
 
 #### 2.5.1. Play/Stop
 
@@ -191,9 +192,11 @@ The test case `01_play_and_stop` was the one used to test this scenario:
 - Check if the `Time Today` field changed to 4000ms, which allows us to check if the project was really in the `Project Playing` state for 4000ms and is now in the `Project Idle` state again;
 - Finally, a cleanup sequence was used to delete the project that was used.
 
+The test passes with success.
+
 #### 2.5.2. Discard Time Today
 
-Here we test the case where the user discards his input by pressing "Esc" to discard his changes. In the end, we expect that the `Time Today` value remains the same.
+Here we test the case where the user discards his input by pressing "Esc" to discard his changes. For that, we combine the two paths shown below.
 
 ![](./figures/02_edit_time_today/02_path3.png)
 ![](./figures/02_edit_time_today/02_path2.png)
@@ -209,9 +212,11 @@ The test case `02_edit-esc` was the one used to test this scenario:
 - Check if the `Time Today` is the initial one ("0:00:00");
 - Finally, a cleanup sequence was used to delete the project that was used.
 
+The test passes with success.
+
 #### 2.5.3. Save Time Today
 
-In these tests we exercise the scenario in which the user updates the `Time Today` to a valid time i.e. a time that respects the regular expression "\d+:[0-5]?\d:[0-5]?\d"; an empty input or an invalid time. To test this, we decided to combine the paths shown below and to create three different tests: one where the input is a valid time string (`03_1_edit_save`), another where the input is empty `03_2_edit_save` and a final one where the input is invalid `03_3_edit_save`.
+These tests exercise the scenario in which the user updates the `Time Today` to a valid time i.e. a time that respects the regular expression "\d+:[0-5]?\d:[0-5]?\d"; an empty input or an invalid time. To test this, we combined the paths shown below.and created three different tests: one where the input is a valid time string (`03_1_edit_save`), another where the input is empty (`03_2_edit_save`) and a final one where the input is invalid (`03_3_edit_save`).
 
 ![](./figures/02_edit_time_today/02_path3.png)
 ![](./figures/02_edit_time_today/02_path4.png)
@@ -229,15 +234,17 @@ All the test cases follow a similar structure:
   - if the input was invalid, check if the time is the initial one i.e. the time was not modified;
 - Finally, a cleanup sequence was used to delete the project that was used.
 
+The tests pass with success.
+
 #### 2.5.4. (Sneak Path 1) Edit time today while playing
 
 The test was designed in the following way: 
 
-- First the application starts in the initial state, `Project Idle`; 
+- The application starts in the initial state, `Project Idle`; 
 - Then the event `play` is triggered; 
-- At this phase the application is in the `Project Playing` state and as shown in the state machine diagram, there isn't any transition from `Project Playing` that leads to `Time Today` edition; 
+- At this phase, the application is in the `Project Playing` state and, as shown in the state machine diagram, there isn't any transition from `Project Playing` that leads to `Time Today` edition; 
 - However, the `Time Today Double Left Click` event is induced; 
-- At this phase it must be verified if the `TimeToday` box is in edit mode or not. By the triggering of this event, it's expected that no alterations are made in the state. 
+- At this phase, it must be verified if the `TimeToday` box is in edit mode or not. By triggering this event, it's expected that no alterations are made in the state. 
 
 The test passes with success. 
 
@@ -245,12 +252,13 @@ The test passes with success.
 
 This test was designed in the following way: 
 
-- First the application starts in the initial state, `Project Idle`; 
-- Then the user triggers the `Time Today Double Left Click` event and therefore the program transits to the `Time Today Edition`;  
-- Once more, the user tries to trigger the `Time Today Double Left Click`, which implies that user must perform a double click in the `Time Today` field once more; 
-- It's expected that the application doesn't respond to the command remaining in the same state, since, giving the context, this is the most intuitive alternative. 
+- The application starts in the initial state, `Project Idle`; 
+- Then the user triggers the `Time Today Double Left Click` event and, therefore, the program transits to the `Time Today Edition`;  
+- Once more, the user tries to trigger the `Time Today Double Left Click`, which implies that the user must perform a double click in the `Time Today` field once more; 
+- It's expected that the application doesn't respond to the command remaining in the same state, since this is the most intuitive alternative in this context. 
 
 The test passes with success.
+
 ## 3. Delete Project
 
 As mentioned before, JTimeSched's main goal is to allow users to track the time of their projects. As well as creating a project, to manage the software the user also must be able to delete the projects.   
