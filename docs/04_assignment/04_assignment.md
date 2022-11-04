@@ -39,16 +39,16 @@ From this tree, we can derive the test paths, which will be explored in the QF-T
 | Project Title Edited | | | | | App Idle or Playing || 
 
 ### 1.4 Sneak Paths 
-
+<!-- TODO: check if it makes sense-->
 In section **1.3**, the 17 empty cells correspond to **sneaky transitions**.
 Let's map the expected behavior of each **sneaky transition**. 
 
-- From the initial state (`App Idle or Playing`) it is clear that the `Edit Title`, `Save Title`, `Discard Title`, `Submit` and `Valid Keyboard Input` events are not  expected to generate any change of state. For instance, if we type without selecting a specific input, nothing is expected to change in the App, but there is no need to throw an exception either. Also, if the user doesn't create a project or explicitly selects a title to change, he will not be able to edit/save/discard anything, because there will be no title field selected.
+- From the initial state (`App Idle or Playing`) it is clear that the `Edit Title`, `Save Title`, `Discard Title`, `Submit` and `Valid Keyboard Input` events are not expected to generate any change of state. For instance, if we type without selecting a specific input, nothing is expected to change in the App, but there is no need to throw an exception either. Also, if the user doesn't create a project or explicitly selects a title to change, he will not be able to edit/save/discard anything, because there will be no title field selected.
 - From the `Project Created` state the user is not able to `Submit` or `Discard` his input because this actions may only be triggered in a state where an input is being edited, which is not the case, as this state only represents that the project was successfully created. For the same reason, any keyboard input that doesn't trigger the acceptance of the default project title - `Valid Keyboard Input`; should be ignored in this state. Furthermore, a new `Create` event should never happen before the title of the current project is set with the default. If it is, maybe an exception should be thrown. 
 
 ### 1.5 Tests developed in QF-Test tool
 
-For the creation requirement we used the `Creation` test-set that can be found in the QF-Test test-suite,  available in the qf-test directory.
+For the creation requirement we used the `Creation` test-set that can be found in the QF-Test test-suite, available in the qf-test directory.
 
 **Requirements**: This test set assumes you have no previous configuration saved (no projects stored in memory). Please delete the `conf` folder before testing.
 
@@ -102,9 +102,19 @@ The test case `03_create_type_and_save` was the one used to test this scenario:
 - Check if the project title was changed to "Project1";
 - Finally, a cleanup sequence was used to delete the newly created project.
 
-#### 1.5.4. Sneak Path - ??
+#### 1.5.4. Sneak Path - (Project Created, Valid Keyboard input)  
 
-TODO
+In this sneak path, we want to **assess** that if given an event of `Valid Keyboard Input`, the application doesn't change its state. Changing the state by typing any key is not an intuitive behavior for the user unless this action is a shortcut that was documented. 
+
+The test was performed in the following way: 
+
+- Firstly, a project was created; 
+- It's checked if the project was created with success in the `Project Created` State; 
+- The **Edit Title** action is **NOT** performed. Instead, we induced a **Valid Keyboard Input**; 
+- Upon the input of a **Valid Keyboard input** the test fails, since it transits from the **Project Created** to the **Project Title Edition**. In other words, by clicking in any letter in the keyboard, or any `Valid Keyboard Input`, the edition of the project title is automatically started. 
+
+As metioned before, this behavior isnt' desired, since it is not intuitive for the user, and might cause many undesired editions by accident. 
+
 
 ## 2. Edit time 
 
@@ -150,50 +160,95 @@ From this tree, we can derive the test paths, which will be explored in the QF-T
 
 In total there are 21 sneak paths. But only two were selected to be tested:   
 
-1. (Project Playing, Play)  
-2. (Time Today Edition, Play)   
+1. (Project Playing, Time Today Double Left Click)
+2. (Time Today Edition, Time Today Double Left Click)
 
-In the first sneak path, it's necessary to assess that if the project is playing: 
-- The available button references the stop action.   
-- By pressing the stop/play button, the project that is already running must stop.  
+In the first sneak path, it mustn't be possible to edit the `Time Today` field while the project is playing. It is expected that the program remains in the same state.  
+In the second case, if the user triggers the `Time Today Double Left Click` the state also must remain the same.   
 
-In the second action it's necessary to verify that if the project is running, then the "TimeToday" field can't be edited.  
 
 ### 2.5 Tests developed in QF-Test tool 
 
-#### 1. Save Time Today
+To tests the "Edit Time Today" requirement, we used the `Time-Today-Edition` test-set that can be found in the QF-Test test-suite, available in the qf-test directory.
 
-In these tests we exercise the scenario in which the user updates the `Time Today` to a valid time i.e. a time that respects the regular expression "\d+:[0-5]?\d:[0-5]?\d"; or submits an empty input. To test this, we decided to combine the paths shown below and to create two different tests: one where the input is a valid time string and another where the input is empty. In the end, we must check if the `Time Today` of the project was effectively changed.
+**Requirements**: This test set assumes you have no previous configuration saved (no projects stored in memory). Please delete the `conf` folder before testing.
 
-![](./figures/02_edit_time_today/02_path2_1.png)
-![](./figures/02_edit_time_today/02_path3.png)
+**Outcome**: TODO
 
-##### 1.1. Valid Time Today
-The test case `?` was the one used to test this scenario.
-First, we recorded a sequence that represents all the states and transitions:
-- The sequence starts at the main window of the JTimeSched tool, with a project already available....
+#### 2.5.1. Play/Stop
 
-##### 1.2. Empty Time Today
-
-
-#### 2. Discard Time Today
-
-Here we test the cases where the user submits an invalid `Time Today` i.e. a time that doesn't respects the regular expression "\d+:[0-5]?\d:[0-5]?\d"; or presses "Esc" to discard his changes. In the end, we expect that the `Time Today` value remains the same.
-![](./figures/02_edit_time_today/02_path2_2.png)
-![](./figures/02_edit_time_today/02_path3.png)
-
-##### 2.1. Invalid Time Today
-
-##### 2.2. Discard Time Today
-
-#### 3. Play/Pause 
-
-As we explained above, the play/pause use case was also included here. Here, we want to check that it is possible to play and pause a project if no popup windows are opened.
+As we explained above, the play/pause use case was also included here. With this test, we want to check that it is possible to play and pause a project when no popup windows are opened.
 
 ![](./figures/02_edit_time_today/02_path1.png)
 
-#### 4. (Sneak Path 1) Edit time today while playing 
+The test case `01_play_and_stop` was the one used to test this scenario:
 
+- The setup brings the App to the `Project Idle` state, where there are no popups opened and there is already a project in the table with "0:00:00" time;
+- Press the "Play" button;
+- Press the "Pause" button after 4000ms (by setting the "Delay before" of the `stop` sequence);
+- Check if the `Time Today` field changed to 4000ms, which allows us to check if the project was really in the `Project Playing` state for 4000ms and is now in the `Project Idle` state again;
+- Finally, a cleanup sequence was used to delete the project that was used.
+
+#### 2.5.2. Discard Time Today
+
+Here we test the case where the user discards his input by pressing "Esc" to discard his changes. In the end, we expect that the `Time Today` value remains the same.
+
+![](./figures/02_edit_time_today/02_path3.png)
+![](./figures/02_edit_time_today/02_path2.png)
+
+The test case `02_edit-esc` was the one used to test this scenario:
+
+- The setup brings the App to the `Project Idle` state, where there are no popups opened and there is already a project in the table with "0:00:00" time;
+- Check the initial time of the project;
+- Select the `Time Today` field - `Time Today Double Left Click` event; which brings the App to the `Time Today Edition` state;
+- In the `Time Today Edition` state, type a valid time ("0:32:32");
+- Verify if the value "0:32:32" is in the input field;
+- Press "Esc" to discard the input - `Discard Time Today`;
+- Check if the `Time Today` is the initial one ("0:00:00");
+- Finally, a cleanup sequence was used to delete the project that was used.
+
+#### 2.5.3. Save Time Today
+
+In these tests we exercise the scenario in which the user updates the `Time Today` to a valid time i.e. a time that respects the regular expression "\d+:[0-5]?\d:[0-5]?\d"; an empty input or an invalid time. To test this, we decided to combine the paths shown below and to create three different tests: one where the input is a valid time string (`03_1_edit_save`), another where the input is empty `03_2_edit_save` and a final one where the input is invalid `03_3_edit_save`.
+
+![](./figures/02_edit_time_today/02_path3.png)
+![](./figures/02_edit_time_today/02_path4.png)
+
+All the test cases follow a similar structure:
+
+- The setup brings the App to the `Project Idle` state, where there are no popups opened and there is already a project in the table;
+- Check the initial time of the project;
+- Select the `Time Today` field - `Time Today Double Left Click` event; which brings the App to the `Time Today Edition` state;
+- In the `Time Today Edition` state, depending on the test case, we write a valid, empty or invalid input;
+- Verify the value of the input field;
+- According to the test, verify if the time was correctly saved:
+  - in the case of a valid input, check if the value is the one that was typed;
+  - if the input was empty, check if the final time is "0:00:00";
+  - if the input was invalid, check if the time is the initial one i.e. the time was not modified;
+- Finally, a cleanup sequence was used to delete the project that was used.
+
+#### 2.5.4. (Sneak Path 1) Edit time today while playing
+
+The test was designed in the following way: 
+
+- First the application starts in the initial state, `Project Idle`; 
+- Then the event `play` is triggered; 
+- At this phase the application is in the `Project Playing` state and as shown in the state machine diagram, there isn't any transition from `Project Playing` that leads to `Time Today` edition; 
+- However, the `Time Today Double Left Click` event is induced; 
+- At this phase it must be verified if the `TimeToday` box is in edit mode or not. By the triggering of this event, it's expected that no alterations are made in the state. 
+
+The test passes with success. 
+
+#### 2.5.5. (Sneak Path 2) 
+
+This test was designed in the following way: 
+
+- First the application starts in the initial state, `Project Idle`; 
+- Then the user triggers the `Time Today Double Left Click` event and therefore the program transits to the `Time Today Edition`;  
+- Once more, the user tries to trigger the `Time Today Double Left Click`, which implies that user must perform a double click in the `Time Today` field once more; 
+- It's expected that the application doesn't respond to the command remaining in the same state, since, giving the context, this is the most intuitive alternative. 
+
+The test passes with success.
 ## 3. Delete Project
 
 As mentioned before, JTimeSched's main goal is to allow users to track the time of their projects. As well as creating a project, to manage the software the user also must be able to delete the projects.   
@@ -203,62 +258,68 @@ The malfunctioning of the delete use case not only would cause chaos in the admi
 
 This diagram shows the flow to delete a project in the system perspective.  
 
-- **App Idle or Playing**: In this initial state the software can be idle or not. 
-- **Project Selected**: A project selected is one that is highlighted in blue. This action can be performed by a click. 
+- **Transitions from App Idle or Playing**: In this initial state, the software can be idle or not. The only action that it can perform is selecting a project. By "selecting a project" we mean that this is highlighted in blue. It is only possible to select if the number of projects (`n`) is higher than zero, naturally.  
+- **Transitions from Project Selected**: Once a project is selected, we can delete it. Even if a person tries to double-click the button to delete a project, this action automatically highlights it. In this state, it's possible to unselect the project using the mouse or using the arrows to change the selection. It's also feasible to delete a project. However, this action is only possible if the number of projects is higher than zero and after that, the number of projects is decremented by one. 
+- **Transitions from Project Deleted**: This is a state of validation, where it's verified if the project was truly deleted. If it was, then the application returns to the initial state.  
 
-One might ask why the **play** and **pause** events were represented in this diagram, since they might represent a different use case. The reason behind this analysis, comes from the fact that some actions are forbidden while a project has its counter in execution. Therefore, it's important to check that the `delete` case is not included in the forbidden actions in the **Project Playing** state, given that errors in conditions of this kind are not uncommon. 
 
 ![](./figures/03_delete_project/03_state_machine.png)
 
 ### 3.2 Transition tree
 
-- We start with the **Project Idle** state (**Project_Idle_0**); 
-- From `Project Idle` we have two transitions: one to it self (**Project_Idle_1**) when deleting a project and another to set a project as playing (**Project_Playing_0**); 
-- From the **Project_Idle_1**, we have the same possibilities of transitions as in **Project_Idle_0**. Since these were already exercised, we set **Project_Idle_1** as a leaf;  
-- **Project_Playing** (**Project_Playing_0**) we can pause the project, which leads to the **Project_Idle** (**Project_Idle_2**) state, or we can delete a project, which leads us to the same **Project_Idle** (**Project_Idle_3**) state. 
-- Since all the outgoing transitions from **Project_Idle** were exercised, we let **Project_Idle_2** and **Project_Idle_3** as the leaves of the tree.  
+- We start with the **App_Idle_or_Playing_0**, which as metioned before, states that the app might be running the counter or not;  
+-  Then the only state available from **App_Idle_or_Playing** is **Project_Selected**; 
+-  In **Project_Selected**, we have two options: **Project_Deleted** and **App_Idle_or_Playing**. Let's first analyse the **Project_Deleted** and then the **App_Idle_or_Playing**: 
+    - After the project is deleted in **Project_Deleted**, the only available path possible is returning to the intial state (**Project_Idle_or_Playing**). Since the **Project_Idle_or_Playing** was already visited in the tree, we can consider a leaf of the tree; 
+    - The same goes to the other fork of **Project_Selected_0**, which is **App_Idle_or_Playing**. As well in the previous case, since **App_Idle_or_Playing** was already processed, this is a leaf of the transition tree. 
 
-![](./figures/03_delete_project/03_transition_tree.png)
+![](./figures/03_delete_project/03_transition_tree.png)  
+
 ### 3.3 Transition table 
 
-| States / Events | Delete | Play | Pause | 
-|- | - | - | -  |
-| Project Idle | Project Idle | Project Playing | |  
-| Project Playing | Project Idle | | Project Idle | 
+| States / Events | Select | Unselect | Delete | Valid Delete |  
+| - | - | - | - | - | 
+| App Idle or Playing | Project Selected |  |  |  |  
+| Project Selected | | App Idle or Playing | Project Deleted  | |
+| Project Deleted | | | App Idle or Playing |
 
 
 ### 3.4 Sneak Paths 
+ 
+With this table we can see that there's a total of 8 sneak paths. 
 
-Here there're two sneak paths. 
-| (State, Event) | Behavior | Explanation | 
-| - | - | - | 
-| (Project Idle, Pause) | Nothing | If a project is paused and it was paused again, then it should remain in the same state |
-| (Project Playing, Play) | Nothing | Analog to the previous situation. If a counter is already counting, then the final state should be the same, but the counter should not be reseted |  
+We expect that the events that generate sneak paths in their respective states, generate a default behavior equivalent to nothing. For example, in the sneak path `(Project Selected, Select)`, means that someone tried to select the same project. This action can be performed in many ways, but let's suppose that someone tries to select it once again. In this case, nothing should happen and the project must remain selected (highlighted in blue).  
+
+However, a case that perhaps should display an error message is the `(App Idle or Playing, Delete)`. It would be wise to warn the user to select a project before trying to delete it. 
+
 ### 3.5 Tests developed in QF-Test tool 
 
-#### 3.5.1 Start and pause a project
-<!-- TODO: justify this -->
-After starting and pausing a project, the user must be able to delete it. In the test 3.5.3 we verify that if the project is idle, then it must be possible to delete it. 
-This test, thus, verifies that if the project was started it also must be able to stop and return to the correct state. If the state is correct, the test **3.5.3** assess whether it will be able to stop it.  
+In this section we briefly describes the tests perfomed in the QF-Test.  
+<!-- TODO: Outcome e dizer o nome dos testes que estão no qf-test-->
+**Requirements**: This test set assumes you have no previous configuration saved (no projects stored in memory). Please delete the `conf` folder before testing.
+
+**Outcome**: TODO
+
+#### 3.5.1 Delete a project  
+
+The main goal of this test is to verify if all the phases related to the deletion of a project work accordingly. The initial state starts with the application being idle or playing. If at least one project exists, the `select` event can be performed. After performing the previous step, the project becomes `selected`. Since it's not possible to verify if a project is selected or not using the QF-Tool, the validation of the `Project Selected` was discarded. 
+
+After the selection of the project, it can be `deleted`. This action lead us to the `Project Deleted` state, where we must assess if the project was truly deleted. If it was, then the application returns to the initial state.  
 
 ![](./figures/03_delete_project/03_path1.png)
 
-#### 3.5.2 Play and delete a project
-Here we initialize the counter of a project and delete this same project. This should lead us with another idle project selected.  
+
+#### 3.5.2 Select and unselect a project  
+In this scenario, we just want to select an unselect a project. This test, however, was not performed. The QF-test tool was somehow limitating: it wasn't possible to verify if a test was selected or not, since the color is the only aspects that characterizes a selection.  
+
 ![](./figures/03_delete_project/03_path2.png)
 
-#### 3.5.3 Delete a project  
-In this scenario we simply try to delete a project that is not in execution. Still in this case there are two subscenarios: delete one single project and the other is to delete two or more projects in sequence.   
-
-![](./figures/03_delete_project/03_path3.png)
-
-## 3.5.4 Sneak Path 
 
 ## QF-Test tool feedback 
 
-The tool is really intuitive, however: 
-- It was hard to understand if a specific test has passed. There is a small on the bottom right corner. It would be better to also have a message similar to the JUnit tool, that represents if a test has passed or failed in a clear way. This might not make difference to old users, but it improve the experience of new users.   
-- The design is another point. It wouldn't make difference to old customers that are already clients of the tool, but improving the design would make more attractive.  
-- Selecting a table cell ..................
-- Doesn't show where the error was?
-- input selecionado ou nao
+The tool is really intuitive, however:
+- It was hard to understand if a specific test passed. This information is only available near a small "plus" icon on the bottom right corner of the tool. It would be better to also have a message similar to the JUnit tool, that indicates if the test has passed or failed in a clear way. This might not make difference to old users, but it would improve the experience for new users like us.
+- The design is another point. It wouldn't make a difference to old customers that are already used to the tool, but improving the design would make more attractive.
+- In our case it was also difficult to create some of the checks. Particularly, the App that we were testing mainly consists of a table and it was hard to select a particular cell of that table.
+- If we include multiple sequences within the same test-case, it is difficult to understand in which of them the test failed;
+- The checks are based on the text content of the inputs an text elements, but sometimes this is not enough. For instance, in our project, when a row is selected, its color changes. It would be useful to be able to capture this modification, as well as other visual modifications of the UI that are not text related.

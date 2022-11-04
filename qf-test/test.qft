@@ -1,225 +1,920 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!DOCTYPE RootStep>
 <RootStep id="_0" name="root"
-          signature="2FCA5CD7F4E68173100BB17235DB87A14EF0C150"
+          signature="BD9D396187686C1D2EDAF8CD026E724E8464A459"
           version="6.0.3">
   <include>qfs.qft</include>
-  <TestSet id="_1" name="unnamed">
-    <SetupSequence id="_6" name="Launch jtimesched">
-      <SetGlobalStep id="_7" varname="client">
-        <default>jtimesched</default>
+  <TestSet id="_1" name="Creation">
+    <SetupSequence id="_64l" name="Launch jtimesched-1">
+      <SetGlobalStep id="_64m" varname="client">
+        <default>jtimesched-1</default>
       </SetGlobalStep>
-      <ClientWaiter client="$(client)" id="_8" local="true" raise="false"
+      <ClientWaiter client="$(client)" id="_64n" local="true" raise="false"
                     resvarname="isSUTRunning" timeout="1">
         <comment>This node checks whether the SUT is already running. The result of this check will be stored in the variable isSUTRunning. The variable itself can contain true if SUT is already running or false if SUT is not running. This variable will be used in the following 'If' node.</comment>
       </ClientWaiter>
-      <IfSequence id="_9" name="Launch SUT if not running"
+      <IfSequence id="_64o" name="Launch SUT if not running"
                   test="not $(isSUTRunning)">
         <JavaClientStarter client="$(client)"
                            directory="/home/maruba/Documents/jtimesched"
-                           executable="${qftest:java}" id="_A">
+                           executable="${qftest:java}" id="_64p">
           <parameter>-jar</parameter>
           <parameter>/home/maruba/Documents/jtimesched/target/jtimesched-1.2-SNAPSHOT-jar-with-dependencies.jar</parameter>
         </JavaClientStarter>
-        <ClientWaiter client="$(client)" id="_B"/>
+        <ClientWaiter client="$(client)" id="_64q"/>
       </IfSequence>
     </SetupSequence>
-    <TestCase id="_2" name="create-project">
-      <BasicSequence id="_Q">
-        <comment>no popup opened -&gt;  new idle project -&gt; edit title -&gt; no popup opened </comment>
+    <TestCase id="_40" name="01_create-and-discard-title">
+      <BasicSequence id="_43" name="create">
         <MouseEventStep clicks="1" client="$(client)"
                         component="buttonAdd_project" event="MOUSE_MPRC"
-                        id="_R" modifiers="16"/>
-        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
-                      event="KEY_PTR" id="_S" keychar="8" keycode="8"
-                      modifiers="0"/>
+                        id="_44" modifiers="16"/>
+      </BasicSequence>
+      <BasicSequence id="_4B" name="project-created">
+        <CheckStringStep client="$(client)"
+                         component="label1_project_|_0:00:00_overall_|_0:00:00_today"
+                         id="_4C">
+          <text>1 project | 0:00:00 overall | 0:00:00 today</text>
+        </CheckStringStep>
+      </BasicSequence>
+      <BasicSequence id="_45" name="project-title-edition">
         <TextInputStep clear="true" client="$(client)"
-                       component="frameJTimeSched.text" id="_T">
-          <text>Projeto1</text>
+                       component="frameJTimeSched.text" id="_46">
+          <text>Project1</text>
         </TextInputStep>
-        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
-                      event="KEY_PTR" id="_U" keychar="10" keycode="10"
-                      modifiers="0"/>
       </BasicSequence>
-      <BasicSequence id="_u" name="Check project name">
-        <comment>Check the project name: "Projeto1"</comment>
-        <CheckStringStep checktype="item" client="$(client)"
-                         component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today@Title&amp;0"
-                         id="_v">
-          <text>Projeto1</text>
-        </CheckStringStep>
-      </BasicSequence>
-      <BasicSequence id="_2z" name="Check number of projects">
-        <CheckStringStep client="$(client)"
-                         component="label1_project_|_0:00:00_overall_|_0:00:00_today"
-                         id="_2+">
-          <text>1 project | 0:00:00 overall | 0:00:00 today</text>
-        </CheckStringStep>
-      </BasicSequence>
-      <CleanupSequence id="_2b">
-        <MouseEventStep clicks="2" client="$(client)"
-                        component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today&amp;0&amp;0"
-                        event="MOUSE_DBLCLK" id="_2c" modifiers="16"/>
-      </CleanupSequence>
-    </TestCase>
-    <TestCase id="_1x" name="create-project-default">
-      <comment>Creates a project with "New Project" name. </comment>
-      <BasicSequence id="_2o">
-        <comment>Add Project -&gt; Enter</comment>
-        <MouseEventStep clicks="1" client="$(client)"
-                        component="buttonAdd_project" event="MOUSE_MPRC"
-                        id="_2p" modifiers="16"/>
-        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
-                      event="KEY_PTR" id="_2q" keychar="10" keycode="10"
-                      modifiers="0"/>
-      </BasicSequence>
-      <BasicSequence id="_2v" name="Check Project Name">
-        <CheckStringStep checktype="item" client="$(client)"
-                         component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today@Title&amp;0"
-                         id="_2w">
-          <text>New project</text>
-        </CheckStringStep>
-      </BasicSequence>
-      <BasicSequence id="_2x" name="Check number of projects">
-        <CheckStringStep client="$(client)"
-                         component="label1_project_|_0:00:00_overall_|_0:00:00_today"
-                         id="_2y">
-          <text>1 project | 0:00:00 overall | 0:00:00 today</text>
-        </CheckStringStep>
-      </BasicSequence>
-      <CleanupSequence id="_2h">
-        <MouseEventStep clicks="2" client="$(client)"
-                        component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today&amp;0&amp;0"
-                        event="MOUSE_DBLCLK" id="_2i" modifiers="16"/>
-      </CleanupSequence>
-    </TestCase>
-    <TestCase id="_1+" name="create-project-add-project">
-      <comment>Click add project twice
+      <BasicSequence id="_4I" name="check-edition">
+        <comment>Verify that the title is different from "New Project" while editing
 </comment>
-      <BasicSequence id="_2-">
-        <comment>Create default project using "Add Project"</comment>
-        <MouseEventStep clicks="1" client="$(client)"
-                        component="buttonAdd_project" event="MOUSE_MPRC"
-                        id="_30" modifiers="16"/>
-        <MouseEventStep clicks="1" client="$(client)"
-                        component="buttonAdd_project" event="MOUSE_MPRC"
-                        id="_31" modifiers="16"/>
+        <CheckStringStep client="$(client)" component="frameJTimeSched.text"
+                         id="_4J">
+          <text>Project1</text>
+        </CheckStringStep>
+      </BasicSequence>
+      <BasicSequence id="_49" name="discard">
         <KeyEventStep client="$(client)" component="frameJTimeSched.text"
-                      event="KEY_PTR" id="_32" keychar="10" keycode="10"
+                      event="KEY_PTR" id="_4A" keychar="27" keycode="27"
                       modifiers="0"/>
       </BasicSequence>
-      <BasicSequence id="_36" name="Check project name 1">
-        <CheckStringStep checktype="item" client="$(client)"
-                         component="frameJTimeSched.table2_projects_|_0:00:00_overall_|_0:00:00_today@Title&amp;0"
-                         id="_37">
-          <text>New project</text>
-        </CheckStringStep>
-      </BasicSequence>
-      <BasicSequence id="_38" name="Check project name 2">
-        <CheckStringStep checktype="item" client="$(client)"
-                         component="frameJTimeSched.table2_projects_|_0:00:00_overall_|_0:00:00_today@Title&amp;1"
-                         id="_39">
-          <text>New project</text>
-        </CheckStringStep>
-      </BasicSequence>
-      <BasicSequence id="_3B" name="Check number of projects">
-        <CheckStringStep client="$(client)"
-                         component="label2_projects_|_0:00:00_overall_|_0:00:00_today"
-                         id="_3C">
-          <text>2 projects | 0:00:00 overall | 0:00:00 today</text>
-        </CheckStringStep>
-      </BasicSequence>
-      <CleanupSequence id="_3D">
-        <MouseEventStep clicks="2" client="$(client)"
-                        component="frameJTimeSched.table2_projects_|_0:00:00_overall_|_0:00:00_today&amp;0&amp;0"
-                        event="MOUSE_DBLCLK" id="_3E" modifiers="16"/>
-        <MouseEventStep clicks="2" client="$(client)"
-                        component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today&amp;0&amp;0"
-                        event="MOUSE_DBLCLK" id="_3F" modifiers="16"/>
-      </CleanupSequence>
-    </TestCase>
-    <TestCase id="_23" name="create-project-discard-name">
-      <BasicSequence id="_3G">
-        <MouseEventStep clicks="1" client="$(client)"
-                        component="buttonAdd_project" event="MOUSE_MPRC"
-                        id="_3H" modifiers="16"/>
-        <TextInputStep clear="true" client="$(client)"
-                       component="frameJTimeSched.text" id="_3I">
-          <text>MyProject</text>
-        </TextInputStep>
-        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
-                      event="KEY_PTR" id="_3J" keychar="27" keycode="27"
-                      modifiers="0"/>
-      </BasicSequence>
-      <BasicSequence id="_3K" name="Check project name">
+      <BasicSequence id="_4D" name="check-discarded">
+        <comment>Verify if it's discarded</comment>
         <CheckStringStep checktype="item" client="$(client)"
                          component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today@Title&amp;0"
-                         id="_3L">
+                         id="_4E">
           <text>New project</text>
         </CheckStringStep>
-      </BasicSequence>
-      <BasicSequence id="_3M" name="Check number of projects">
         <CheckStringStep client="$(client)"
                          component="label1_project_|_0:00:00_overall_|_0:00:00_today"
-                         id="_3N">
+                         id="_4F">
           <text>1 project | 0:00:00 overall | 0:00:00 today</text>
         </CheckStringStep>
       </BasicSequence>
-      <CleanupSequence id="_3O">
+      <CleanupSequence id="_4L">
         <MouseEventStep clicks="2" client="$(client)"
                         component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today&amp;0&amp;0"
-                        event="MOUSE_DBLCLK" id="_3P" modifiers="16"/>
+                        event="MOUSE_DBLCLK" id="_4M" modifiers="16"/>
       </CleanupSequence>
     </TestCase>
-    <TestCase id="_3Q" name="create-project-title-add-project">
-      <BasicSequence id="_3R">
+    <TestCase id="_4N" name="02_create-and-enter">
+      <BasicSequence id="_4O" name="create">
         <MouseEventStep clicks="1" client="$(client)"
                         component="buttonAdd_project" event="MOUSE_MPRC"
-                        id="_3S" modifiers="16"/>
-        <TextInputStep clear="true" client="$(client)"
-                       component="frameJTimeSched.text" id="_3T">
-          <text>MyProject</text>
-        </TextInputStep>
-        <MouseEventStep clicks="1" client="$(client)"
-                        component="buttonAdd_project" event="MOUSE_MPRC"
-                        id="_3U" modifiers="16"/>
-        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
-                      event="KEY_PTR" id="_3V" keychar="10" keycode="10"
-                      modifiers="0"/>
+                        id="_4P" modifiers="16"/>
       </BasicSequence>
-      <BasicSequence id="_3W" name="Check project name 1">
-        <CheckStringStep checktype="item" client="$(client)"
-                         component="frameJTimeSched.table2_projects_|_0:00:00_overall_|_0:00:00_today@Title&amp;0"
-                         id="_3X">
-          <text>MyProject</text>
+      <BasicSequence id="_4Q" name="project-created">
+        <CheckStringStep client="$(client)"
+                         component="label1_project_|_0:00:00_overall_|_0:00:00_today"
+                         id="_4R">
+          <text>1 project | 0:00:00 overall | 0:00:00 today</text>
         </CheckStringStep>
       </BasicSequence>
-      <BasicSequence id="_3a" name="Check project name 2">
+      <BasicSequence id="_4S" name="save-title">
+        <comment>Press enter</comment>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_4T" keychar="10" keycode="10"
+                      modifiers="0"/>
+      </BasicSequence>
+      <BasicSequence id="_4U" name="check-title">
+        <comment>Verify if the title is "New Project"</comment>
         <CheckStringStep checktype="item" client="$(client)"
-                         component="frameJTimeSched.table2_projects_|_0:00:00_overall_|_0:00:00_today@Title&amp;1"
-                         id="_3b">
+                         component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today@Title&amp;0"
+                         id="_4V">
           <text>New project</text>
         </CheckStringStep>
       </BasicSequence>
-      <BasicSequence id="_3c" name="Check number of projects">
-        <CheckStringStep client="$(client)"
-                         component="label2_projects_|_0:00:00_overall_|_0:00:00_today"
-                         id="_3d">
-          <text>2 projects | 0:00:00 overall | 0:00:00 today</text>
-        </CheckStringStep>
-      </BasicSequence>
-      <CleanupSequence id="_3e">
-        <MouseEventStep clicks="2" client="$(client)"
-                        component="frameJTimeSched.table2_projects_|_0:00:00_overall_|_0:00:00_today&amp;0&amp;0"
-                        event="MOUSE_DBLCLK" id="_3f" modifiers="16"/>
+      <CleanupSequence id="_4f">
         <MouseEventStep clicks="2" client="$(client)"
                         component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today&amp;0&amp;0"
-                        event="MOUSE_DBLCLK" id="_3g" modifiers="16"/>
+                        event="MOUSE_DBLCLK" id="_4g" modifiers="16"/>
+      </CleanupSequence>
+    </TestCase>
+    <TestCase id="_4W" name="03_create_type_and_save">
+      <BasicSequence id="_4X" name="create">
+        <MouseEventStep clicks="1" client="$(client)"
+                        component="buttonAdd_project" event="MOUSE_MPRC"
+                        id="_4Y" modifiers="16"/>
+      </BasicSequence>
+      <BasicSequence id="_4Z" name="project-created">
+        <CheckStringStep client="$(client)"
+                         component="label1_project_|_0:00:00_overall_|_0:00:00_today"
+                         id="_4a">
+          <text>1 project | 0:00:00 overall | 0:00:00 today</text>
+        </CheckStringStep>
+      </BasicSequence>
+      <BasicSequence id="_4b" name="project-title-edition">
+        <TextInputStep clear="true" client="$(client)"
+                       component="frameJTimeSched.text" id="_4c">
+          <text>Project1</text>
+        </TextInputStep>
+      </BasicSequence>
+      <BasicSequence id="_4d" name="check-edition">
+        <comment>Verify that the title is different from "New Project" while editing
+</comment>
+        <CheckStringStep client="$(client)" component="frameJTimeSched.text"
+                         id="_4e">
+          <text>Project1</text>
+        </CheckStringStep>
+      </BasicSequence>
+      <BasicSequence id="_4h" name="save-title">
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_4i" keychar="10" keycode="10"
+                      modifiers="0"/>
+      </BasicSequence>
+      <BasicSequence id="_4j" name="check-title">
+        <CheckStringStep checktype="item" client="$(client)"
+                         component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today@Title&amp;0"
+                         id="_4k">
+          <text>Project1</text>
+        </CheckStringStep>
+      </BasicSequence>
+      <CleanupSequence id="_4x">
+        <MouseEventStep clicks="2" client="$(client)"
+                        component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today&amp;0&amp;0"
+                        event="MOUSE_DBLCLK" id="_4y" modifiers="16"/>
+      </CleanupSequence>
+    </TestCase>
+    <TestCase id="_63s" name="04_sneak_path">
+      <comment>Name can't chanve without double click
+</comment>
+      <BasicSequence id="_65q" name="create">
+        <MouseEventStep clicks="1" client="$(client)"
+                        component="buttonAdd_project" event="MOUSE_MPRC"
+                        id="_65r" modifiers="16"/>
+      </BasicSequence>
+      <BasicSequence id="_65s" name="project-created">
+        <CheckStringStep client="$(client)"
+                         component="label1_project_|_0:00:00_overall_|_0:00:00_today"
+                         id="_65t">
+          <text>1 project | 0:00:00 overall | 0:00:00 today</text>
+        </CheckStringStep>
+      </BasicSequence>
+      <BasicSequence id="_659" name="edit-title">
+        <KeyEventStep client="$(client)"
+                      component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today"
+                      event="KEY_PRESSED" id="_65A" keychar="65535"
+                      keycode="16" modifiers="1"/>
+        <KeyEventStep client="$(client)"
+                      component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today"
+                      event="KEY_PTR" id="_65B" keychar="80" keycode="80"
+                      modifiers="1"/>
+        <KeyEventStep client="$(client)"
+                      component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today"
+                      event="KEY_RELEASED" id="_65C" keychar="65535"
+                      keycode="16" modifiers="0"/>
+        <KeyEventStep client="$(client)"
+                      component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today"
+                      event="KEY_PTR" id="_65D" keychar="114" keycode="82"
+                      modifiers="0"/>
+        <KeyEventStep client="$(client)"
+                      component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today"
+                      event="KEY_PTR" id="_65E" keychar="111" keycode="79"
+                      modifiers="0"/>
+        <KeyEventStep client="$(client)"
+                      component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today"
+                      event="KEY_PTR" id="_65F" keychar="106" keycode="74"
+                      modifiers="0"/>
+        <KeyEventStep client="$(client)"
+                      component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today"
+                      event="KEY_PTR" id="_65G" keychar="101" keycode="69"
+                      modifiers="0"/>
+        <KeyEventStep client="$(client)"
+                      component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today"
+                      event="KEY_PTR" id="_65H" keychar="99" keycode="67"
+                      modifiers="0"/>
+        <KeyEventStep client="$(client)"
+                      component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today"
+                      event="KEY_PTR" id="_65I" keychar="116" keycode="84"
+                      modifiers="0"/>
+        <KeyEventStep client="$(client)"
+                      component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today"
+                      event="KEY_PTR" id="_65J" keychar="49" keycode="49"
+                      modifiers="0"/>
+      </BasicSequence>
+      <BasicSequence id="_65K" name="check-title">
+        <CheckStringStep client="$(client)" component="frameJTimeSched.text"
+                         id="_65N">
+          <text>New project</text>
+        </CheckStringStep>
+      </BasicSequence>
+      <CleanupSequence id="_64Q">
+        <MouseEventStep clicks="2" client="$(client)"
+                        component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today&amp;0&amp;0"
+                        event="MOUSE_DBLCLK" id="_64R" modifiers="16"/>
       </CleanupSequence>
     </TestCase>
   </TestSet>
-  <PackageRoot id="_3"/>
-  <ExtraSequence id="_4"/>
+  <TestSet id="_4z" name="Time-Today-Edition">
+    <SetupSequence id="_65e" name="Launch jtimesched-1">
+      <SetGlobalStep id="_65f" varname="client">
+        <default>jtimesched-1</default>
+      </SetGlobalStep>
+      <ClientWaiter client="$(client)" id="_65g" local="true" raise="false"
+                    resvarname="isSUTRunning" timeout="1">
+        <comment>This node checks whether the SUT is already running. The result of this check will be stored in the variable isSUTRunning. The variable itself can contain true if SUT is already running or false if SUT is not running. This variable will be used in the following 'If' node.</comment>
+      </ClientWaiter>
+      <IfSequence id="_65h" name="Launch SUT if not running"
+                  test="not $(isSUTRunning)">
+        <JavaClientStarter client="$(client)"
+                           directory="/home/maruba/Documents/jtimesched"
+                           executable="${qftest:java}" id="_65i">
+          <parameter>-jar</parameter>
+          <parameter>/home/maruba/Documents/jtimesched/target/jtimesched-1.2-SNAPSHOT-jar-with-dependencies.jar</parameter>
+        </JavaClientStarter>
+        <ClientWaiter client="$(client)" id="_65j"/>
+      </IfSequence>
+    </SetupSequence>
+    <TestCase id="_57" name="01_play_and_stop">
+      <SetupSequence id="_54" name="create-project">
+        <MouseEventStep clicks="1" client="$(client)"
+                        component="buttonAdd_project" event="MOUSE_MPRC"
+                        id="_55" modifiers="16"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_56" keychar="10" keycode="10"
+                      modifiers="0"/>
+      </SetupSequence>
+      <BasicSequence id="_5I" name="play">
+        <MouseEventStep clicks="1" client="$(client)"
+                        component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today&amp;7&amp;0"
+                        event="MOUSE_MPRC" id="_5J" modifiers="16"/>
+      </BasicSequence>
+      <BasicSequence id="_5K" name="stop" predelay="4000">
+        <MouseEventStep clicks="1" client="$(client)"
+                        component="frameJTimeSched.table&amp;7&amp;0"
+                        event="MOUSE_MPRC" id="_5L" modifiers="16"/>
+      </BasicSequence>
+      <BasicSequence id="_5M" name="check-timetoday">
+        <CheckStringStep checktype="item" client="$(client)"
+                         component="frameJTimeSched.table@Time Today&amp;0"
+                         id="_5N">
+          <text>0:00:04</text>
+        </CheckStringStep>
+      </BasicSequence>
+      <CleanupSequence id="_5O">
+        <MouseEventStep clicks="2" client="$(client)"
+                        component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today&amp;0&amp;0"
+                        event="MOUSE_DBLCLK" id="_5P" modifiers="16"/>
+      </CleanupSequence>
+    </TestCase>
+    <TestCase id="_5Q" name="02_edit-esc">
+      <SetupSequence id="_5R" name="create-project">
+        <MouseEventStep clicks="1" client="$(client)"
+                        component="buttonAdd_project" event="MOUSE_MPRC"
+                        id="_5S" modifiers="16"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_5T" keychar="10" keycode="10"
+                      modifiers="0"/>
+      </SetupSequence>
+      <BasicSequence id="_5U" name="check-intial-time">
+        <comment>The intial time must be 0:00:00</comment>
+        <CheckStringStep checktype="item" client="$(client)"
+                         component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today@Time Today&amp;0"
+                         id="_5V">
+          <text>0:00:00</text>
+        </CheckStringStep>
+      </BasicSequence>
+      <BasicSequence id="_5W" name="double-click">
+        <MouseEventStep clicks="2" client="$(client)"
+                        component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today@Time Today&amp;0"
+                        event="MOUSE_DBLCLK" id="_5X" modifiers="16"/>
+      </BasicSequence>
+      <BasicSequence id="_5j" name="edit-time">
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_5k" keychar="65535" keycode="39"
+                      modifiers="0"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_5l" keychar="65535" keycode="39"
+                      modifiers="0"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_5m" keychar="65535" keycode="39"
+                      modifiers="0"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_5n" keychar="65535" keycode="39"
+                      modifiers="0"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_5o" keychar="8" keycode="8"
+                      modifiers="0"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_5p" keychar="8" keycode="8"
+                      modifiers="0"/>
+        <TextInputStep client="$(client)" component="frameJTimeSched.text"
+                       id="_5q">
+          <text>32</text>
+        </TextInputStep>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_5r" keychar="65535" keycode="39"
+                      modifiers="0"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_5s" keychar="65535" keycode="39"
+                      modifiers="0"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_5t" keychar="65535" keycode="39"
+                      modifiers="0"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_5u" keychar="8" keycode="8"
+                      modifiers="0"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_5v" keychar="8" keycode="8"
+                      modifiers="0"/>
+        <TextInputStep client="$(client)" component="frameJTimeSched.text"
+                       id="_5w">
+          <text>32</text>
+        </TextInputStep>
+      </BasicSequence>
+      <BasicSequence id="_5x" name="check-edition">
+        <comment>Check time while editing</comment>
+        <CheckStringStep client="$(client)" component="frameJTimeSched.text"
+                         id="_5y">
+          <text>0:32:32</text>
+        </CheckStringStep>
+      </BasicSequence>
+      <BasicSequence id="_5b" name="discard">
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_5c" keychar="27" keycode="27"
+                      modifiers="0"/>
+      </BasicSequence>
+      <BasicSequence id="_5d" name="check-timetoday">
+        <CheckStringStep checktype="item" client="$(client)"
+                         component="frameJTimeSched.table@Time Today&amp;0"
+                         id="_5e">
+          <text>0:00:00</text>
+        </CheckStringStep>
+      </BasicSequence>
+      <CleanupSequence id="_5h">
+        <MouseEventStep clicks="2" client="$(client)"
+                        component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today&amp;0&amp;0"
+                        event="MOUSE_DBLCLK" id="_5i" modifiers="16"/>
+      </CleanupSequence>
+    </TestCase>
+    <TestCase id="_5-" name="03_1_edit_save">
+      <SetupSequence id="_60" name="create-project">
+        <MouseEventStep clicks="1" client="$(client)"
+                        component="buttonAdd_project" event="MOUSE_MPRC"
+                        id="_61" modifiers="16"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_62" keychar="10" keycode="10"
+                      modifiers="0"/>
+      </SetupSequence>
+      <BasicSequence id="_63" name="check-intial-time">
+        <comment>The intial time must be 0:00:00</comment>
+        <CheckStringStep checktype="item" client="$(client)"
+                         component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today@Time Today&amp;0"
+                         id="_64">
+          <text>0:00:00</text>
+        </CheckStringStep>
+      </BasicSequence>
+      <BasicSequence id="_65" name="double-click">
+        <MouseEventStep clicks="2" client="$(client)"
+                        component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today@Time Today&amp;0"
+                        event="MOUSE_DBLCLK" id="_66" modifiers="16"/>
+      </BasicSequence>
+      <BasicSequence id="_67" name="edit-time">
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_68" keychar="65535" keycode="39"
+                      modifiers="0"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_69" keychar="65535" keycode="39"
+                      modifiers="0"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_6A" keychar="65535" keycode="39"
+                      modifiers="0"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_6B" keychar="65535" keycode="39"
+                      modifiers="0"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_6C" keychar="8" keycode="8"
+                      modifiers="0"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_6D" keychar="8" keycode="8"
+                      modifiers="0"/>
+        <TextInputStep client="$(client)" component="frameJTimeSched.text"
+                       id="_6E">
+          <text>32</text>
+        </TextInputStep>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_6F" keychar="65535" keycode="39"
+                      modifiers="0"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_6G" keychar="65535" keycode="39"
+                      modifiers="0"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_6H" keychar="65535" keycode="39"
+                      modifiers="0"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_6I" keychar="8" keycode="8"
+                      modifiers="0"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_6J" keychar="8" keycode="8"
+                      modifiers="0"/>
+        <TextInputStep client="$(client)" component="frameJTimeSched.text"
+                       id="_6K">
+          <text>32</text>
+        </TextInputStep>
+      </BasicSequence>
+      <BasicSequence id="_6L" name="check-edition">
+        <comment>Check time while editing</comment>
+        <CheckStringStep client="$(client)" component="frameJTimeSched.text"
+                         id="_6M">
+          <text>0:32:32</text>
+        </CheckStringStep>
+      </BasicSequence>
+      <BasicSequence id="_6N" name="save-time-today">
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_6O" keychar="10" keycode="10"
+                      modifiers="0"/>
+      </BasicSequence>
+      <BasicSequence id="_6P" name="verify-time-today">
+        <comment>Verify that that the time was saved
+</comment>
+        <CheckStringStep checktype="item" client="$(client)"
+                         component="frameJTimeSched.table@Time Today&amp;0"
+                         id="_6Q">
+          <text>0:32:32</text>
+        </CheckStringStep>
+      </BasicSequence>
+      <CleanupSequence id="_6R">
+        <MouseEventStep clicks="2" client="$(client)"
+                        component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today&amp;0&amp;0"
+                        event="MOUSE_DBLCLK" id="_6S" modifiers="16"/>
+      </CleanupSequence>
+    </TestCase>
+    <TestCase id="_6T" name="03_2_edit_save">
+      <SetupSequence id="_78" name="create-project">
+        <MouseEventStep clicks="1" client="$(client)"
+                        component="buttonAdd_project" event="MOUSE_MPRC"
+                        id="_79" modifiers="16"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_7A" keychar="10" keycode="10"
+                      modifiers="0"/>
+        <MouseEventStep clicks="2" client="$(client)"
+                        component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today@Time Today&amp;0"
+                        event="MOUSE_DBLCLK" id="_7B" modifiers="16"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_7C" keychar="65535" keycode="39"
+                      modifiers="0"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_7D" keychar="8" keycode="8"
+                      modifiers="0"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_7E" keychar="8" keycode="8"
+                      modifiers="0"/>
+        <TextInputStep client="$(client)" component="frameJTimeSched.text"
+                       id="_7F">
+          <text>24</text>
+        </TextInputStep>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_7G" keychar="10" keycode="10"
+                      modifiers="0"/>
+      </SetupSequence>
+      <BasicSequence id="_7H" name="check-initial-time">
+        <CheckStringStep checktype="item" client="$(client)"
+                         component="frameJTimeSched.table@Time Today&amp;0"
+                         id="_7I">
+          <text>24:00:00</text>
+        </CheckStringStep>
+      </BasicSequence>
+      <BasicSequence id="_7J" name="double-click">
+        <MouseEventStep clicks="2" client="$(client)"
+                        component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today@Time Today&amp;0"
+                        event="MOUSE_DBLCLK" id="_7K" modifiers="16"/>
+      </BasicSequence>
+      <BasicSequence id="_7L" name="set-empty-string">
+        <comment>The time today has an empty string</comment>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_7M" keychar="127" keycode="127"
+                      modifiers="0"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_7N" keychar="127" keycode="127"
+                      modifiers="0"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_7O" keychar="127" keycode="127"
+                      modifiers="0"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_7P" keychar="127" keycode="127"
+                      modifiers="0"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_7Q" keychar="127" keycode="127"
+                      modifiers="0"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_7R" keychar="127" keycode="127"
+                      modifiers="0"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_7S" keychar="127" keycode="127"
+                      modifiers="0"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_7T" keychar="127" keycode="127"
+                      modifiers="0"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_7U" keychar="127" keycode="127"
+                      modifiers="0"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_7V" keychar="127" keycode="127"
+                      modifiers="0"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_7W" keychar="127" keycode="127"
+                      modifiers="0"/>
+      </BasicSequence>
+      <BasicSequence id="_7X" name="check-empty-string">
+        <CheckStringStep client="$(client)" component="frameJTimeSched.text"
+                         id="_7Y"/>
+      </BasicSequence>
+      <BasicSequence id="_7Z" name="save-timetoday">
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_7a" keychar="10" keycode="10"
+                      modifiers="0"/>
+      </BasicSequence>
+      <BasicSequence id="_7b" name="check-timetoday">
+        <comment>Verify that the timetoday is 0:00:00
+</comment>
+        <CheckStringStep checktype="item" client="$(client)"
+                         component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today@Time Today&amp;0"
+                         id="_7c">
+          <text>0:00:00</text>
+        </CheckStringStep>
+      </BasicSequence>
+      <CleanupSequence id="_6v">
+        <MouseEventStep clicks="2" client="$(client)"
+                        component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today&amp;0&amp;0"
+                        event="MOUSE_DBLCLK" id="_6w" modifiers="16"/>
+      </CleanupSequence>
+    </TestCase>
+    <TestCase id="_7d" name="03_3_edit_save">
+      <SetupSequence id="_7e" name="create-project">
+        <MouseEventStep clicks="1" client="$(client)"
+                        component="buttonAdd_project" event="MOUSE_MPRC"
+                        id="_7f" modifiers="16"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_7g" keychar="10" keycode="10"
+                      modifiers="0"/>
+        <MouseEventStep clicks="2" client="$(client)"
+                        component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today@Time Today&amp;0"
+                        event="MOUSE_DBLCLK" id="_7h" modifiers="16"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_7i" keychar="65535" keycode="39"
+                      modifiers="0"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_7j" keychar="8" keycode="8"
+                      modifiers="0"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_7k" keychar="8" keycode="8"
+                      modifiers="0"/>
+        <TextInputStep client="$(client)" component="frameJTimeSched.text"
+                       id="_7l">
+          <text>24</text>
+        </TextInputStep>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_7m" keychar="10" keycode="10"
+                      modifiers="0"/>
+      </SetupSequence>
+      <BasicSequence id="_7n" name="check-initial-time">
+        <CheckStringStep checktype="item" client="$(client)"
+                         component="frameJTimeSched.table@Time Today&amp;0"
+                         id="_7o">
+          <text>24:00:00</text>
+        </CheckStringStep>
+      </BasicSequence>
+      <BasicSequence id="_7p" name="double-click">
+        <MouseEventStep clicks="2" client="$(client)"
+                        component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today@Time Today&amp;0"
+                        event="MOUSE_DBLCLK" id="_7q" modifiers="16"/>
+      </BasicSequence>
+      <BasicSequence id="_8C" name="set-invalid-timetoday">
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_8D" keychar="65535" keycode="39"
+                      modifiers="0"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_8E" keychar="65535" keycode="39"
+                      modifiers="0"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_8F" keychar="65535" keycode="39"
+                      modifiers="0"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_8G" keychar="65535" keycode="39"
+                      modifiers="0"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_8H" keychar="65535" keycode="39"
+                      modifiers="0"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_8I" keychar="8" keycode="8"
+                      modifiers="0"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_8J" keychar="8" keycode="8"
+                      modifiers="0"/>
+        <TextInputStep client="$(client)" component="frameJTimeSched.text"
+                       id="_8K">
+          <text>60</text>
+        </TextInputStep>
+      </BasicSequence>
+      <BasicSequence id="_8L" name="verify-timetoday">
+        <CheckStringStep client="$(client)" component="frameJTimeSched.text"
+                         id="_8M">
+          <text>24:60:00</text>
+        </CheckStringStep>
+      </BasicSequence>
+      <BasicSequence id="_83" name="save-timetoday">
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_84" keychar="10" keycode="10"
+                      modifiers="0"/>
+      </BasicSequence>
+      <BasicSequence id="_85" name="check-timetoday">
+        <comment>Verify that the timetoday is 24:00:00
+</comment>
+        <CheckStringStep checktype="item" client="$(client)"
+                         component="frameJTimeSched.table@Time Today&amp;0"
+                         id="_8B">
+          <text>24:00:00</text>
+        </CheckStringStep>
+      </BasicSequence>
+      <CleanupSequence id="_87">
+        <MouseEventStep clicks="2" client="$(client)"
+                        component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today&amp;0&amp;0"
+                        event="MOUSE_DBLCLK" id="_88" modifiers="16"/>
+      </CleanupSequence>
+    </TestCase>
+    <TestCase id="_8N" name="04_sneak_path">
+      <comment>Play and click to edit in timetoday
+</comment>
+      <SetupSequence id="_8O" name="create-project">
+        <MouseEventStep clicks="1" client="$(client)"
+                        component="buttonAdd_project" event="MOUSE_MPRC"
+                        id="_8P" modifiers="16"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_8Q" keychar="10" keycode="10"
+                      modifiers="0"/>
+      </SetupSequence>
+      <BasicSequence id="_8R" name="play">
+        <MouseEventStep clicks="1" client="$(client)"
+                        component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today&amp;7&amp;0"
+                        event="MOUSE_MPRC" id="_8S" modifiers="16"/>
+      </BasicSequence>
+      <BasicSequence id="_8Z" name="edit-timetoday">
+        <MouseEventStep clicks="2" client="$(client)"
+                        component="frameJTimeSched.table@Time Today&amp;0"
+                        event="MOUSE_DBLCLK" id="_8a" modifiers="16"/>
+      </BasicSequence>
+      <BasicSequence id="_8d" name="check-edit" predelay="4000">
+        <CheckStringStep checktype="item" client="$(client)"
+                         component="frameJTimeSched.table@Time Today&amp;0"
+                         id="_8e">
+          <text>0:00:04</text>
+        </CheckStringStep>
+      </BasicSequence>
+      <CleanupSequence id="_8f">
+        <MouseEventStep clicks="2" client="$(client)"
+                        component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today&amp;0&amp;0"
+                        event="MOUSE_DBLCLK" id="_8g" modifiers="16"/>
+      </CleanupSequence>
+    </TestCase>
+    <TestCase id="_65O" name="05_sneak_path">
+      <SetupSequence id="_65R" name="create-project">
+        <MouseEventStep clicks="1" client="$(client)"
+                        component="buttonAdd_project" event="MOUSE_MPRC"
+                        id="_65S" modifiers="16"/>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_65T" keychar="10" keycode="10"
+                      modifiers="0"/>
+      </SetupSequence>
+      <BasicSequence id="_65U" name="double-click">
+        <MouseEventStep clicks="2" client="$(client)"
+                        component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today@Time Today&amp;0"
+                        event="MOUSE_DBLCLK" id="_65V" modifiers="16"/>
+      </BasicSequence>
+      <BasicSequence id="_65W" name="double-click">
+        <MouseEventStep clicks="2" client="$(client)"
+                        component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today@Time Today&amp;0"
+                        event="MOUSE_DBLCLK" id="_65X" modifiers="16"/>
+      </BasicSequence>
+      <BasicSequence id="_65Y" name="check-time-today-edition">
+        <CheckStringStep client="$(client)" component="frameJTimeSched.text"
+                         id="_65Z">
+          <text>0:00:00</text>
+        </CheckStringStep>
+      </BasicSequence>
+      <CleanupSequence id="_65c">
+        <MouseEventStep clicks="2" client="$(client)"
+                        component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today&amp;0&amp;0"
+                        event="MOUSE_DBLCLK" id="_65d" modifiers="16"/>
+      </CleanupSequence>
+    </TestCase>
+  </TestSet>
+  <TestSet id="_8h" name="Delete">
+    <SetupSequence id="_65k" name="Launch jtimesched-1">
+      <SetGlobalStep id="_65l" varname="client">
+        <default>jtimesched-1</default>
+      </SetGlobalStep>
+      <ClientWaiter client="$(client)" id="_65m" local="true" raise="false"
+                    resvarname="isSUTRunning" timeout="1">
+        <comment>This node checks whether the SUT is already running. The result of this check will be stored in the variable isSUTRunning. The variable itself can contain true if SUT is already running or false if SUT is not running. This variable will be used in the following 'If' node.</comment>
+      </ClientWaiter>
+      <IfSequence id="_65n" name="Launch SUT if not running"
+                  test="not $(isSUTRunning)">
+        <JavaClientStarter client="$(client)"
+                           directory="/home/maruba/Documents/jtimesched"
+                           executable="${qftest:java}" id="_65o">
+          <parameter>-jar</parameter>
+          <parameter>/home/maruba/Documents/jtimesched/target/jtimesched-1.2-SNAPSHOT-jar-with-dependencies.jar</parameter>
+        </JavaClientStarter>
+        <ClientWaiter client="$(client)" id="_65p"/>
+      </IfSequence>
+    </SetupSequence>
+    <TestCase id="_63b" name="01_delete">
+      <SetupSequence id="_63c" name="create-projects">
+        <MouseEventStep clicks="1" client="$(client)"
+                        component="buttonAdd_project" event="MOUSE_MPRC"
+                        id="_63d" modifiers="16"/>
+        <MouseEventStep clicks="1" client="$(client)"
+                        component="buttonAdd_project" event="MOUSE_MPRC"
+                        id="_63e" modifiers="16"/>
+        <MouseEventStep clicks="1" client="$(client)"
+                        component="frameJTimeSched.text" event="MOUSE_MPRC"
+                        id="_63f" modifiers="16" x="111" y="6"/>
+        <TextInputStep client="$(client)" component="frameJTimeSched.text"
+                       id="_63g">
+          <text>1</text>
+        </TextInputStep>
+        <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                      event="KEY_PTR" id="_63h" keychar="10" keycode="10"
+                      modifiers="0"/>
+      </SetupSequence>
+      <BasicSequence id="_63i" name="check-initial-state">
+        <comment>It must have two tests and their project names</comment>
+        <CheckStringStep client="$(client)"
+                         component="label2_projects_|_0:00:00_overall_|_0:00:00_today"
+                         id="_63j">
+          <text>2 projects | 0:00:00 overall | 0:00:00 today</text>
+        </CheckStringStep>
+        <CheckStringStep checktype="item" client="$(client)"
+                         component="frameJTimeSched.table2_projects_|_0:00:00_overall_|_0:00:00_today@Title&amp;0"
+                         id="_63l">
+          <text>New project</text>
+        </CheckStringStep>
+        <CheckStringStep checktype="item" client="$(client)"
+                         component="frameJTimeSched.table2_projects_|_0:00:00_overall_|_0:00:00_today@Title&amp;1"
+                         id="_63m">
+          <text>New project1</text>
+        </CheckStringStep>
+      </BasicSequence>
+      <BasicSequence id="_63Z" name="select-and-delete">
+        <MouseEventStep clicks="2" client="$(client)"
+                        component="frameJTimeSched.table2_projects_|_0:00:00_overall_|_0:00:00_today&amp;0&amp;0"
+                        event="MOUSE_DBLCLK" id="_63a" modifiers="16"/>
+      </BasicSequence>
+      <BasicSequence id="_63n" name="check-project-deleted">
+        <CheckStringStep client="$(client)"
+                         component="label1_project_|_0:00:00_overall_|_0:00:00_today"
+                         id="_63o">
+          <text>1 project | 0:00:00 overall | 0:00:00 today</text>
+        </CheckStringStep>
+        <CheckStringStep checktype="item" client="$(client)"
+                         component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today@Title&amp;0"
+                         id="_63p">
+          <text>New project1</text>
+        </CheckStringStep>
+      </BasicSequence>
+      <CleanupSequence id="_63q">
+        <MouseEventStep clicks="2" client="$(client)"
+                        component="frameJTimeSched.table1_project_|_0:00:00_overall_|_0:00:00_today&amp;0&amp;0"
+                        event="MOUSE_DBLCLK" id="_63r" modifiers="16"/>
+      </CleanupSequence>
+    </TestCase>
+  </TestSet>
+  <PackageRoot id="_3">
+    <Package id="_8q" name="procbuilder">
+      <Package id="_8r" name="check">
+        <comment>automatically generated</comment>
+        <Package id="_8s" name="table">
+          <comment>automatically generated</comment>
+          <Procedure id="_8t"
+                     name="checkRowCount_frameJTimeSched_table2_projects_|_0:00:00_overall_|_0:00:00_today">
+            <variable name="compareValue">0</variable>
+            <variable name="compareMode">=</variable>
+            <variable name="errorLevel">ERROR</variable>
+            <variable name="appearInReport">1</variable>
+            <comment>Check the number of rows of a table according to a specified comparison mode.
+It uses the method JTable.getRowCount() to get the number.</comment>
+            <ProcedureCall id="_635" local="true"
+                           procedure="qfs.swing.table.checks.checkNumberOfRows"
+                           retvarname="rowcount">
+              <variable name="id">${id:frameJTimeSched.table2_projects_|_0:00:00_overall_|_0:00:00_today}</variable>
+              <variable name="compareValue">$(compareValue)</variable>
+              <variable name="compareMode">$(compareMode)</variable>
+              <variable name="errorLevel">$(errorLevel)</variable>
+              <variable name="appearInReport">$(appearInReport)</variable>
+              <comment>automatically generated</comment>
+            </ProcedureCall>
+          </Procedure>
+        </Package>
+      </Package>
+      <Package id="_636" name="count">
+        <comment>automatically generated</comment>
+        <Procedure id="_639"
+                   name="getColumnCount_frameJTimeSched_table2_projects_|_0:00:00_overall_|_0:00:00_today">
+          <comment>Return the number of columns of the table.
+
+@return the amount of the columns of the table.</comment>
+          <ProcedureCall id="_63A" local="true"
+                         procedure="qfs.swing.table.getColumnCount"
+                         retvarname="colcount">
+            <variable name="id">${id:frameJTimeSched.table2_projects_|_0:00:00_overall_|_0:00:00_today}</variable>
+            <comment>automatically generated</comment>
+          </ProcedureCall>
+          <ReturnStep id="_60x" retval="$(colcount)">
+            <comment>automatically generated</comment>
+          </ReturnStep>
+        </Procedure>
+        <Procedure id="_637"
+                   name="getRowCount_frameJTimeSched_table2_projects_|_0:00:00_overall_|_0:00:00_today">
+          <comment>Return the number of rows of the table.
+
+@return the amount of the rows of the table.</comment>
+          <ProcedureCall id="_638" local="true"
+                         procedure="qfs.swing.table.getRowCount"
+                         retvarname="rowcount">
+            <variable name="id">${id:frameJTimeSched.table2_projects_|_0:00:00_overall_|_0:00:00_today}</variable>
+            <comment>automatically generated</comment>
+          </ProcedureCall>
+          <ReturnStep id="_60w" retval="$(rowcount)">
+            <comment>automatically generated</comment>
+          </ReturnStep>
+        </Procedure>
+      </Package>
+      <Package id="_63B" name="select">
+        <comment>automatically generated</comment>
+        <Procedure id="_63E"
+                   name="deselectAll_frameJTimeSched_table2_projects_|_0:00:00_overall_|_0:00:00_today">
+          <comment>Deselect all rows of the table.</comment>
+          <ProcedureCall id="_63F"
+                         procedure="qfs.swing.table.selection.deselectAllRows">
+            <variable name="id">${id:frameJTimeSched.table2_projects_|_0:00:00_overall_|_0:00:00_today}</variable>
+            <comment>automatically generated</comment>
+          </ProcedureCall>
+        </Procedure>
+        <Procedure id="_63G"
+                   name="selectAll_frameJTimeSched_table2_projects_|_0:00:00_overall_|_0:00:00_today">
+          <comment>Select all rows of the table.</comment>
+          <ProcedureCall id="_4H"
+                         procedure="qfs.swing.table.selection.selectAllRows">
+            <variable name="id">${id:frameJTimeSched.table2_projects_|_0:00:00_overall_|_0:00:00_today}</variable>
+            <comment>automatically generated</comment>
+          </ProcedureCall>
+        </Procedure>
+        <Procedure id="_63C"
+                   name="selectCell_frameJTimeSched_table2_projects_|_0:00:00_overall_|_0:00:00_today">
+          <variable name="column"/>
+          <variable name="row"/>
+          <variable name="columnSeparator">@</variable>
+          <variable name="rowSeparator">@</variable>
+          <comment>Select a cell in the table.
+
+@param column	The column of the table.
+@param row		The row of the table.
+@param columnSeparator	@ if then column should be addressed by the full text.
+		&amp; if the column should be addressed by an index.
+		% if the column should be addressed by an regular expression.
+@param rowSeparator	@ if then row should addressed by the full text.
+		&amp; if the row should be addressed by an index.
+		% if the row should be addressed by an regular expression.</comment>
+          <ProcedureCall id="_63D" procedure="qfs.swing.table.selectCell">
+            <variable name="id">${id:frameJTimeSched.table2_projects_|_0:00:00_overall_|_0:00:00_today}</variable>
+            <variable name="column">$(column)</variable>
+            <variable name="row">$(row)</variable>
+            <variable name="columnSeparator">$(columnSeparator)</variable>
+            <variable name="rowSeparator">$(rowSeparator)</variable>
+            <comment>automatically generated</comment>
+          </ProcedureCall>
+        </Procedure>
+      </Package>
+    </Package>
+  </PackageRoot>
+  <ExtraSequence id="_4">
+    <SetupSequence id="_64J" name="create-project">
+      <MouseEventStep clicks="1" client="$(client)"
+                      component="buttonAdd_project" event="MOUSE_MPRC"
+                      id="_64K" modifiers="16"/>
+      <KeyEventStep client="$(client)" component="frameJTimeSched.text"
+                    event="KEY_PTR" id="_64L" keychar="10" keycode="10"
+                    modifiers="0"/>
+    </SetupSequence>
+  </ExtraSequence>
   <WindowList id="_5">
     <WindowStep class="Window" feature="jTimeSched" height="150"
                 id="frameJTimeSched" uid="_C" width="590" x="610" y="316">
@@ -335,6 +1030,27 @@
           <extrafeature name="qfs:systemclass" negate="false" regexp="false"
                         state="0">javax.swing.JTable</extrafeature>
         </ComponentStep>
+        <ComponentStep class="TableHeader" classcount="1" classindex="0"
+                       id="frameJTimeSched.header1_project_|_0:00:00_overall_|_0:00:00_today"
+                       uid="_3q">
+          <extrafeature name="qfs:class" negate="false" regexp="false"
+                        state="0">javax.swing.table.JTableHeader</extrafeature>
+          <extrafeature name="qfs:genericclass" negate="false" regexp="false"
+                        state="0">TableHeader</extrafeature>
+          <extrafeature name="qfs:label" negate="false" regexp="false"
+                        state="1">1 project | 0:00:00 overall | 0:00:00 today</extrafeature>
+          <extrafeature name="qfs:systemclass" negate="false" regexp="false"
+                        state="0">javax.swing.table.JTableHeader</extrafeature>
+        </ComponentStep>
+        <ComponentStep class="Table" classcount="1" classindex="0"
+                       id="frameJTimeSched.table" uid="_4s">
+          <extrafeature name="qfs:class" negate="false" regexp="false"
+                        state="0">de.dominik_geyer.jtimesched.gui.table.ProjectTable</extrafeature>
+          <extrafeature name="qfs:genericclass" negate="false" regexp="false"
+                        state="0">Table</extrafeature>
+          <extrafeature name="qfs:systemclass" negate="false" regexp="false"
+                        state="0">javax.swing.JTable</extrafeature>
+        </ComponentStep>
       </ComponentStep>
       <ComponentStep class="Label" classcount="1" classindex="0"
                      feature="6 projects | 0:00:00 overall | 0:00:00 today"
@@ -377,6 +1093,16 @@
                       state="1">2 projects | 0:00:00 overall | 0:00:00 today</extrafeature>
         <extrafeature name="qfs:systemclass" negate="false" regexp="false"
                       state="0">javax.swing.JLabel</extrafeature>
+      </ComponentStep>
+      <ComponentStep class="Panel" classcount="11" classindex="8" height="27"
+                     id="frameJTimeSched.panel" uid="_4l" width="590" x="0"
+                     y="171">
+        <extrafeature name="qfs:class" negate="false" regexp="false"
+                      state="0">javax.swing.JPanel</extrafeature>
+        <extrafeature name="qfs:genericclass" negate="false" regexp="false"
+                      state="0">Panel</extrafeature>
+        <extrafeature name="qfs:systemclass" negate="false" regexp="false"
+                      state="0">javax.swing.JPanel</extrafeature>
       </ComponentStep>
     </WindowStep>
     <WindowStep class="EmbeddedWindow" height="22" id="frame" uid="_Z"
