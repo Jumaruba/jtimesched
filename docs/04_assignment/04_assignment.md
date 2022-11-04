@@ -173,7 +173,7 @@ To tests the "Edit Time Today" requirement, we used the `Time-Today-Edition` tes
 
 **Requirements**: This test set assumes you have no previous configuration saved (no projects stored in memory). Please delete the `conf` folder before testing.
 
-**Outcome**: TODO
+**Outcome**: There is a total of 7 tests couting with the sneak paths. All of them passes with success. 
 
 #### 2.5.1. Play/Stop
 
@@ -254,6 +254,7 @@ The test passes with success.
 As mentioned before, JTimeSched's main goal is to allow users to track the time of their projects. As well as creating a project, to manage the software the user also must be able to delete the projects.   
 The malfunctioning of the delete use case not only would cause chaos in the administration of information but probably would compromise the program usage in a long term. For this reason, it's crucial.  
 
+
 ###  3.1 State diagram   
 
 This diagram shows the flow to delete a project in the system perspective.  
@@ -295,10 +296,10 @@ However, a case that perhaps should display an error message is the `(App Idle o
 ### 3.5 Tests developed in QF-Test tool 
 
 In this section we briefly describes the tests perfomed in the QF-Test.  
-<!-- TODO: Outcome e dizer o nome dos testes que estão no qf-test-->
+
 **Requirements**: This test set assumes you have no previous configuration saved (no projects stored in memory). Please delete the `conf` folder before testing.
 
-**Outcome**: TODO
+**Outcome**: Two tests were programmed to be performed in this test-case. However, as exlpained in the test **3.5.2**, due to limitations associated with the Qf-test tool, it was not possible to test the situation where a project is selected and then unselected.  
 
 #### 3.5.1 Delete a project  
 
