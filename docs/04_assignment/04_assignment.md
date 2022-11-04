@@ -238,7 +238,7 @@ The tests pass with success.
 
 #### 2.5.4. (Sneak Path 1) Edit time today while playing
 
-The test was designed in the following way: 
+The test `04_sneak_path` was designed in the following way: 
 
 - The application starts in the initial state, `Project Idle`; 
 - Then the event `play` is triggered; 
@@ -250,7 +250,7 @@ The test passes with success.
 
 #### 2.5.5. (Sneak Path 2) 
 
-This test was designed in the following way: 
+The test `05_sneak_path` was designed in the following way: 
 
 - The application starts in the initial state, `Project Idle`; 
 - Then the user triggers the `Time Today Double Left Click` event and, therefore, the program transits to the `Time Today Edition`;  
@@ -261,30 +261,29 @@ The test passes with success.
 
 ## 3. Delete Project
 
-As mentioned before, JTimeSched's main goal is to allow users to track the time of their projects. As well as creating a project, to manage the software the user also must be able to delete the projects.   
-The malfunctioning of the delete use case not only would cause chaos in the administration of information but probably would compromise the program usage in a long term. For this reason, it's crucial.  
+As mentioned before, JTimeSched's main goal is to allow users to track the time of their projects. Apart from creating a project, to manage the software the user must also be able to delete it.   
+The malfunctioning of the delete use case not only would cause chaos in the administration of information but would also compromise the program usage on the long term. For this reason, it's crucial to the the deletion of a project.  
 
 
 ###  3.1 State diagram   
 
-This diagram shows the flow to delete a project in the system perspective.  
-
-- **Transitions from App Idle or Playing**: In this initial state, the software can be idle or not. The only action that it can perform is selecting a project. By "selecting a project" we mean that this is highlighted in blue. It is only possible to select if the number of projects (`n`) is higher than zero, naturally.  
-- **Transitions from Project Selected**: Once a project is selected, we can delete it. Even if a person tries to double-click the button to delete a project, this action automatically highlights it. In this state, it's possible to unselect the project using the mouse or using the arrows to change the selection. It's also feasible to delete a project. However, this action is only possible if the number of projects is higher than zero and after that, the number of projects is decremented by one. 
-- **Transitions from Project Deleted**: This is a state of validation, where it's verified if the project was truly deleted. If it was, then the application returns to the initial state.  
-
+This diagram shows the flow to delete a project in the system's perspective. 
 
 ![](./figures/03_delete_project/03_state_machine.png)
 
+- **Transitions from App Idle or Playing**: In this initial state, the software can be idle or not. The only action that it can perform is selecting a project. By "selecting a project" we mean that the project becomes highlighted in blue. It is only possible to select a project if the number of projects (`n`) is higher than zero, naturally.  
+- **Transitions from Project Selected**: Once a project is selected, we can delete it. Even if a person tries to double-click the button to delete a project, this action automatically highlights it. In this state, it's possible to unselect the project using the mouse or using the arrows to change the selection. It's also feasible to delete a project. However, this action is only possible if the number of projects is higher than zero and after that, the number of projects is decremented by one. 
+- **Transitions from Project Deleted**: This is a state of validation, where it's verified if the project was truly deleted. If it was, then the application returns to the initial state.  
+
 ### 3.2 Transition tree
 
-- We start with the **App_Idle_or_Playing_0**, which as metioned before, states that the app might be running the counter or not;  
--  Then the only state available from **App_Idle_or_Playing** is **Project_Selected**; 
--  In **Project_Selected**, we have two options: **Project_Deleted** and **App_Idle_or_Playing**. Let's first analyse the **Project_Deleted** and then the **App_Idle_or_Playing**: 
-    - After the project is deleted in **Project_Deleted**, the only available path possible is returning to the intial state (**Project_Idle_or_Playing**). Since the **Project_Idle_or_Playing** was already visited in the tree, we can consider a leaf of the tree; 
-    - The same goes to the other fork of **Project_Selected_0**, which is **App_Idle_or_Playing**. As well in the previous case, since **App_Idle_or_Playing** was already processed, this is a leaf of the transition tree. 
+![](./figures/03_delete_project/03_transition_tree.png) 
 
-![](./figures/03_delete_project/03_transition_tree.png)  
+- We start with the `App_Idle_or_Playing`, which  states that the app might be running the counter or not;  
+- Then the only state available from `App_Idle_or_Playing` is `Project_Selected`; 
+-  In `Project_Selected`, we have two options: `Project_Deleted` and `App_Idle_or_Playing`. Let's first analyse the `Project_Deleted` and then the `App_Idle_or_Playing`: 
+    - After the project is deleted in `Project_Deleted`, the only available path is returning to the initial state (`Project_Idle_or_Playing`), which was already visited in the tree; 
+    - The same goes for the other fork of `Project_Selected`, which is `App_Idle_or_Playing`. As in the previous case, since `App_Idle_or_Playing` was already processed, this is a leaf of the transition tree. 
 
 ### 3.3 Transition table 
 
@@ -292,45 +291,51 @@ This diagram shows the flow to delete a project in the system perspective.
 | - | - | - | - | - | 
 | App Idle or Playing | Project Selected |  |  |  |  
 | Project Selected | | App Idle or Playing | Project Deleted  | |
-| Project Deleted | | | App Idle or Playing |
+| Project Deleted | | | |App Idle or Playing |
 
 
 ### 3.4 Sneak Paths 
  
 With this table we can see that there's a total of 8 sneak paths. 
 
-We expect that the events that generate sneak paths in their respective states, generate a default behavior equivalent to nothing. For example, in the sneak path `(Project Selected, Select)`, means that someone tried to select the same project. This action can be performed in many ways, but let's suppose that someone tries to select it once again. In this case, nothing should happen and the project must remain selected (highlighted in blue).  
+We expect that the events that generate sneak paths in their respective states, generate a default behavior equivalent to nothing. For example, the sneak path `(Project Selected, Select)`, means that someone tried to select the same project. This action can be performed in many ways, but let's suppose that someone tries to select it once again. In this case, nothing should happen and the project must remain selected (highlighted in blue).  
 
 However, a case that perhaps should display an error message is the `(App Idle or Playing, Delete)`. It would be wise to warn the user to select a project before trying to delete it. 
 
 ### 3.5 Tests developed in QF-Test tool 
 
-In this section we briefly describes the tests perfomed in the QF-Test.  
+To test the "Delete Project" requirement, we used the `Delete` test-set that can be found in the QF-Test test-suite, available in the qf-test directory.
 
 **Requirements**: This test set assumes you have no previous configuration saved (no projects stored in memory). Please delete the `conf` folder before testing.
 
-**Outcome**: Two tests were programmed to be performed in this test-case. However, as exlpained in the test **3.5.2**, due to limitations associated with the Qf-test tool, it was not possible to test the situation where a project is selected and then unselected.  
+**Outcome**: W had planned to be perform two tests in this test-case. However, as explained in the test **3.5.2**, due to limitations associated with the Qf-test tool, it was not possible to test the situation where a project is selected and then unselected.  
 
 #### 3.5.1 Delete a project  
 
-The main goal of this test is to verify if all the phases related to the deletion of a project work accordingly. The initial state starts with the application being idle or playing. If at least one project exists, the `select` event can be performed. After performing the previous step, the project becomes `selected`. Since it's not possible to verify if a project is selected or not using the QF-Tool, the validation of the `Project Selected` was discarded. 
-
-After the selection of the project, it can be `deleted`. This action lead us to the `Project Deleted` state, where we must assess if the project was truly deleted. If it was, then the application returns to the initial state.  
+The main goal of this test is to verify if all the phases related to the deletion of a project work accordingly.
 
 ![](./figures/03_delete_project/03_path1.png)
 
+The test is structured as follows:
+- The initial state starts with the application being idle or playing - `App Idle or Playing`;
+- If at least one project exists, the `select` event can be performed;
+- After performing the previous step, the project becomes `selected`;
+- Since it's not possible to verify if a project is selected or not using the QF-Tool, the validation of the `Project Selected` was discarded; 
+- After the selection of the project, it can be `deleted`;
+- This action leads to the `Project Deleted` state, where we must assess if the project was truly deleted. If it was, then the application returns to the initial state.  
 
 #### 3.5.2 Select and unselect a project  
-In this scenario, we just want to select an unselect a project. This test, however, was not performed. The QF-test tool was somehow limitating: it wasn't possible to verify if a test was selected or not, since the color is the only aspects that characterizes a selection.  
+In this scenario, we just want to select and unselect a project. 
 
 ![](./figures/03_delete_project/03_path2.png)
 
+This test, however, was not performed. The QF-test tool was somehow an impediment: it wasn't possible to verify if a project was selected or not, since the color is the only aspect that characterizes a selection and the check of the QF-tool are mainly based on "textual" fields.  
 
 ## QF-Test tool feedback 
 
-The tool is really intuitive, however:
-- It was hard to understand if a specific test passed. This information is only available near a small "plus" icon on the bottom right corner of the tool. It would be better to also have a message similar to the JUnit tool, that indicates if the test has passed or failed in a clear way. This might not make difference to old users, but it would improve the experience for new users like us.
+In general, the tool is really intuitive, however:
+- It was hard to understand if a specific test passed. This information is only available near a small "plus" icon on the bottom right corner of the tool. It would be better to also have a message similar to the JUnit tool, that indicates if the test passed or failed in a clear way. This might not make difference to old users, but it would improve the experience for new users like us.
 - The design is another point. It wouldn't make a difference to old customers that are already used to the tool, but improving the design would make more attractive.
-- In our case it was also difficult to create some of the checks. Particularly, the App that we were testing mainly consists of a table and it was hard to select a particular cell of that table.
+- In our case, it was also difficult to create some of the checks. Particularly, the App that we were testing mainly consists of a table, and it was hard to select a particular cell of that table without accidentally selecting other parts of the table;
 - If we include multiple sequences within the same test-case, it is difficult to understand in which of them the test failed;
-- The checks are based on the text content of the inputs an text elements, but sometimes this is not enough. For instance, in our project, when a row is selected, its color changes. It would be useful to be able to capture this modification, as well as other visual modifications of the UI that are not text related.
+- The checks are based on the text content of the inputs and text elements, but sometimes this is not enough. For instance, in our project, when a row is selected, its color changes. It would be useful to be able to capture this modification, as well as other visual modifications of the UI that are not text related.
