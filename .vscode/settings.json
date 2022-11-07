@@ -6,6 +6,11 @@
       "language": "markdown",
       "scheme": "file",
       "pattern": "docs/04_assignment/04_assignment.md"
+    },
+    {
+      "language": "markdown",
+      "scheme": "file",
+      "pattern": "docs/05_assignment/05_assignment.md"
     }
   ]
 }
