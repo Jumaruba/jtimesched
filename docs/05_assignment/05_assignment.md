@@ -37,12 +37,15 @@ Yet, each test case covered its target function at 100% in both *line coverage* 
 ## New tests 
 <!-- Dúvida: criar testes indiscriminadamente?? -->
 
-### Test 6 - A test
+### Project class
+#### Test 6 - A test
 
-#### Outcome 
+2 branch: `secondsOverall < 0` =>  test < 0
+
+##### Outcome 
 <!-- Brief description of the outcome of each test and whether any test results in a failure (and why). --> 
 
-#### Line and Branch Coverage 
+##### Line and Branch Coverage 
 <!--Line and branch coverage of the unit tests you have developed in this assignment.-->
 
 
