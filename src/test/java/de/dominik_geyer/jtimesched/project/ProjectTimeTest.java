@@ -1,5 +1,6 @@
 package de.dominik_geyer.jtimesched.project;
 
+import java.util.Date;
 import java.util.stream.Stream;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
@@ -7,6 +8,7 @@ import static org.junit.Assert.fail;
 
 import java.text.ParseException;
 
+import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -142,5 +144,36 @@ public class ProjectTimeTest {
         Arguments.of(3600, "1:00:00"),
         Arguments.of(86399, "23:59:59"),
         Arguments.of(86400, "24:00:00"));
+  }
+
+  @Test
+  public void parseDateTest() {
+    // Given
+    Date d = new Date(1667779200000l);
+    String str = "2022-11-7";
+
+    // When
+    Date result;
+    try {
+      result = ProjectTime.parseDate(str);
+
+      // Then
+      Assertions.assertTrue(d.compareTo(result) == 0);
+    } catch (ParseException e) {
+      fail("No exception should be thrown");
+    }
+  }
+
+  @Test
+  public void formatDateTest() {
+    // Given
+    Date d = new Date(1667779200000l);
+    String expected = "2022-11-07";
+
+    // When
+    String result = ProjectTime.formatDate(d);
+
+    // Then
+    Assertions.assertEquals(expected, result);
   }
 }
