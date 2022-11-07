@@ -1,4 +1,11 @@
 {
   "java.format.settings.url": "eclipse-formatter.xml",
-  "java.configuration.updateBuildConfiguration": "disabled"
+  "java.configuration.updateBuildConfiguration": "disabled",
+  "grammarly.selectors": [
+    {
+      "language": "markdown",
+      "scheme": "file",
+      "pattern": "docs/04_assignment/04_assignment.md"
+    }
+  ]
 }
