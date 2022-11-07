@@ -19,24 +19,13 @@ public class ProjectTimeTest {
   @ParameterizedTest
   @MethodSource("parseSecondsInvalidBoundaries")
   public void parseSecondsInvalidBoundariesTest(String strTime) {
-    assertThrows(
-        ParseException.class, () -> ProjectTime.parseSeconds(strTime));
+    assertThrows(ParseException.class, () -> ProjectTime.parseSeconds(strTime));
   }
 
   static Stream<String> parseSecondsInvalidBoundaries() {
     return Stream.of(
-        "0:0:-1",
-        "0:-1:0",
-        "-1:0:0",
-        "0:0:60",
-        "0:60:0",
-        "0:0:",
-        "0::0",
-        ":0:0",
-        "0",
-        "0:0",
-        "0:0:000",
-        "0:000:0");
+        "0:0:-1", "0:-1:0", "-1:0:0", "0:0:60", "0:60:0", "0:0:", "0::0",
+        ":0:0", "0", "0:0", "0:0:000", "0:000:0");
   }
 
   @ParameterizedTest
@@ -56,7 +45,8 @@ public class ProjectTimeTest {
   }
 
   static Stream<Arguments> parseSecondsValidBoundaries() {
-    return Stream.of(Arguments.of("0:0:0", 0),
+    return Stream.of(
+        Arguments.of("0:0:0", 0),
         Arguments.of("0:0:00", 0),
         Arguments.of("0:0:59", 59),
         Arguments.of("0:59:0", 3540),
@@ -68,14 +58,25 @@ public class ProjectTimeTest {
   @ParameterizedTest
   @MethodSource("parseSecondsInvalidParams")
   public void parseSecondsInvalidTest(String strTime) {
-    assertThrows(
-        ParseException.class, () -> ProjectTime.parseSeconds(strTime));
+    assertThrows(ParseException.class, () -> ProjectTime.parseSeconds(strTime));
   }
 
   static Stream<String> parseSecondsInvalidParams() {
     return Stream.of(
-        "", "0:07:60", "0:90:05", "0:6:054", "0:007:05", "6:54", "2",  "0:07:", "0::02", ":6:54", "2:02:-1", "2:-1:05",
-        "-1:09:05", null);
+        "",
+        "0:07:60",
+        "0:90:05",
+        "0:6:054",
+        "0:007:05",
+        "6:54",
+        "2",
+        "0:07:",
+        "0::02",
+        ":6:54",
+        "2:02:-1",
+        "2:-1:05",
+        "-1:09:05",
+        null);
   }
 
   @ParameterizedTest
@@ -96,13 +97,11 @@ public class ProjectTimeTest {
 
   static Stream<Arguments> parseSecondsValidParams() {
     return Stream.of(
-        Arguments.of("22:5:48", 79548),
-        Arguments.of("36:25:8", 131108));
+        Arguments.of("22:5:48", 79548), Arguments.of("36:25:8", 131108));
   }
 
-
   // formatSeconds tests
-  public void testFormatSeconds(int s, String expected){
+  public void testFormatSeconds(int s, String expected) {
     // Given 'seconds'
 
     // When
