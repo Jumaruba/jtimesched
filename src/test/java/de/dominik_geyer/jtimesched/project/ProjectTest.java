@@ -1,12 +1,16 @@
 package de.dominik_geyer.jtimesched.project;
 
+import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.anyInt;
 
 import java.util.stream.Stream;
 
@@ -167,8 +171,6 @@ public class ProjectTest {
     } catch (ProjectException e) {
       fail("Exception shouldn't be thrown");
     }
-
-    // TODO: don't know how to test it better because it uses the current time
   }
 
   @Test
@@ -185,12 +187,13 @@ public class ProjectTest {
     // Given
     Project project = new Project();
 
-    // When and Then
     try {
+      // When
       project.start();
       Thread.sleep(2000);
       project.pause();
 
+      // Then
       Assertions.assertEquals(2, project.getSecondsOverall());
       Assertions.assertEquals(2, project.getSecondsToday());
       Assertions.assertEquals(false, project.isRunning());
@@ -199,18 +202,153 @@ public class ProjectTest {
     } catch (InterruptedException e1) {
       e1.printStackTrace();
     }
-
-    // TODO: don't know how to test it better because it uses the current time
   }
 
-  // public void pause() throws ProjectException {
-  //   if (!this.isRunning()) throw new ProjectException("Timer not running");
+  @Test
+  public void runningToggleTest() {
+    // Given
+    Project project = new Project();
+    project.setRunning(true);
 
-  //   int secondsElapsed = this.getElapsedSeconds();
-  //   this.secondsOverall += secondsElapsed;
-  //   this.secondsToday += secondsElapsed;
+    // When
+    project.toggle();
 
-  //   this.running = false;
-  // }
+    // Then
+    Assertions.assertEquals(false, project.isRunning());
+  }
 
+  @Test
+  public void idleToggleTest() {
+    // Given
+    Project project = new Project();
+    project.setRunning(false);
+
+    // When
+    project.toggle();
+
+    // Then
+    Assertions.assertEquals(true, project.isRunning());
+  }
+
+  // TODO: how to test the catch of toggle? Mockito
+
+  @Test
+  public void runningGetSecondsOverallTest() {
+    // Given
+    Project project = new Project();
+
+    try {
+      project.start();
+      Thread.sleep(2000);
+
+      // When
+      int result = project.getSecondsOverall();
+
+      // Then
+      Assert.assertEquals(2, result);
+
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    } catch (ProjectException e) {
+      fail("Shouldn't throw an exception");
+    }
+  }
+
+  @Test
+  public void exceptionGetSecondsOverallTest() {
+    try {
+      // Given
+      Project project = Mockito.mock(Project.class);
+      Mockito.when(project.getElapsedSeconds())
+          .thenThrow(ProjectException.class);
+      Mockito.doCallRealMethod().when(project).setSecondsOverall(anyInt());
+      Mockito.doCallRealMethod().when(project).setRunning(anyBoolean());
+      Mockito.doCallRealMethod().when(project).getSecondsOverall();
+
+      project.setSecondsOverall(10);
+      project.setRunning(false);
+
+      // When
+      int result = project.getSecondsOverall();
+
+      // Then
+      Assert.assertEquals(10, result);
+    } catch (ProjectException e) {
+      fail("Shouldn't throw an exception");
+    }
+  }
+
+  @Test
+  public void idleGetSecondsOverallTest() {
+    // Given
+    Project project = new Project();
+    project.setSecondsOverall(10);
+    project.setRunning(false);
+
+    // When
+    int result = project.getSecondsOverall();
+
+    // Then
+    Assert.assertEquals(10, result);
+  }
+
+  @Test
+  public void runningGetSecondsTodayTest() {
+    // Given
+    Project project = new Project();
+
+    try {
+      project.start();
+      Thread.sleep(2000);
+
+      // When
+      int result = project.getSecondsToday();
+
+      // Then
+      Assert.assertEquals(2, result);
+
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    } catch (ProjectException e) {
+      fail("Shouldn't throw an exception");
+    }
+  }
+
+  @Test
+  public void idleGetSecondsTodayTest() {
+    // Given
+    Project project = new Project();
+    project.setSecondsToday(10);
+    project.setRunning(false);
+
+    // When
+    int result = project.getSecondsToday();
+
+    // Then
+    Assert.assertEquals(10, result);
+  }
+
+  @Test
+  public void exceptionGetSecondsTodayTest() {
+    try {
+      // Given
+      Project project = Mockito.mock(Project.class);
+      Mockito.when(project.getElapsedSeconds())
+          .thenThrow(ProjectException.class);
+      Mockito.doCallRealMethod().when(project).setSecondsToday(anyInt());
+      Mockito.doCallRealMethod().when(project).setRunning(anyBoolean());
+      Mockito.doCallRealMethod().when(project).getSecondsToday();
+
+      project.setSecondsToday(10);
+      project.setRunning(false);
+
+      // When
+      int result = project.getSecondsToday();
+
+      // Then
+      Assert.assertEquals(10, result);
+    } catch (ProjectException e) {
+      fail("Shouldn't throw an exception");
+    }
+  }
 }
