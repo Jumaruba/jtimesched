@@ -4,7 +4,14 @@ import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.sax.SAXTransformerFactory;
@@ -12,11 +19,15 @@ import javax.xml.transform.sax.TransformerHandler;
 import javax.xml.transform.stream.StreamResult;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
+import java.awt.Color;
+
 public class ProjectSerializerTest {
   private final String xmlProlog = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+  private static String outputDir = "docs/05_assignment/outputDir/";
 
   // Simple element
   @Test
@@ -188,4 +199,73 @@ public class ProjectSerializerTest {
     hd.setResult(new StreamResult(writer));
     return writer;
   }
+
+  // Assignment 5
+  // writeXml
+  @Test
+  public void zeroProjectsWriteXmlTest() {
+    // Given
+    ProjectSerializer ps =
+        new ProjectSerializer(outputDir + "zeroProjectsTest");
+    List<Project> projects = new ArrayList<Project>();
+
+    // When
+    try {
+      ps.writeXml(projects);
+    } catch (Exception e) {
+      fail("Unexpected exception");
+    }
+
+    // Then
+    String expected = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><projects version=\"unknown\"/>";
+    try {
+      assertEquals(expected, readProjectsFile());
+    } catch (IOException e) {
+      e.printStackTrace();
+      fail("Shouldn't have thrown an exception");
+    }
+  }
+
+  @Test
+  public void colorRunningCheckedWriteXmlTest() {
+    // Given
+    ProjectSerializer ps =
+        new ProjectSerializer(outputDir + "zeroProjectsTest");
+    List<Project> projects = new ArrayList<Project>();
+
+    // => color null, running, checked
+  }
+
+  @Test
+  public void noColorIdleUncheckedWriteXmlTest() {
+    // Given
+    ProjectSerializer ps =
+        new ProjectSerializer(outputDir + "zeroProjectsTest");
+    List<Project> projects = new ArrayList<Project>();
+    Project proj = new Project();
+    Color color = Mockito.mock(Color.class);
+    proj.setColor(color);
+    proj.setChecked(true);
+    proj.setRunning(true);
+    
+    projects.add(proj);
+
+    // When
+
+    // Then
+  }
+
+  public String readProjectsFile() throws IOException {
+    File file = new File(outputDir + "zeroProjectsTest");
+    System.out.println(file.getAbsolutePath());
+    BufferedReader br = new BufferedReader(new FileReader(file));
+    String st = "", tmp = "";
+    
+    while ((tmp = br.readLine()) != null) {
+      st += tmp;
+    }
+
+    return st;
+  }
+  
 }
