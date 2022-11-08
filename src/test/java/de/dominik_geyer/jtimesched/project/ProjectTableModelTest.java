@@ -1,11 +1,17 @@
 package de.dominik_geyer.jtimesched.project;
 
+import org.junit.Before;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
+import java.util.Date;
+import java.awt.Color;
+import de.dominik_geyer.jtimesched.JTimeSchedApp;
 
 public class ProjectTableModelTest {
   public static ProjectTableModel projectTableModel;
@@ -102,4 +108,64 @@ public class ProjectTableModelTest {
   public void testPartitionE9(int row) {
     testRowParameter(row);
   }
+
+  // Assignemnt 5
+
+  @Test
+  public void testGetColumnCount() {
+    // Given
+    initProjectTableModel();
+    // When
+    int columnCount = projectTableModel.getColumnCount();
+
+    // Then
+    Assertions.assertEquals(columnCount, 8);
+  }
+
+  @Test
+  public void testGetRowCount() {
+    // Given
+    initProjectTableModel();
+    // When
+    int rowCount = projectTableModel.getRowCount();
+
+    // Then
+    Assertions.assertEquals(rowCount, 1);
+  }
+
+  @Test
+  public void testGetColumnName() {
+    // Given
+    initProjectTableModel();
+    // When
+    String columnName = projectTableModel.getColumnName(2);
+
+    // Then
+    Assertions.assertEquals(columnName, "Title");
+  }
+
+  public static Stream<Arguments> genGetColumnClass() {
+    return Stream.of(
+        Arguments.of(ProjectTableModel.COLUMN_COLOR, Color.class),
+        Arguments.of(ProjectTableModel.COLUMN_CREATED, Date.class),
+        Arguments.of(ProjectTableModel.COLUMN_TIMEOVERALL, Integer.class),
+        Arguments.of(ProjectTableModel.COLUMN_TIMETODAY, Integer.class),
+        Arguments.of(ProjectTableModel.COLUMN_CHECK, Boolean.class),
+        Arguments.of(ProjectTableModel.COLUMN_ACTION_DELETE, Boolean.class),
+        Arguments.of(ProjectTableModel.COLUMN_ACTION_STARTPAUSE, Boolean.class),
+        Arguments.of(8, String.class));
+  }
+
+  @ParameterizedTest
+  @MethodSource("genGetColumnClass")
+  public void testGetColumnClass(int value, Class expected) {
+    // Given
+    initProjectTableModel();
+    // When
+    Class columnClass = projectTableModel.getColumnClass(value);
+
+    // Then
+    Assertions.assertEquals(expected, columnClass);
+  }
+
 }
