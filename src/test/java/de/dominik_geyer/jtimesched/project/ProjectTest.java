@@ -1,5 +1,7 @@
 package de.dominik_geyer.jtimesched.project;
 
+import java.awt.Color;
+
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -12,10 +14,11 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyInt;
 
+import java.util.Date;
 import java.util.stream.Stream;
 
 public class ProjectTest {
-
+  // setSecondsToday
   public static Stream<Arguments> genSetSecondsToday() {
     return Stream.of(
         Arguments.of(Integer.MIN_VALUE, 0),
@@ -41,6 +44,7 @@ public class ProjectTest {
   }
 
   // Assignment 5
+  // setSecondsOverall
   @ParameterizedTest
   @MethodSource("genSecondsOverall")
   public void setSecondsOverallTest(int secondsOverall, int expected) {
@@ -56,6 +60,7 @@ public class ProjectTest {
     return Stream.of(Arguments.of(-2, 0), Arguments.of(10, 10));
   }
 
+  // setQuotaToday
   @Test
   public void setQuotaTodayTest() {
     // Given
@@ -68,6 +73,7 @@ public class ProjectTest {
     Assertions.assertEquals(5, project.getQuotaToday());
   }
 
+  // setQuotaOverall
   @Test
   public void setQuotaOverallTest() {
     // Given
@@ -80,6 +86,7 @@ public class ProjectTest {
     Assertions.assertEquals(5, project.getQuotaOverall());
   }
 
+  // adjustSecondsToday
   @ParameterizedTest
   @MethodSource("genAdjustSecondsToday")
   public void adjustSecondsTodayTest(
@@ -107,6 +114,7 @@ public class ProjectTest {
         Arguments.of(-2, 10, 43, 0, 33), Arguments.of(16, 10, 43, 16, 49));
   }
 
+  // resetToday
   @Test
   public void resetTodayTest() {
     // Given
@@ -117,9 +125,10 @@ public class ProjectTest {
 
     Assertions.assertEquals(0, project.getSecondsToday());
     Assertions.assertEquals(0, project.getQuotaToday());
-    // TODO: test date with mock?
+    // TODO: how to test the date
   }
 
+  // toString
   @Test
   public void newProjectToStringTest() {
     // Given
@@ -149,6 +158,7 @@ public class ProjectTest {
     Assertions.assertEquals(expected, result);
   }
 
+  // getElapsedSeconds
   @Test
   public void idleElapsedSecondsTest() {
     // Given
@@ -173,6 +183,7 @@ public class ProjectTest {
     }
   }
 
+  // pause
   @Test
   public void idlePauseTest() {
     // Given
@@ -204,6 +215,36 @@ public class ProjectTest {
     }
   }
 
+  // play
+  @Test
+  public void idleStartTest() {
+    // Given
+    Project project = new Project();
+
+    try {
+      // When
+      project.start();
+    } catch (ProjectException e) {
+      fail("Shouldn't throw an exception");
+    }
+
+    // TODO: how to test the Date?
+
+    // Then
+    Assert.assertTrue(project.isRunning());
+  }
+
+  @Test
+  public void runningStartTest() {
+    // Given
+    Project project = new Project();
+    project.setRunning(true);
+
+    // When and then
+    Assertions.assertThrows(ProjectException.class, () -> project.start());
+  }
+
+  // toggle
   @Test
   public void runningToggleTest() {
     // Given
@@ -232,6 +273,7 @@ public class ProjectTest {
 
   // TODO: how to test the catch of toggle? Mockito
 
+  // getSecondsOverall
   @Test
   public void runningGetSecondsOverallTest() {
     // Given
@@ -292,6 +334,7 @@ public class ProjectTest {
     Assert.assertEquals(10, result);
   }
 
+  // getSecondsToday
   @Test
   public void runningGetSecondsTodayTest() {
     // Given
@@ -350,5 +393,91 @@ public class ProjectTest {
     } catch (ProjectException e) {
       fail("Shouldn't throw an exception");
     }
+  }
+
+  // setTitle
+  @Test
+  public void setTitleTest() {
+    // Given
+    Project project = new Project();
+    String title = "New Project";
+
+    // When
+    project.setTitle(title);
+
+    // Then
+    Assert.assertEquals(title, project.getTitle());
+  }
+
+  // setNotes
+  @Test
+  public void setNotesTest() {
+    // Given
+    Project project = new Project();
+    String notes = "This is a note";
+
+    // When
+    project.setNotes(notes);
+
+    // Then
+    Assert.assertEquals(notes, project.getNotes());
+  }
+
+  // TODO: check if mock is appropriate here
+  // setColor
+  @Test
+  public void setColorTest() {
+    // Given
+    Project project = new Project();
+    Color color = Mockito.mock(Color.class);
+
+    // When
+    project.setColor(color);
+
+    // Then
+    Assert.assertEquals(color, project.getColor());
+  }
+
+  // setChecked
+  @Test
+  public void setCheckedTest() {
+    // Given
+    Project project = new Project();
+    Boolean checked = true;
+
+    // When
+    project.setChecked(checked);
+
+    // Then
+    Assert.assertTrue(project.isChecked());
+  }
+
+  // TODO: check if mock is appropriate here
+  // setTimeCreated
+  @Test
+  public void setTimeCreatedTest() {
+    // Given
+    Project project = new Project();
+    Date date = Mockito.mock(Date.class);
+
+    // When
+    project.setTimeCreated(date);
+
+    // Then
+    Assert.assertEquals(date, project.getTimeCreated());
+  }
+
+  // setTimeStart
+  @Test
+  public void setTimeStartTest() {
+    // Given
+    Project project = new Project();
+    Date date = Mockito.mock(Date.class);
+
+    // When
+    project.setTimeStart(date);
+
+    // Then
+    Assert.assertEquals(date, project.getTimeStart());
   }
 }

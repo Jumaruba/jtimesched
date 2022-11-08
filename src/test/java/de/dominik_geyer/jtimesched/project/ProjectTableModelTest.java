@@ -167,5 +167,4 @@ public class ProjectTableModelTest {
     // Then
     Assertions.assertEquals(expected, columnClass);
   }
-
 }

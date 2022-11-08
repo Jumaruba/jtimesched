@@ -40,7 +40,9 @@ Yet, each test case covered its target function at 100% in both *line coverage* 
 ### Project class
 #### Test 6 - A test
 
+<!-- TODO: maybe indicar os branches que testamos no caso de haver mais do que um, indicar porque razao usei mocks em alguns se for para manter os mocks, explicar que as unicas linhas nao testadas sao as da imagem (por razoes obvias) -->
 2 branch: `secondsOverall < 0` =>  test < 0
+![](./figures/isCellEditable-report.png)
 
 ##### Outcome 
 <!-- Brief description of the outcome of each test and whether any test results in a failure (and why). --> 
