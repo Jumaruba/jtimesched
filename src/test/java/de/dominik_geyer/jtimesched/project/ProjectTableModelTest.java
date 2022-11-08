@@ -19,6 +19,13 @@ public class ProjectTableModelTest {
   @BeforeEach
   public void initProjectTableModel() {
     Project project = new Project();
+    project.setTitle("title");
+    project.setChecked(true);
+    project.setColor(Color.BLUE);
+    project.setTimeCreated(new Date(0));
+    project.setSecondsOverall(1);
+    project.setSecondsToday(1);
+    project.setRunning(true);
     List<Project> arProj = new ArrayList<>();
     arProj.add(project);
     projectTableModel = new ProjectTableModel(arProj);
@@ -138,7 +145,7 @@ public class ProjectTableModelTest {
     Assertions.assertEquals(columnName, "Title");
   }
 
-  public static Stream<Arguments> genGetColumnClass() {
+  public static Stream<Arguments> genGetColumnsClass() {
     return Stream.of(
         Arguments.of(ProjectTableModel.COLUMN_COLOR, Color.class),
         Arguments.of(ProjectTableModel.COLUMN_CREATED, Date.class),
@@ -151,12 +158,35 @@ public class ProjectTableModelTest {
   }
 
   @ParameterizedTest
-  @MethodSource("genGetColumnClass")
+  @MethodSource("genGetColumnsClass")
   public void testGetColumnClass(int value, Class expected) {
     // When
     Class columnClass = projectTableModel.getColumnClass(value);
 
     // Then
     Assertions.assertEquals(expected, columnClass);
+  }
+
+  public static Stream<Arguments> genGetValueAt() {
+    return Stream.of(
+        Arguments.of(ProjectTableModel.COLUMN_COLOR, Color.BLUE),
+        Arguments.of(ProjectTableModel.COLUMN_CREATED, new Date(0)),
+        Arguments.of(ProjectTableModel.COLUMN_TIMEOVERALL, 1),
+        Arguments.of(ProjectTableModel.COLUMN_TIMETODAY, 1),
+        Arguments.of(ProjectTableModel.COLUMN_CHECK, true),
+        Arguments.of(ProjectTableModel.COLUMN_ACTION_DELETE, true),
+        Arguments.of(ProjectTableModel.COLUMN_ACTION_STARTPAUSE, true),
+        Arguments.of(8, "wtf?"));
+  }
+
+
+  @ParameterizedTest
+  @MethodSource("genGetValueAt")
+  public void testGetValueAt(int column, Object expected){
+    //When 
+    Object obj = projectTableModel.getValueAt(0, column);
+
+    Assertions.assertEquals(expected, obj);
+    
   }
 }
