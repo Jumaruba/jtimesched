@@ -113,8 +113,6 @@ public class ProjectTableModelTest {
 
   @Test
   public void testGetColumnCount() {
-    // Given
-    initProjectTableModel();
     // When
     int columnCount = projectTableModel.getColumnCount();
 
@@ -124,8 +122,6 @@ public class ProjectTableModelTest {
 
   @Test
   public void testGetRowCount() {
-    // Given
-    initProjectTableModel();
     // When
     int rowCount = projectTableModel.getRowCount();
 
@@ -135,8 +131,6 @@ public class ProjectTableModelTest {
 
   @Test
   public void testGetColumnName() {
-    // Given
-    initProjectTableModel();
     // When
     String columnName = projectTableModel.getColumnName(2);
 
@@ -159,8 +153,6 @@ public class ProjectTableModelTest {
   @ParameterizedTest
   @MethodSource("genGetColumnClass")
   public void testGetColumnClass(int value, Class expected) {
-    // Given
-    initProjectTableModel();
     // When
     Class columnClass = projectTableModel.getColumnClass(value);
 

@@ -217,7 +217,8 @@ public class ProjectSerializerTest {
     }
 
     // Then
-    String expected = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><projects version=\"unknown\"/>";
+    String expected =
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?><projects version=\"unknown\"/>";
     try {
       assertEquals(expected, readProjectsFile());
     } catch (IOException e) {
@@ -232,8 +233,29 @@ public class ProjectSerializerTest {
     ProjectSerializer ps =
         new ProjectSerializer(outputDir + "zeroProjectsTest");
     List<Project> projects = new ArrayList<Project>();
+    Project proj = new Project();
+    Color color = Mockito.mock(Color.class);
+    proj.setColor(color);
+    proj.setTitle("New Project");
+    proj.setChecked(true);
+    proj.setRunning(true);
+    projects.add(proj);
 
-    // => color null, running, checked
+    // When
+    try {
+      ps.writeXml(projects);
+    } catch (Exception e) {
+      fail("Unexpected exception");
+    }
+
+    // Then
+    String expected = getProjectExpectedXml1();
+    // try {
+    //   assertEquals(expected, readProjectsFile());
+    // } catch (IOException e) {
+    //   e.printStackTrace();
+    //   fail("Shouldn't have thrown an exception");
+    // }
   }
 
   @Test
@@ -243,16 +265,27 @@ public class ProjectSerializerTest {
         new ProjectSerializer(outputDir + "zeroProjectsTest");
     List<Project> projects = new ArrayList<Project>();
     Project proj = new Project();
-    Color color = Mockito.mock(Color.class);
-    proj.setColor(color);
-    proj.setChecked(true);
-    proj.setRunning(true);
-    
+    proj.setTitle("New Project");
+    proj.setChecked(false);
+    proj.setRunning(false);
     projects.add(proj);
 
     // When
+    try {
+      ps.writeXml(projects);
+    } catch (Exception e) {
+      fail("Unexpected exception");
+    }
 
     // Then
+    // String expected = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><projects
+    // version=\"unknown\"/>";
+    // try {
+    //   assertEquals(expected, readProjectsFile());
+    // } catch (IOException e) {
+    //   e.printStackTrace();
+    //   fail("Shouldn't have thrown an exception");
+    // }
   }
 
   public String readProjectsFile() throws IOException {
@@ -260,12 +293,24 @@ public class ProjectSerializerTest {
     System.out.println(file.getAbsolutePath());
     BufferedReader br = new BufferedReader(new FileReader(file));
     String st = "", tmp = "";
-    
+
     while ((tmp = br.readLine()) != null) {
       st += tmp;
     }
 
     return st;
   }
-  
+
+  public String getProjectExpectedXml1() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+    sb.append("<projects version=\"unknown\">");
+    sb.append("<project>");
+    sb.append("<title>New Project</title>");
+    sb.append("<notes/>");
+    // TODO: find a way to mock the date
+    sb.append("<title>project</title>");
+    sb.append("<\\project>");
+    return sb.toString();
+  }
 }
