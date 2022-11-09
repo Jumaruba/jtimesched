@@ -420,22 +420,21 @@ public class ProjectSerializerTest {
   public void getEndXmlElement() {
     try {
       // Given
-      SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
-      TransformerHandler hd = tf.newTransformerHandler();
-
+      setup(); 
       // When
+      hd.startDocument();
       ProjectSerializer.endXmlElement(hd, "projects");
+      hd.endDocument();
 
-      Transformer t = hd.getTransformer();
+      // Then 
+      Assertions.assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?></projects>", new String(bytearr.toByteArray())); 
     } catch (Exception e) {
-      Assertions.fail();
       e.printStackTrace();
     }
   }
 
   @Test
   public void addXmlElement_1() {
-    // TODO: in the text explain the redundancy in the branches.
     try {
       // Given
       setup(); 
@@ -449,7 +448,6 @@ public class ProjectSerializerTest {
       // Then
       Assertions.assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?><title/>", new String(bytearr.toByteArray())); 
 
-      // TODO: what assertion?
     } catch (Exception e) {
       Assertions.fail();
       e.printStackTrace();
@@ -469,9 +467,12 @@ public class ProjectSerializerTest {
       hd.startDocument();
       ProjectSerializer.addXmlElement(hd, element, atts, data);
       hd.endDocument();
+
       // Then
       Assertions.assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?><element>title</element>", new String(bytearr.toByteArray()));
+      
     }catch (Exception e) {
+      Assertions.fail();
       e.printStackTrace(); 
     }
 
