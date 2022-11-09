@@ -7,11 +7,14 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.anyString;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -21,22 +24,18 @@ import java.util.regex.Pattern;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TransformerHandler;
 import javax.xml.transform.stream.StreamResult;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.Mockito;
-import org.testng.asserts.Assertion;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
@@ -46,6 +45,32 @@ import java.awt.Color;
 public class ProjectSerializerTest {
   private final String xmlProlog = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
   private static String outputDir = "docs/05_assignment/outputDir/";
+  private static ByteArrayOutputStream bytearr; 
+  private static TransformerHandler hd; 
+ 
+  public void setup() {
+    try {
+      SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
+      hd = tf.newTransformerHandler();
+      bytearr = new ByteArrayOutputStream();
+      OutputStreamWriter out = new OutputStreamWriter(bytearr, "UTF8");
+      StreamResult streamResult = new StreamResult(out);
+      hd.setResult(streamResult);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+  }
+
+  @AfterEach
+  public void finish() {
+    try {
+      hd.endDocument();
+    } catch (Exception e){
+      e.printStackTrace();
+    }
+  }
+
 
   public static Document getDocument(String xml)
       throws ParserConfigurationException, SAXException, IOException {
@@ -98,8 +123,7 @@ public class ProjectSerializerTest {
     }
 
     // Then
-    final String expected =
-        xmlProlog + "<color r=\"24\" g=\"165\" b=\"67\">#18a542</color>";
+    final String expected = xmlProlog + "<color r=\"24\" g=\"165\" b=\"67\">#18a542</color>";
     assertEquals(writer.toString(), expected);
   }
 
@@ -122,8 +146,7 @@ public class ProjectSerializerTest {
     }
 
     // Then
-    final String expected =
-        xmlProlog + "<time format=\"seconds\">1664828078692</time>";
+    final String expected = xmlProlog + "<time format=\"seconds\">1664828078692</time>";
     assertEquals(writer.toString(), expected);
   }
 
@@ -168,9 +191,8 @@ public class ProjectSerializerTest {
       fail("Exception should not be thrown");
     }
 
-    final String expected =
-        xmlProlog
-            + "<project><createdAt>1664828078692</createdAt><startedAt value=\"1664828011325\"/></project>";
+    final String expected = xmlProlog
+        + "<project><createdAt>1664828078692</createdAt><startedAt value=\"1664828011325\"/></project>";
     assertEquals(writer.toString(), expected);
   }
 
@@ -213,10 +235,9 @@ public class ProjectSerializerTest {
   }
 
   // Auxiliary methods
-  public TransformerHandler getTransformerHandler()
+  public TransformerHandler getTransformerHandler() 
       throws TransformerConfigurationException {
-    SAXTransformerFactory tf =
-        (SAXTransformerFactory) SAXTransformerFactory.newInstance();
+    SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
     return tf.newTransformerHandler();
   }
 
@@ -231,8 +252,7 @@ public class ProjectSerializerTest {
   @Test
   public void zeroProjectsWriteXmlTest() {
     // Given
-    ProjectSerializer ps =
-        new ProjectSerializer(outputDir + "zeroProjectsTest");
+    ProjectSerializer ps = new ProjectSerializer(outputDir + "zeroProjectsTest");
     List<Project> projects = new ArrayList<Project>();
 
     // When
@@ -243,8 +263,7 @@ public class ProjectSerializerTest {
     }
 
     // Then
-    String expected =
-        "<?xml version=\"1.0\" encoding=\"UTF-8\"?><projects version=\"unknown\"/>";
+    String expected = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><projects version=\"unknown\"/>";
     try {
       assertEquals(expected, readProjectsFile());
     } catch (IOException e) {
@@ -256,8 +275,7 @@ public class ProjectSerializerTest {
   @Test
   public void colorRunningCheckedWriteXmlTest() {
     // Given
-    ProjectSerializer ps =
-        new ProjectSerializer(outputDir + "zeroProjectsTest");
+    ProjectSerializer ps = new ProjectSerializer(outputDir + "zeroProjectsTest");
     List<Project> projects = new ArrayList<Project>();
     Project proj = new Project();
     Color color = new Color(219, 148, 112);
@@ -290,8 +308,7 @@ public class ProjectSerializerTest {
   @Test
   public void noColorIdleUncheckedWriteXmlTest() {
     // Given
-    ProjectSerializer ps =
-        new ProjectSerializer(outputDir + "zeroProjectsTest");
+    ProjectSerializer ps = new ProjectSerializer(outputDir + "zeroProjectsTest");
     List<Project> projects = new ArrayList<Project>();
     Project proj = new Project();
     proj.setTitle("New Project");
@@ -373,42 +390,41 @@ public class ProjectSerializerTest {
 
   // @Test
   // public void testGetFirstElement() {
-  //   try {
-  //     // Given
-  //     ProjectSerializer projSerializer = new ProjectSerializer(anyString());
-  //     Document doc =
-  //         getDocument("<tag><tag1><tag2>another tag</tag2></tag1></tag>");
-  //     Element root = doc.getDocumentElement();
+  // try {
+  // // Given
+  // ProjectSerializer projSerializer = new ProjectSerializer(anyString());
+  // Document doc =
+  // getDocument("<tag><tag1><tag2>another tag</tag2></tag1></tag>");
+  // Element root = doc.getDocumentElement();
 
-  //     // When
+  // // When
 
-  //     Node firstElement = (Node) projSerializer.getFirstElement(root,
+  // Node firstElement = (Node) projSerializer.getFirstElement(root,
   // "tag1");
-  //     String nodeName = firstElement.getNodeName();
-  //     String nodeValue = firstElement.getNodeValue();
+  // String nodeName = firstElement.getNodeName();
+  // String nodeValue = firstElement.getNodeValue();
 
-  //     // Then
-  //     Assertions.assertEquals("tag1", nodeName);
-  //     Assertions.assertEquals(null, nodeValue);
+  // // Then
+  // Assertions.assertEquals("tag1", nodeName);
+  // Assertions.assertEquals(null, nodeValue);
 
-  //   } catch (Exception e) {
-  //     Assertions.fail();
-  //     e.printStackTrace();
-  //   }
+  // } catch (Exception e) {
+  // Assertions.fail();
+  // e.printStackTrace();
+  // }
   // }
 
   @Test
   public void getEndXmlElement() {
     try {
       // Given
-      SAXTransformerFactory tf =
-          (SAXTransformerFactory) SAXTransformerFactory.newInstance();
+      SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
       TransformerHandler hd = tf.newTransformerHandler();
 
       // When
-      ProjectSerializer.endXmlElement(hd, "<tag>lala</tag>");
+      ProjectSerializer.endXmlElement(hd, "projects");
 
-      // TODO: what assertion?
+      Transformer t = hd.getTransformer();
     } catch (Exception e) {
       Assertions.fail();
       e.printStackTrace();
@@ -420,10 +436,9 @@ public class ProjectSerializerTest {
     // TODO: in the text explain the redundancy in the branches.
     try {
       // Given
-      SAXTransformerFactory tf =
-          (SAXTransformerFactory) SAXTransformerFactory.newInstance();
+      SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
       TransformerHandler hd = tf.newTransformerHandler();
-      String element = "<tag>element</tag>";
+      String element = "title";
 
       // When
       ProjectSerializer.addXmlElement(hd, element, null, null);
@@ -440,22 +455,21 @@ public class ProjectSerializerTest {
   public void addXmlElement_2() {
     try {
       // Given
-      SAXTransformerFactory tf =
-          (SAXTransformerFactory) SAXTransformerFactory.newInstance();
-      TransformerHandler hd = tf.newTransformerHandler();
-      String element = "<tag>element</tag>";
+      setup();
+      String element = "element";
       AttributesImpl atts = new AttributesImpl();
       String data = "title";
 
       // When
+      hd.startDocument();
       ProjectSerializer.addXmlElement(hd, element, atts, data);
-
+      hd.endDocument();
       // Then
-      // TODO: what assertion?
-    } catch (Exception e) {
-      Assertions.fail();
-      e.printStackTrace();
+      Assertions.assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?><element>title</element>", new String(bytearr.toByteArray()));
+    }catch (Exception e) {
+      e.printStackTrace(); 
     }
+
   }
 
   @Test
@@ -481,8 +495,7 @@ public class ProjectSerializerTest {
   public void startXmlElement_1() {
     try {
       // Given
-      SAXTransformerFactory tf =
-          (SAXTransformerFactory) SAXTransformerFactory.newInstance();
+      SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
       TransformerHandler hd = tf.newTransformerHandler();
       String element = "<tag>element</tag>";
       AttributesImpl atts = new AttributesImpl();
@@ -502,8 +515,7 @@ public class ProjectSerializerTest {
   public void startXmlElement_2() {
     try {
       // Given
-      SAXTransformerFactory tf =
-          (SAXTransformerFactory) SAXTransformerFactory.newInstance();
+      SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
       TransformerHandler hd = tf.newTransformerHandler();
       String element = "<tag>element</tag>";
 
@@ -519,10 +531,9 @@ public class ProjectSerializerTest {
   }
 
   @ParameterizedTest
-  @ValueSource(
-      strings = {
-        "docs/05_assignment/inputDir/projectTest",
-      })
+  @ValueSource(strings = {
+      "docs/05_assignment/inputDir/projectTest",
+  })
   public void readXml(String filepath)
       throws ParserConfigurationException, SAXException, IOException {
     ProjectSerializer p = new ProjectSerializer(filepath);
