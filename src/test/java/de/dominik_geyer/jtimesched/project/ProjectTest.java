@@ -11,8 +11,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.fail;
-import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.ArgumentMatchers.anyInt;
 
 import java.util.Date;
 import java.util.stream.Stream;
@@ -195,23 +193,24 @@ public class ProjectTest {
 
   @Test
   public void runningPauseTest() {
-    // Given
-    Project project = new Project();
-
     try {
+      // Given
+      Project project = new Project();
+      project.setRunning(true);
+
+      Project spy = Mockito.spy(project);
+      Mockito.doReturn(2).when(spy).getElapsedSeconds();
+
       // When
-      project.start();
-      Thread.sleep(2000);
-      project.pause();
+      spy.pause();   
 
       // Then
-      Assertions.assertEquals(2, project.getSecondsOverall());
-      Assertions.assertEquals(2, project.getSecondsToday());
-      Assertions.assertEquals(false, project.isRunning());
+      Assertions.assertEquals(2, spy.getSecondsOverall());
+      Assertions.assertEquals(2, spy.getSecondsToday());
+      Assertions.assertEquals(false, spy.isRunning());
+
     } catch (ProjectException e) {
       fail("Exception shouldn't be thrown");
-    } catch (InterruptedException e1) {
-      e1.printStackTrace();
     }
   }
 
@@ -300,18 +299,15 @@ public class ProjectTest {
   public void exceptionGetSecondsOverallTest() {
     try {
       // Given
-      Project project = Mockito.mock(Project.class);
-      Mockito.when(project.getElapsedSeconds())
-          .thenThrow(ProjectException.class);
-      Mockito.doCallRealMethod().when(project).setSecondsOverall(anyInt());
-      Mockito.doCallRealMethod().when(project).setRunning(anyBoolean());
-      Mockito.doCallRealMethod().when(project).getSecondsOverall();
-
+      Project project = new Project();
       project.setSecondsOverall(10);
       project.setRunning(false);
+      
+      Project spy = Mockito.spy(project);
+      Mockito.doThrow(ProjectException.class).when(spy).getElapsedSeconds();
 
       // When
-      int result = project.getSecondsOverall();
+      int result = spy.getSecondsOverall();
 
       // Then
       Assert.assertEquals(10, result);
@@ -375,18 +371,15 @@ public class ProjectTest {
   public void exceptionGetSecondsTodayTest() {
     try {
       // Given
-      Project project = Mockito.mock(Project.class);
-      Mockito.when(project.getElapsedSeconds())
-          .thenThrow(ProjectException.class);
-      Mockito.doCallRealMethod().when(project).setSecondsToday(anyInt());
-      Mockito.doCallRealMethod().when(project).setRunning(anyBoolean());
-      Mockito.doCallRealMethod().when(project).getSecondsToday();
-
+      Project project = new Project();
       project.setSecondsToday(10);
       project.setRunning(false);
 
+      Project spy = Mockito.spy(project);
+      Mockito.doThrow(ProjectException.class).when(spy).getElapsedSeconds();
+
       // When
-      int result = project.getSecondsToday();
+      int result = spy.getSecondsToday();
 
       // Then
       Assert.assertEquals(10, result);

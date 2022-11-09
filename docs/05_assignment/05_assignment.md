@@ -58,13 +58,13 @@ The only lines that were not tested are presented below.
 #### Test 6 - setSecondsOverall
 
 The function `setSecondsOverall` includes a single if condition. For this reason, two different input values were tested, one that makes the condition evaluate to false (`secondsOverall` >= 0) and another that makes it evaluate to true (`secondsOverall` < 0).
-To create this test we used the ParameterizedTest `setSecondsTodayTest`, which uses the MethodSource `genSecondsOverall` to feed the function with the input values.
+To create this test we used the ParameterizedTest `setSecondsTodayTest`, which uses the MethodSource `genSecondsOverall` to feed the function with the input values. We then assert that the value of `secondsOverall` was effectively changed.
 
 **Inputs used**: -2 and 10
 
 **Outcome**: The test passed successfully.
 
-#### Tests [7 - 14] - setQuotaToday
+#### Tests [7 - 14]
 
 To test most of the setters of the `Project` class, mainly the methods:
 
@@ -91,6 +91,98 @@ To test most of the setters of the `Project` class, mainly the methods:
 
 **Outcome**: The tests passed successfully.
 
+#### Test 15 - adjustSecondsToday
+
+**Inputs**:
+**Outcome**: The tests passed successfully.
+
+#### Test 16 - resetToday
+
+**Inputs**:
+**Outcome**: The tests passed successfully.
+
+#### Test 16 - toString
+
+**Inputs**:
+**Outcome**: The tests passed successfully.
+
+#### Test 17 - adjustSecondsToday
+The function `adjustSecondsToday` includes a single if condition. For this reason, two different input values were tested, one that makes the condition evaluate to false (`secondsToday` >= 0) and another that makes it evaluate to true (`secondsToday` < 0).
+To create this test we used the ParameterizedTest `adjustSecondsTodayTest`, which uses the MethodSource `genAdjustSecondsToday` to feed the test with:
+- `secondsToday`: parameter passed to `adjustSecondsToday`;
+- `olSecondsToday`: original value of `secondsToday`, before calling `adjustSecondsToday`;
+- `oldSecondsOverall`: original value of `secondsOverall` before calling `adjustSecondsToday`;
+- `expectedSecondsToday`: the expected value of `secondsToday` after calling `adjustSecondsToday`;
+- `expectedSecondsOverall`: the expected value of `secondsOverall` after calling `adjustSecondsToday`;
+We used `olSecondsToday` and `oldSecondsOverall` to set the initial values of the respective variables of the project. After that, we call the function `adjustSecondsToday`.
+We then assert that the values of `secondsOverall` and `secondsToday` are changed according to the input.
+
+**Inputs**:  
+
+- Case 1 - `secondsToday` < 0:
+  - `secondsToday`: -2;
+  - `olSecondsToday`: 10;
+  - `oldSecondsOverall`: 43;
+  - `expectedSecondsToday`: 0;
+- `expectedSecondsOverall`: 33 (old value minus the old secondsToday, which is now 0);
+- Case 2 - `secondsToday` >= 0: 
+  - `secondsToday`: 16;
+  - `olSecondsToday`: 10;
+  - `oldSecondsOverall`: 43;
+  - `expectedSecondsToday`: 16;
+- `expectedSecondsOverall`: 49 (adds 6 to the old value,  the seconds that have passed);
+
+**Outcome**: The tests passed successfully.
+
+#### Test 18 - resetToday
+
+**Inputs**:
+**Outcome**: The tests passed successfully.
+
+#### Test 19 - elapsedSeconds
+This method as a single condition that checks if the project is running. For this reason, we developed two different tests - `idleElapsedSecondsTest` and `runningElapsedSecondsTest`; where the first tests this function when the project is idle and the second when it is running. If the project is not running we use `assertThrows` to make sure that an exception is thrown. Otherwise, we verify if we can successfully retrieve the elapsed seconds.
+
+**Inputs**:
+- running = false (the default value when a new project is created);
+- running = true (we use `setTunning(true)` to set this value).
+
+**Outcome**: The tests passed successfully.
+
+#### Test 20 - start
+
+#### Test 21 - pause
+Similarly to the last method, the outcome of the `pause` method depend on the state of the project - when the project is running we must be able to call this method and pause the project, otherwise an exception should be thrown.
+For the first case we use `runningPauseTest` where we `start` the project, wait 2 seconds and `pause` it. We then verify if the  `secondsOverall`, `secondsToday` and `running` variables were correctly updated.
+For the second test we use `idlePauseTest`, where we assert that an exception is thrown with `assertThrows`.
+
+**Inputs**:
+- running = false (the default value when a new project is created);
+- running = true (we use `play()` to set this value).
+
+**Outcome**: The tests passed successfully.
+
+
+**Inputs**:
+**Outcome**: The tests passed successfully.
+
+#### Test 22 - toggle
+
+**Inputs**:
+**Outcome**: The tests passed successfully.
+
+#### Test 23 - getSecondsOverall
+
+**Inputs**:
+**Outcome**: The tests passed successfully.
+
+#### Test 24 - getSecondsToday
+
+**Inputs**:
+**Outcome**: The tests passed successfully.
+
 ### Line and Branch Coverage
+
+**Inputs**:
+**Outcome**: The tests passed successfully.
 
 <!--Line and branch coverage of the unit tests you have developed in this assignment.-->
