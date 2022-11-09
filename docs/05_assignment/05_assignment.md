@@ -45,7 +45,6 @@ Yet, each test case covered its target function at 100% in both _line coverage_ 
 
 ## New tests
 
-<!-- Dúvida: criar testes indiscriminadamente?? -->
 
 ### Project class
 
@@ -223,6 +222,49 @@ In this test we followed exactly the same approach as in the previous tests for 
   - initial `secondsToday` = 10;
   - `running` = false;
 **Outcome**: The tests passed successfully.
+
+### ProjectTableModel class 
+
+Before we talk about the created tests, it's important to highlight the actions performed before the test. For the next few lines, the `initProjectTableModel` function will be explained. 
+
+```java 
+@BeforeEach 
+public void initProjectTableModel(); 
+```
+
+This function is responsible for initializing the `Logger` using java reflection and setup an instance of the `ProjectTableModel` class with one `Project` inside it. 
+
+Also, after the execution of each test the instance of the `project` is set to null:
+
+```java
+  @AfterEach
+  public void setNullProjectTableModel() {
+    projectTableModel = null;
+  }
+```
+
+#### Test x - tstGetColumnCount 
+
+Tests if the number of columns n
+
+#### Test [x-x] - testGetRowCount 
+
+It checks the number of projects in the `ProjectTableModel`. 
+In the end performs an `Assertions.assertEquals` over the number of projects, which is expected to be 1. 
+
+``` java 
+Assertions.assertEquals(rowCount, 1);
+``` 
+
+#### Test x - testColumnName 
+
+Tests if the name of the columns is read well. 
+Performs an `Assertions.assertEquals` over the name returned: the second column, which the name should be `Title`. 
+
+#### Test x - 
+ 
+
+
 
 ### Line and Branch Coverage
 

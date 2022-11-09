@@ -126,8 +126,9 @@ public class ProjectTableModelTest {
     testRowParameter(row);
   }
 
-  // Assignemnt 5 ===========================================================================
- 
+  // Assignemnt 5
+  // ===========================================================================
+
   public static Stream<Arguments> genGetColumnsClass() {
     return Stream.of(
         Arguments.of(ProjectTableModel.COLUMN_COLOR, Color.class),
@@ -139,7 +140,7 @@ public class ProjectTableModelTest {
         Arguments.of(ProjectTableModel.COLUMN_ACTION_STARTPAUSE, Boolean.class),
         Arguments.of(8, String.class));
   }
-  
+
   public static Stream<Arguments> genGetValueAt() {
     return Stream.of(
         Arguments.of(ProjectTableModel.COLUMN_COLOR, Color.BLUE, 1),
@@ -152,7 +153,7 @@ public class ProjectTableModelTest {
         Arguments.of(ProjectTableModel.COLUMN_ACTION_STARTPAUSE, false, 0),
         Arguments.of(8, "wtf?", 0));
   }
-  
+
   public static Stream<Arguments> genSetValueAt() {
     return Stream.of(
         Arguments.of(ProjectTableModel.COLUMN_CHECK, true, 0),
@@ -164,7 +165,6 @@ public class ProjectTableModelTest {
         Arguments.of(ProjectTableModel.COLUMN_TIMETODAY, 1, 0),
         Arguments.of(8, 1, 0));
   }
-
 
   @Test
   public void testGetColumnCount() {
@@ -192,7 +192,7 @@ public class ProjectTableModelTest {
     // Then
     Assertions.assertEquals(columnName, "Title");
   }
- 
+
   @Test
   public void testAddProject() {
     // Given
@@ -218,6 +218,7 @@ public class ProjectTableModelTest {
     // Then
     Assertions.assertEquals(0, projectCount);
   }
+
   @ParameterizedTest
   @MethodSource("genGetColumnsClass")
   public void testGetColumnClass(int value, Class expected) {
@@ -227,7 +228,7 @@ public class ProjectTableModelTest {
     // Then
     Assertions.assertEquals(expected, columnClass);
   }
-  
+
   @ParameterizedTest
   @MethodSource("genGetValueAt")
   public void testGetValueAt(int column, Object expected, int row) {
@@ -250,7 +251,7 @@ public class ProjectTableModelTest {
 
     Assertions.assertEquals(expected, obj);
   }
- 
+
   @ParameterizedTest
   @MethodSource("genSetValueAt")
   public void testSetValueAt(int column, Object value, int row) {
@@ -266,8 +267,4 @@ public class ProjectTableModelTest {
     // Then
     Assertions.assertEquals(value, actualValue);
   }
-  
-
-
-
 }
