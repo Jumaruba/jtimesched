@@ -352,9 +352,19 @@ This test uses an `Assertions.assertEquals`:
 Assertions.assertEquals(value, actualValue); 
 ```
 
-### ProjectSerializerTest 
+### ProjectSerializerTest class
 
-#### x -
+#### [x-x] Tests 
+The tests from x - x are: 
+- `getEndXmlElement`; 
+- `addXmlElement_1`; 
+- `addXmlElement_2`; 
+- `startXmlElement_1`; 
+- `startXmlElement_2`; 
+
+Are tests the follows the same pattern, by assessing the output written to the a Stream. 
+
+All the tests uses a `setup()` function, which sets the 
 ### Line and Branch Coverage
 
 **Inputs**:

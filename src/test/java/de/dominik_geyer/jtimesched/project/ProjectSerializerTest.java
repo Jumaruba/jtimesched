@@ -389,31 +389,6 @@ public class ProjectSerializerTest {
   // ASSIGMENT 5 ==========================================================
 
   @Test
-  public void testGetFirstElement() {
-    try {
-      // Given
-      ProjectSerializer projSerializer = new ProjectSerializer(anyString());
-      Document doc = getDocument("<tag><tag1><tag2>another tag</tag2></tag1></tag>");
-      Element root = doc.getDocumentElement();
-
-      // When
-
-      Node firstElement = (Node) projSerializer.getFirstElement(root,
-          "tag1");
-      String nodeName = firstElement.getNodeName();
-      String nodeValue = firstElement.getNodeValue();
-
-      // Then
-      Assertions.assertEquals("tag1", nodeName);
-      Assertions.assertEquals(null, nodeValue);
-
-    } catch (Exception e) {
-      Assertions.fail();
-      e.printStackTrace();
-    }
-  }
-
-  @Test
   public void getEndXmlElement() {
     try {
       // Given
@@ -478,25 +453,6 @@ public class ProjectSerializerTest {
   }
 
   @Test
-  public void testAddXmlAttribute() {
-    try {
-      // Given
-      String attribute = "title";
-      AttributesImpl atts = new AttributesImpl();
-      String data = "my-title";
-
-      // When
-      ProjectSerializer.addXmlAttribute(atts, attribute, data);
-
-      // Then
-      Assertions.assertEquals("my-title", atts.getValue("title"));
-    } catch (Exception e) {
-      Assertions.fail();
-      e.printStackTrace();
-    }
-  }
-
-  @Test
   public void startXmlElement_1() {
     try {
       // Given
@@ -534,6 +490,51 @@ public class ProjectSerializerTest {
       // Then
       Assertions.assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?><tag>",
           new String(bytearr.toByteArray()));
+
+    } catch (Exception e) {
+      Assertions.fail();
+      e.printStackTrace();
+    }
+  }
+ 
+  @Test
+  public void testAddXmlAttribute() {
+    try {
+      // Given
+      String attribute = "title";
+      AttributesImpl atts = new AttributesImpl();
+      String data = "my-title";
+
+      // When
+      ProjectSerializer.addXmlAttribute(atts, attribute, data);
+
+      // Then
+      Assertions.assertEquals("my-title", atts.getValue("title"));
+    } catch (Exception e) {
+      Assertions.fail();
+      e.printStackTrace();
+    }
+  }
+ 
+ 
+  @Test
+  public void testGetFirstElement() {
+    try {
+      // Given
+      ProjectSerializer projSerializer = new ProjectSerializer(anyString());
+      Document doc = getDocument("<tag><tag1><tag2>another tag</tag2></tag1></tag>");
+      Element root = doc.getDocumentElement();
+
+      // When
+
+      Node firstElement = (Node) projSerializer.getFirstElement(root,
+          "tag1");
+      String nodeName = firstElement.getNodeName();
+      String nodeValue = firstElement.getNodeValue();
+
+      // Then
+      Assertions.assertEquals("tag1", nodeName);
+      Assertions.assertEquals(null, nodeValue);
 
     } catch (Exception e) {
       Assertions.fail();
