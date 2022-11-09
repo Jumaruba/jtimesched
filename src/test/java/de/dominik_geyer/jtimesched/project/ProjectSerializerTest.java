@@ -3,31 +3,52 @@ package de.dominik_geyer.jtimesched.project;
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.anyString;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TransformerHandler;
 import javax.xml.transform.stream.StreamResult;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.testng.asserts.Assertion;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
+
 
 import java.awt.Color;
 
 public class ProjectSerializerTest {
   private final String xmlProlog = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
   private static String outputDir = "docs/05_assignment/outputDir/";
+
+  public static Document getDocument(String xml) throws ParserConfigurationException, SAXException, IOException {
+    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+    DocumentBuilder builder = factory.newDocumentBuilder();
+    InputSource is = new InputSource(new StringReader(xml));
+    return builder.parse(is);
+  }
 
   // Simple element
   @Test
@@ -72,8 +93,7 @@ public class ProjectSerializerTest {
     }
 
     // Then
-    final String expected =
-        xmlProlog + "<color r=\"24\" g=\"165\" b=\"67\">#18a542</color>";
+    final String expected = xmlProlog + "<color r=\"24\" g=\"165\" b=\"67\">#18a542</color>";
     assertEquals(writer.toString(), expected);
   }
 
@@ -96,8 +116,7 @@ public class ProjectSerializerTest {
     }
 
     // Then
-    final String expected =
-        xmlProlog + "<time format=\"seconds\">1664828078692</time>";
+    final String expected = xmlProlog + "<time format=\"seconds\">1664828078692</time>";
     assertEquals(writer.toString(), expected);
   }
 
@@ -142,9 +161,8 @@ public class ProjectSerializerTest {
       fail("Exception should not be thrown");
     }
 
-    final String expected =
-        xmlProlog
-            + "<project><createdAt>1664828078692</createdAt><startedAt value=\"1664828011325\"/></project>";
+    final String expected = xmlProlog
+        + "<project><createdAt>1664828078692</createdAt><startedAt value=\"1664828011325\"/></project>";
     assertEquals(writer.toString(), expected);
   }
 
@@ -189,8 +207,7 @@ public class ProjectSerializerTest {
   // Auxiliary methods
   public TransformerHandler getTransformerHandler()
       throws TransformerConfigurationException {
-    SAXTransformerFactory tf =
-        (SAXTransformerFactory) SAXTransformerFactory.newInstance();
+    SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
     return tf.newTransformerHandler();
   }
 
@@ -205,8 +222,7 @@ public class ProjectSerializerTest {
   @Test
   public void zeroProjectsWriteXmlTest() {
     // Given
-    ProjectSerializer ps =
-        new ProjectSerializer(outputDir + "zeroProjectsTest");
+    ProjectSerializer ps = new ProjectSerializer(outputDir + "zeroProjectsTest");
     List<Project> projects = new ArrayList<Project>();
 
     // When
@@ -217,8 +233,7 @@ public class ProjectSerializerTest {
     }
 
     // Then
-    String expected =
-        "<?xml version=\"1.0\" encoding=\"UTF-8\"?><projects version=\"unknown\"/>";
+    String expected = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><projects version=\"unknown\"/>";
     try {
       assertEquals(expected, readProjectsFile());
     } catch (IOException e) {
@@ -230,8 +245,7 @@ public class ProjectSerializerTest {
   @Test
   public void colorRunningCheckedWriteXmlTest() {
     // Given
-    ProjectSerializer ps =
-        new ProjectSerializer(outputDir + "zeroProjectsTest");
+    ProjectSerializer ps = new ProjectSerializer(outputDir + "zeroProjectsTest");
     List<Project> projects = new ArrayList<Project>();
     Project proj = new Project();
     Color color = Mockito.mock(Color.class);
@@ -251,18 +265,17 @@ public class ProjectSerializerTest {
     // Then
     String expected = getProjectExpectedXml1();
     // try {
-    //   assertEquals(expected, readProjectsFile());
+    // assertEquals(expected, readProjectsFile());
     // } catch (IOException e) {
-    //   e.printStackTrace();
-    //   fail("Shouldn't have thrown an exception");
+    // e.printStackTrace();
+    // fail("Shouldn't have thrown an exception");
     // }
   }
 
   @Test
   public void noColorIdleUncheckedWriteXmlTest() {
     // Given
-    ProjectSerializer ps =
-        new ProjectSerializer(outputDir + "zeroProjectsTest");
+    ProjectSerializer ps = new ProjectSerializer(outputDir + "zeroProjectsTest");
     List<Project> projects = new ArrayList<Project>();
     Project proj = new Project();
     proj.setTitle("New Project");
@@ -281,10 +294,10 @@ public class ProjectSerializerTest {
     // String expected = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><projects
     // version=\"unknown\"/>";
     // try {
-    //   assertEquals(expected, readProjectsFile());
+    // assertEquals(expected, readProjectsFile());
     // } catch (IOException e) {
-    //   e.printStackTrace();
-    //   fail("Shouldn't have thrown an exception");
+    // e.printStackTrace();
+    // fail("Shouldn't have thrown an exception");
     // }
   }
 
@@ -312,5 +325,29 @@ public class ProjectSerializerTest {
     sb.append("<title>project</title>");
     sb.append("<\\project>");
     return sb.toString();
+  }
+  
+  @Test 
+  public void testGetFirstElement() {
+    try {
+      // Given 
+      ProjectSerializer projSerializer = new ProjectSerializer(anyString());
+      Document doc = getDocument("<tag><tag1><tag2>another tag</tag2></tag1></tag>");
+      Element root = doc.getDocumentElement();
+
+      //When
+
+      Node firstElement = (Node) projSerializer.getFirstElement(root, "tag1");
+      String nodeName = firstElement.getNodeName();
+      String nodeValue = firstElement.getNodeValue(); 
+
+      // Then 
+      Assertions.assertEquals("tag1", nodeName);
+      Assertions.assertEquals(null, nodeValue);
+
+    } catch (Exception e) {
+      Assertions.fail();
+      e.printStackTrace();
+    }
   }
 }
