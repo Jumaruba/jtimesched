@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?><projects version="1.2-SNAPSHOT">
+    <project>
+        <title></title>
+        <created>1668005998207</created>
+        <started>1668005998207</started>
+        <running>no</running>
+        <checked>no</checked>
+        <time overall="0" today="0"/>
+    </project>
+    <project>
+        <title>New project</title>
+        <notes>A nice note</notes>
+        <created>1668006000250</created>
+        <started>1668006000250</started>
+        <running>yes</running>
+        <checked>yes</checked>
+        <time overall="0" today="0"/>
+        <quota overall="0" today="600"/>
+        <color red="122" green="194" blue="229" alpha="255"/>
+    </project>
+</projects>
