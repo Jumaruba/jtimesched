@@ -388,8 +388,9 @@ public class ProjectSerializerTest {
 
   // ASSIGMENT 5 ==========================================================
 
+
   @Test
-  public void getEndXmlElement() {
+  public void testGetEndXmlElement() {
     try {
       // Given
       setup();

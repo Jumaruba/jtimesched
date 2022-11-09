@@ -362,10 +362,71 @@ The tests from x - x are:
 - `startXmlElement_1`; 
 - `startXmlElement_2`; 
 
-Are tests the follows the same pattern, by assessing the output written to the a Stream. 
+These tests follows a similar pattern: 
 
-All the tests uses a `setup()` function, which sets the 
+- First a `setup()` function is called. This function sets a `TransformerHandler hd`, where its results are stored in a `ByteArrayOutputStream bytearr`. This means that everytime an information is added to `hd` it is written in the `bytearr`, so as the output can be analysed with `bytearr.toByteArray()`. An example is: 
+
+```java 
+  Assertions.assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?></projects>", new String(bytearr.toByteArray()));
+```
+
+Still, to the changes in the `TransformerHandler` triggers effects, the operation must be envolved between `hd.startDocument()` and `hd.endDocument()`. An example is the `testgetEndXmlElement`() 
+
+```java
+      // Given
+      setup();
+
+      // When
+      hd.startDocument();
+      ProjectSerializer.endXmlElement(hd, "projects");
+      hd.endDocument();
+
+      // Then
+      Assertions.assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?></projects>",
+          new String(bytearr.toByteArray()));
+```
+
+In this case, the `ProjectSerializer.endXmlElement(hd, "projects");` is envolved by `hd.startDocument()` and hd.endDocument()`.
+
+All the tests passes with success. 
+
+#### x - testAddXmlAttribute 
+
+This test verifies if an attribute addition to a xml element is performed correctly. 
+
+To perform this, an `Assertions.assertEquals()` function is called, as: 
+
+```
+Assertions.assertEquals("my-title", atts.getValue("title"));
+```
+
+#### x- testGetFirstElement 
+
+This function verifies if the first child element of an xml tag is selected with success. 
+
+Two assertions are made in this test: 
+
+```java
+Assertions.assertEquals("tag1", nodeName);
+Assertions.assertEquals(null, nodeValue);
+```
+
+The first checks the name of the tag, the second checks for a value associated, which is this case is none. 
+The test passes with success. 
+
+
+#### x - readXml 
+
+This test reads a `xml` file and verifies if all information contained in it was stored. For this, we have created a file to be read located at docs/05_assignment/inputDir/projectTest.  
+
+This file contains two projects. The first one was designed to be the simplest as possible: there is no title, quotas, color, it's not checked neither running and no notes. The second project, on the other hand, was designed to be as complete as possible. 
+
+In total there're 19 assertions in this tests. All of them are `assertEquals` verifications. 
+
+Currently, the test returns desired results. 
+
 ### Line and Branch Coverage
+
 
 **Inputs**:
 **Outcome**: The tests passed successfully.
