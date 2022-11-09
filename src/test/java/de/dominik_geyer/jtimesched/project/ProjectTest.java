@@ -288,21 +288,20 @@ public class ProjectTest {
   // getSecondsOverall
   @Test
   public void runningGetSecondsOverallTest() {
-    // Given
-    Project project = new Project();
-
     try {
-      project.start();
-      Thread.sleep(2000);
+      // Given
+      Project project = new Project();
+      project.setRunning(true);
+
+      Project spy = Mockito.spy(project);
+      Mockito.doReturn(2).when(spy).getElapsedSeconds();
 
       // When
-      int result = project.getSecondsOverall();
+      int result = spy.getSecondsOverall();
 
       // Then
       Assertions.assertEquals(2, result);
 
-    } catch (InterruptedException e) {
-      e.printStackTrace();
     } catch (ProjectException e) {
       fail("Shouldn't throw an exception");
     }
@@ -346,21 +345,20 @@ public class ProjectTest {
   // getSecondsToday
   @Test
   public void runningGetSecondsTodayTest() {
-    // Given
-    Project project = new Project();
-
     try {
-      project.start();
-      Thread.sleep(2000);
+      // Given
+      Project project = new Project();
+      project.setRunning(true);
+
+      Project spy = Mockito.spy(project);
+      Mockito.doReturn(2).when(spy).getElapsedSeconds();
 
       // When
-      int result = project.getSecondsToday();
+      int result = spy.getSecondsToday();
 
       // Then
       Assertions.assertEquals(2, result);
 
-    } catch (InterruptedException e) {
-      e.printStackTrace();
     } catch (ProjectException e) {
       fail("Shouldn't throw an exception");
     }
