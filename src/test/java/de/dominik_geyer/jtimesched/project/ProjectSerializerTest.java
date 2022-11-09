@@ -4,6 +4,7 @@ import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.anyString;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -32,6 +33,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
@@ -385,31 +388,30 @@ public class ProjectSerializerTest {
 
   // ASSIGMENT 5 ==========================================================
 
-  // @Test
-  // public void testGetFirstElement() {
-  // try {
-  // // Given
-  // ProjectSerializer projSerializer = new ProjectSerializer(anyString());
-  // Document doc =
-  // getDocument("<tag><tag1><tag2>another tag</tag2></tag1></tag>");
-  // Element root = doc.getDocumentElement();
+  @Test
+  public void testGetFirstElement() {
+    try {
+      // Given
+      ProjectSerializer projSerializer = new ProjectSerializer(anyString());
+      Document doc = getDocument("<tag><tag1><tag2>another tag</tag2></tag1></tag>");
+      Element root = doc.getDocumentElement();
 
-  // // When
+      // When
 
-  // Node firstElement = (Node) projSerializer.getFirstElement(root,
-  // "tag1");
-  // String nodeName = firstElement.getNodeName();
-  // String nodeValue = firstElement.getNodeValue();
+      Node firstElement = (Node) projSerializer.getFirstElement(root,
+          "tag1");
+      String nodeName = firstElement.getNodeName();
+      String nodeValue = firstElement.getNodeValue();
 
-  // // Then
-  // Assertions.assertEquals("tag1", nodeName);
-  // Assertions.assertEquals(null, nodeValue);
+      // Then
+      Assertions.assertEquals("tag1", nodeName);
+      Assertions.assertEquals(null, nodeValue);
 
-  // } catch (Exception e) {
-  // Assertions.fail();
-  // e.printStackTrace();
-  // }
-  // }
+    } catch (Exception e) {
+      Assertions.fail();
+      e.printStackTrace();
+    }
+  }
 
   @Test
   public void getEndXmlElement() {
@@ -511,9 +513,9 @@ public class ProjectSerializerTest {
       Assertions.assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?><element>",
           new String(bytearr.toByteArray()));
 
-      } catch (Exception e) {
-        Assertions.fail();
-        e.printStackTrace();
+    } catch (Exception e) {
+      Assertions.fail();
+      e.printStackTrace();
     }
   }
 
@@ -521,7 +523,7 @@ public class ProjectSerializerTest {
   public void startXmlElement_2() {
     try {
       // Given
-      setup(); 
+      setup();
       String element = "tag";
 
       // When
@@ -532,7 +534,7 @@ public class ProjectSerializerTest {
       // Then
       Assertions.assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?><tag>",
           new String(bytearr.toByteArray()));
-        
+
     } catch (Exception e) {
       Assertions.fail();
       e.printStackTrace();
