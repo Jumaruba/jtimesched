@@ -45,9 +45,9 @@ import java.awt.Color;
 public class ProjectSerializerTest {
   private final String xmlProlog = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
   private static String outputDir = "docs/05_assignment/outputDir/";
-  private static ByteArrayOutputStream bytearr; 
-  private static TransformerHandler hd; 
- 
+  private static ByteArrayOutputStream bytearr;
+  private static TransformerHandler hd;
+
   public void setup() {
     try {
       SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
@@ -66,11 +66,10 @@ public class ProjectSerializerTest {
   public void finish() {
     try {
       hd.endDocument();
-    } catch (Exception e){
+    } catch (Exception e) {
       e.printStackTrace();
     }
   }
-
 
   public static Document getDocument(String xml)
       throws ParserConfigurationException, SAXException, IOException {
@@ -235,7 +234,7 @@ public class ProjectSerializerTest {
   }
 
   // Auxiliary methods
-  public TransformerHandler getTransformerHandler() 
+  public TransformerHandler getTransformerHandler()
       throws TransformerConfigurationException {
     SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
     return tf.newTransformerHandler();
@@ -388,7 +387,7 @@ public class ProjectSerializerTest {
     return sb.toString();
   }
 
-  // ASSIGMENT 5 ========================================================== 
+  // ASSIGMENT 5 ==========================================================
 
   // @Test
   // public void testGetFirstElement() {
@@ -420,14 +419,15 @@ public class ProjectSerializerTest {
   public void getEndXmlElement() {
     try {
       // Given
-      setup(); 
+      setup();
       // When
       hd.startDocument();
       ProjectSerializer.endXmlElement(hd, "projects");
       hd.endDocument();
 
-      // Then 
-      Assertions.assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?></projects>", new String(bytearr.toByteArray())); 
+      // Then
+      Assertions.assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?></projects>",
+          new String(bytearr.toByteArray()));
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -437,7 +437,7 @@ public class ProjectSerializerTest {
   public void addXmlElement_1() {
     try {
       // Given
-      setup(); 
+      setup();
       String element = "title";
 
       // When
@@ -446,7 +446,7 @@ public class ProjectSerializerTest {
       hd.endDocument();
 
       // Then
-      Assertions.assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?><title/>", new String(bytearr.toByteArray())); 
+      Assertions.assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?><title/>", new String(bytearr.toByteArray()));
 
     } catch (Exception e) {
       Assertions.fail();
@@ -469,11 +469,12 @@ public class ProjectSerializerTest {
       hd.endDocument();
 
       // Then
-      Assertions.assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?><element>title</element>", new String(bytearr.toByteArray()));
-      
-    }catch (Exception e) {
+      Assertions.assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?><element>title</element>",
+          new String(bytearr.toByteArray()));
+
+    } catch (Exception e) {
       Assertions.fail();
-      e.printStackTrace(); 
+      e.printStackTrace();
     }
 
   }
@@ -501,16 +502,19 @@ public class ProjectSerializerTest {
   public void startXmlElement_1() {
     try {
       // Given
-      SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
-      TransformerHandler hd = tf.newTransformerHandler();
-      String element = "<tag>element</tag>";
+      setup();
+      String element = "element";
       AttributesImpl atts = new AttributesImpl();
 
       // When
+      hd.startDocument();
       ProjectSerializer.startXmlElement(hd, element, atts);
+      hd.endDocument();
 
       // Then
-      // TODO: what assertion?
+
+      Assertions.assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?><element>",
+          new String(bytearr.toByteArray()));
     } catch (Exception e) {
       Assertions.fail();
       e.printStackTrace();
