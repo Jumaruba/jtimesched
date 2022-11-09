@@ -426,4 +426,44 @@ public class ProjectSerializerTest {
       e.printStackTrace();
     }
   }
+
+  @Test 
+  public void startXmlElement_1(){
+    try {
+      // Given
+      SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
+      TransformerHandler hd = tf.newTransformerHandler();
+      String element = "<tag>element</tag>";
+      AttributesImpl atts = new AttributesImpl();
+
+      // When
+      ProjectSerializer.startXmlElement(hd, element, atts);
+
+      // Then
+      // TODO: what assertion?
+    } catch (Exception e) {
+      Assertions.fail();
+      e.printStackTrace();
+    }
+  }
+
+  @Test 
+  public void startXmlElement_2(){
+    try {
+      // Given
+      SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
+      TransformerHandler hd = tf.newTransformerHandler();
+      String element = "<tag>element</tag>";
+
+      // When
+      ProjectSerializer.startXmlElement(hd, element, null);
+
+      // Then
+      // TODO: what assertion?
+    } catch (Exception e) {
+      Assertions.fail();
+      e.printStackTrace();
+    }
+
+  }
 }
