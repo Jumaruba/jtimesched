@@ -512,12 +512,12 @@ public class ProjectSerializerTest {
       hd.endDocument();
 
       // Then
-
       Assertions.assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?><element>",
           new String(bytearr.toByteArray()));
-    } catch (Exception e) {
-      Assertions.fail();
-      e.printStackTrace();
+
+      } catch (Exception e) {
+        Assertions.fail();
+        e.printStackTrace();
     }
   }
 
@@ -525,15 +525,18 @@ public class ProjectSerializerTest {
   public void startXmlElement_2() {
     try {
       // Given
-      SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
-      TransformerHandler hd = tf.newTransformerHandler();
-      String element = "<tag>element</tag>";
+      setup(); 
+      String element = "tag";
 
       // When
+      hd.startDocument();
       ProjectSerializer.startXmlElement(hd, element, null);
+      hd.endDocument();
 
       // Then
-      // TODO: what assertion?
+      Assertions.assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?><tag>",
+          new String(bytearr.toByteArray()));
+        
     } catch (Exception e) {
       Assertions.fail();
       e.printStackTrace();
