@@ -491,6 +491,33 @@ public class ProjectSerializerTest {
   public void readXml(String filepath)
       throws ParserConfigurationException, SAXException, IOException {
     ProjectSerializer p = new ProjectSerializer(filepath);
-    ArrayList<Project> xml = p.readXml();
+    ArrayList<Project> projectList = p.readXml();
+ 
+    // Then 
+    Assertions.assertEquals(2, projectList.size());
+
+    Assertions.assertEquals("", projectList.get(0).getNotes());
+    Assertions.assertEquals("", projectList.get(0).getTitle());
+    Assertions.assertEquals("Wed Nov 09 14:59:58 WET 2022", projectList.get(0).getTimeCreated().toString());
+    Assertions.assertEquals("Wed Nov 09 14:59:58 WET 2022", projectList.get(0).getTimeStart().toString());
+    Assertions.assertEquals(false, projectList.get(0).isRunning());
+    Assertions.assertEquals(false, projectList.get(0).isChecked());
+    Assertions.assertEquals(0, projectList.get(0).getSecondsOverall());
+    Assertions.assertEquals(0, projectList.get(0).getSecondsToday());
+    Assertions.assertEquals(0, projectList.get(0).getQuotaOverall());
+    Assertions.assertEquals(0, projectList.get(0).getQuotaToday());
+    Assertions.assertEquals(null, projectList.get(0).getColor());
+
+    Assertions.assertEquals("New project", projectList.get(1).getTitle());
+    Assertions.assertEquals("A nice note", projectList.get(1).getNotes());
+    Assertions.assertEquals(true, projectList.get(1).isRunning());
+    Assertions.assertEquals(true, projectList.get(1).isChecked());
+    Assertions.assertEquals(0, projectList.get(1).getQuotaOverall());
+    Assertions.assertEquals(600, projectList.get(1).getQuotaToday());
+    Assertions.assertEquals(new Color(122,194,229,255);, projectList.get(1).getColor());
+
+
+
+    
   }
 }
