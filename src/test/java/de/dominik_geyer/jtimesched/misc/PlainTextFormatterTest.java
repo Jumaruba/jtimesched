@@ -4,16 +4,26 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
 import org.junit.Test;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.Assertions;
 
 public class PlainTextFormatterTest {
-  // PlainTextFormatter ptf = new PlainTextFormatter();
+  PlainTextFormatter ptf = new PlainTextFormatter();
 
-  // @Test
-  // public void random() {
-  //   Level level = Mockito.mock(Level.class);
-  //   LogRecord log = new LogRecord(level, "This is a log");
-  //   String result = ptf.format(log);
-  //   System.out.println(result);
-  // }
+  @Test
+  public void testFormatter() {
+    Level level = Level.ALL;
+    LogRecord log = new LogRecord(level, "This is a log");
+    long millis = 1668014664908l;
+    log.setMillis(millis);
+
+    String result = ptf.format(log);
+
+    String date = "2022-11-09";
+    String weekDay = "quarta";
+    String time = "17:24:24";
+    System.out.println(result);
+    String expected =
+        String.format("%s (%s) %s [ALL]: This is a log\n", date, weekDay, time);
+    Assertions.assertEquals(expected, result);
+  }
 }

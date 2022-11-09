@@ -45,7 +45,6 @@ Yet, each test case covered its target function at 100% in both _line coverage_ 
 
 ## New tests
 
-
 ### Project class
 
 We were able to achieve 100% branch coverage and 100% line coverage for the `Project Class`.
@@ -243,9 +242,15 @@ Also, after the execution of each test the instance of the `project` is set to n
   }
 ```
 
-#### Test x - tstGetColumnCount 
+#### Test x - testGetColumnCount 
 
-Tests if the number of columns n
+Tests if the number of columns matches the supposed one: 8. 
+For this test it used an `Assertions.assertEquals`: 
+
+```java
+    Assertions.assertEquals(columnCount, 8);
+```
+
 
 #### Test [x-x] - testGetRowCount 
 
@@ -261,11 +266,95 @@ Assertions.assertEquals(rowCount, 1);
 Tests if the name of the columns is read well. 
 Performs an `Assertions.assertEquals` over the name returned: the second column, which the name should be `Title`. 
 
-#### Test x - 
+#### Test x - testAddProject 
+
+This function verifies if the addition of a project in the `ProjectTableModel` is performed with success. 
+The test adds a project and then verifies the number of projects in the `ProjectTableModel` instance is 2. 
+It also verifies if the project is located in the correct position in the array. 
+To achieve this, 2 `Assertions.assertEquals` were used: 
  
+```java
+Assertions.assertEquals("Project1", projectName);
+Assertions.assertEquals(2, projectCount);
+```
 
+#### Test x - testRemoveProject 
 
+This test verifies if the removal of a project in the `ProjectTableModel` is performed with success. 
 
+After removing a project, it's checked if the number of projects in the `ProjectTableModel` instance is done with success. For this a `Assertions.assertEquals` was used: 
+
+```java
+Assertions.assertEquals(0, projectCount);
+```
+
+#### Test x - testColumnClass 
+
+This test verifies if the class type of a column is correct.  
+Inside the `getColumnClass` function there is a switch case, which receives the number of the column and return the expected class. 
+
+This is a `@ParameterizedTest` test, which receives the **column value** and the **expected class** to be returned, from a function called `genGetValueAt`: 
+
+```java
+@ParameterizedTest
+@MethodSource("genGetColumnsClass")
+public void testGetColumnClass(int value, Class expected);
+```
+
+In the end an `Assertions.assertEquals` is made to check the column class returned and the expected value.  
+
+```java 
+Assertions.assertEquals(expected, columnClass); 
+``` 
+
+#### Test x - testGetValueAt
+
+This test assesses a value of a project in a specific position in the `ProjectTableModel` instance.  
+
+This test works with two projects, in order to cover the branches. 
+One project contains values that would set conditions to true inside the `getValueAt` function, and the other project would carry values that would set the if conditions to `false`.  
+
+This test carries the `@ParameterizedTest`  annotation and received the following parameters from the `genGetGetValueAt` method source: `column`, `expected` and `row`.  
+
+The `row` indicates what project we are testing, the column is the identification column number and the `expect` parameter is the expected value of the test: 
+
+```java
+@ParameterizedTest
+@MethodSource("genGetValueAt")
+public void testGetValueAt(int column, Object expected, int row); 
+```
+
+It is used an `Assertions.assertEquals` in this test as it follows: 
+
+```java 
+Assertions.assertEquals(expected, obj);
+```
+
+#### x - testSetValueAt
+
+This test is similar to the `testGetValueAt`, but instead of retrieving values, it sets.  
+
+As well as in the `testGetValueAt`, this test carries the `@ParameterizedTest` annotation and a `@MethodSource`. 
+
+It receives the following parameters from the `genSetValueAt` helper function: `column`, `value`, `row`: 
+
+```java 
+@ParameterizedTest
+@MethodSource("genSetValueAt")
+public void testSetValueAt(int column, Object value, int row); 
+```
+
+The `column` is the identification number of the column to set the value, the `value` is the value to be set, and the `row` is the position of the project inside the `ProjectTableModel` instance.  
+
+This test uses an `Assertions.assertEquals`: 
+
+```java 
+Assertions.assertEquals(value, actualValue); 
+```
+
+### ProjectSerializerTest 
+
+#### x -
 ### Line and Branch Coverage
 
 **Inputs**:
