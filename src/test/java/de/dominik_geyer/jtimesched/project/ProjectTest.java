@@ -116,8 +116,12 @@ public class ProjectTest {
   public void resetTodayTest() {
     // Given
     Project project = new Project();
+    project.setSecondsToday(2);
+    project.setQuotaToday(2);
+    long yesterday = System.currentTimeMillis()-24*60*60*1000;
+    project.setTimeStart(new Date(yesterday));
     Date now = new Date();
-
+ 
     // When
     project.resetToday();
 

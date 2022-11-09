@@ -89,8 +89,11 @@ To test most of the setters of the `Project` class, mainly the methods:
 **Outcome**: The tests passed successfully.
 
 #### Test 15 - resetToday
+This test only verifies if the `resetToday` method successfully resets the values of the `secondsToday` and `quotaToday` to 0 and that the date was reset.
+For that purpose, we first set the `secondsToday` and `quotaToday` to 2 seconds and the `timeStart` to yesterday. After that call the `resetToday` method and assert that the values were reset.
 
 **Inputs**:
+- An idle project with `secondsToday` = 2, `quotaToday` = 2 and `timeStarted` = yesterday;
 **Outcome**: The tests passed successfully.
 
 #### Tests [16 - 17] - toString
@@ -167,13 +170,22 @@ For the second test we use `idlePauseTest`, where we assert that an exception is
 **Inputs**:
 - `running` = false (the default value when a new project is created);
 - `running` = true;
-> In this case we also assume that the elapsed time is 2 seconds;
+> In this last case (`running` = true) we also assume that the elapsed time is 2 seconds;
 
 **Outcome**: The tests passed successfully.
 
 #### Test [25 - 27] - toggle
+The toggle method also depends on the state of the project - if it is running then it must call the `pause` method, otherwise it must call the `start` method. Additionally, if any of these methods throws and exception, the exception should be caught. To test all these cases we created 3 tests;
+- `runningToggleTest`: tests if the `running` flag is set to false when the `toggle` method is called while the project is running;
+- `idleToggleTest`: tests if the `running` flag is set to true when the `toggle` method is called while the project is idle;
+- `exceptionToggleTest`: tests if the `toggle` method is able to catch an exception thrown by the  `start` call. For this, we use Mockito to create a spy and use the method `doThrow` to simulate an exception on the `start` method.
 
 **Inputs**:
+- `runningToggleTest`: `running` = true; 
+- `idleToggleTest`: `running` = false;
+- `exceptionToggleTest`: `running` = false;
+> In this last case we also use Mockito to ensure  that the `start` method throws an exception.
+
 **Outcome**: The tests passed successfully.
 
 #### Test [28 - 30] - getSecondsOverall
