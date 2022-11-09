@@ -369,7 +369,7 @@ public class ProjectSerializerTest {
 
   @Test
   public void addXmlElement_1() {
-    // TODO: in the text explain the redundancy in the branches. 
+    // TODO: in the text explain the redundancy in the branches.
     try {
       // Given
       SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
@@ -408,8 +408,8 @@ public class ProjectSerializerTest {
     }
   }
 
-  @Test 
-  public void testAddXmlAttribute(){
+  @Test
+  public void testAddXmlAttribute() {
     try {
       // Given
       String attribute = "title";
@@ -427,8 +427,8 @@ public class ProjectSerializerTest {
     }
   }
 
-  @Test 
-  public void startXmlElement_1(){
+  @Test
+  public void startXmlElement_1() {
     try {
       // Given
       SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
@@ -447,8 +447,8 @@ public class ProjectSerializerTest {
     }
   }
 
-  @Test 
-  public void startXmlElement_2(){
+  @Test
+  public void startXmlElement_2() {
     try {
       // Given
       SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
@@ -464,6 +464,10 @@ public class ProjectSerializerTest {
       Assertions.fail();
       e.printStackTrace();
     }
+  }
 
+  @Test 
+  public void readXml(){
+    
   }
 }
