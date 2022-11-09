@@ -26,6 +26,8 @@ import javax.xml.transform.stream.StreamResult;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
 import org.testng.asserts.Assertion;
 import org.w3c.dom.Document;
@@ -42,7 +44,8 @@ public class ProjectSerializerTest {
   private final String xmlProlog = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
   private static String outputDir = "docs/05_assignment/outputDir/";
 
-  public static Document getDocument(String xml) throws ParserConfigurationException, SAXException, IOException {
+  public static Document getDocument(String xml)
+      throws ParserConfigurationException, SAXException, IOException {
     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
     DocumentBuilder builder = factory.newDocumentBuilder();
     InputSource is = new InputSource(new StringReader(xml));
@@ -92,7 +95,8 @@ public class ProjectSerializerTest {
     }
 
     // Then
-    final String expected = xmlProlog + "<color r=\"24\" g=\"165\" b=\"67\">#18a542</color>";
+    final String expected =
+        xmlProlog + "<color r=\"24\" g=\"165\" b=\"67\">#18a542</color>";
     assertEquals(writer.toString(), expected);
   }
 
@@ -115,7 +119,8 @@ public class ProjectSerializerTest {
     }
 
     // Then
-    final String expected = xmlProlog + "<time format=\"seconds\">1664828078692</time>";
+    final String expected =
+        xmlProlog + "<time format=\"seconds\">1664828078692</time>";
     assertEquals(writer.toString(), expected);
   }
 
@@ -160,8 +165,9 @@ public class ProjectSerializerTest {
       fail("Exception should not be thrown");
     }
 
-    final String expected = xmlProlog
-        + "<project><createdAt>1664828078692</createdAt><startedAt value=\"1664828011325\"/></project>";
+    final String expected =
+        xmlProlog
+            + "<project><createdAt>1664828078692</createdAt><startedAt value=\"1664828011325\"/></project>";
     assertEquals(writer.toString(), expected);
   }
 
@@ -206,7 +212,8 @@ public class ProjectSerializerTest {
   // Auxiliary methods
   public TransformerHandler getTransformerHandler()
       throws TransformerConfigurationException {
-    SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
+    SAXTransformerFactory tf =
+        (SAXTransformerFactory) SAXTransformerFactory.newInstance();
     return tf.newTransformerHandler();
   }
 
@@ -221,7 +228,8 @@ public class ProjectSerializerTest {
   @Test
   public void zeroProjectsWriteXmlTest() {
     // Given
-    ProjectSerializer ps = new ProjectSerializer(outputDir + "zeroProjectsTest");
+    ProjectSerializer ps =
+        new ProjectSerializer(outputDir + "zeroProjectsTest");
     List<Project> projects = new ArrayList<Project>();
 
     // When
@@ -232,7 +240,8 @@ public class ProjectSerializerTest {
     }
 
     // Then
-    String expected = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><projects version=\"unknown\"/>";
+    String expected =
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?><projects version=\"unknown\"/>";
     try {
       assertEquals(expected, readProjectsFile());
     } catch (IOException e) {
@@ -244,7 +253,8 @@ public class ProjectSerializerTest {
   @Test
   public void colorRunningCheckedWriteXmlTest() {
     // Given
-    ProjectSerializer ps = new ProjectSerializer(outputDir + "zeroProjectsTest");
+    ProjectSerializer ps =
+        new ProjectSerializer(outputDir + "zeroProjectsTest");
     List<Project> projects = new ArrayList<Project>();
     Project proj = new Project();
     Color color = Mockito.mock(Color.class);
@@ -274,7 +284,8 @@ public class ProjectSerializerTest {
   @Test
   public void noColorIdleUncheckedWriteXmlTest() {
     // Given
-    ProjectSerializer ps = new ProjectSerializer(outputDir + "zeroProjectsTest");
+    ProjectSerializer ps =
+        new ProjectSerializer(outputDir + "zeroProjectsTest");
     List<Project> projects = new ArrayList<Project>();
     Project proj = new Project();
     proj.setTitle("New Project");
@@ -331,7 +342,8 @@ public class ProjectSerializerTest {
     try {
       // Given
       ProjectSerializer projSerializer = new ProjectSerializer(anyString());
-      Document doc = getDocument("<tag><tag1><tag2>another tag</tag2></tag1></tag>");
+      Document doc =
+          getDocument("<tag><tag1><tag2>another tag</tag2></tag1></tag>");
       Element root = doc.getDocumentElement();
 
       // When
@@ -354,7 +366,8 @@ public class ProjectSerializerTest {
   public void getEndXmlElement() {
     try {
       // Given
-      SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
+      SAXTransformerFactory tf =
+          (SAXTransformerFactory) SAXTransformerFactory.newInstance();
       TransformerHandler hd = tf.newTransformerHandler();
 
       // When
@@ -372,7 +385,8 @@ public class ProjectSerializerTest {
     // TODO: in the text explain the redundancy in the branches.
     try {
       // Given
-      SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
+      SAXTransformerFactory tf =
+          (SAXTransformerFactory) SAXTransformerFactory.newInstance();
       TransformerHandler hd = tf.newTransformerHandler();
       String element = "<tag>element</tag>";
 
@@ -391,7 +405,8 @@ public class ProjectSerializerTest {
   public void addXmlElement_2() {
     try {
       // Given
-      SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
+      SAXTransformerFactory tf =
+          (SAXTransformerFactory) SAXTransformerFactory.newInstance();
       TransformerHandler hd = tf.newTransformerHandler();
       String element = "<tag>element</tag>";
       AttributesImpl atts = new AttributesImpl();
@@ -431,7 +446,8 @@ public class ProjectSerializerTest {
   public void startXmlElement_1() {
     try {
       // Given
-      SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
+      SAXTransformerFactory tf =
+          (SAXTransformerFactory) SAXTransformerFactory.newInstance();
       TransformerHandler hd = tf.newTransformerHandler();
       String element = "<tag>element</tag>";
       AttributesImpl atts = new AttributesImpl();
@@ -451,7 +467,8 @@ public class ProjectSerializerTest {
   public void startXmlElement_2() {
     try {
       // Given
-      SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
+      SAXTransformerFactory tf =
+          (SAXTransformerFactory) SAXTransformerFactory.newInstance();
       TransformerHandler hd = tf.newTransformerHandler();
       String element = "<tag>element</tag>";
 
@@ -466,8 +483,14 @@ public class ProjectSerializerTest {
     }
   }
 
-  @Test 
-  public void readXml(){
-    
+  @ParameterizedTest
+  @ValueSource(
+      strings = {
+        "docs/05_assignment/inputDir/projectTest",
+      })
+  public void readXml(String filepath)
+      throws ParserConfigurationException, SAXException, IOException {
+    ProjectSerializer p = new ProjectSerializer(filepath);
+    ArrayList<Project> xml = p.readXml();
   }
 }
