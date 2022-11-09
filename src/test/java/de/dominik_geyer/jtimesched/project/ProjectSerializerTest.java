@@ -3,23 +3,38 @@ package de.dominik_geyer.jtimesched.project;
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.anyString;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TransformerHandler;
 import javax.xml.transform.stream.StreamResult;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
+import org.testng.asserts.Assertion;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
@@ -28,6 +43,14 @@ import java.awt.Color;
 public class ProjectSerializerTest {
   private final String xmlProlog = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
   private static String outputDir = "docs/05_assignment/outputDir/";
+
+  public static Document getDocument(String xml)
+      throws ParserConfigurationException, SAXException, IOException {
+    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+    DocumentBuilder builder = factory.newDocumentBuilder();
+    InputSource is = new InputSource(new StringReader(xml));
+    return builder.parse(is);
+  }
 
   // Simple element
   @Test
@@ -251,10 +274,10 @@ public class ProjectSerializerTest {
     // Then
     String expected = getProjectExpectedXml1();
     // try {
-    //   assertEquals(expected, readProjectsFile());
+    // assertEquals(expected, readProjectsFile());
     // } catch (IOException e) {
-    //   e.printStackTrace();
-    //   fail("Shouldn't have thrown an exception");
+    // e.printStackTrace();
+    // fail("Shouldn't have thrown an exception");
     // }
   }
 
@@ -281,10 +304,10 @@ public class ProjectSerializerTest {
     // String expected = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><projects
     // version=\"unknown\"/>";
     // try {
-    //   assertEquals(expected, readProjectsFile());
+    // assertEquals(expected, readProjectsFile());
     // } catch (IOException e) {
-    //   e.printStackTrace();
-    //   fail("Shouldn't have thrown an exception");
+    // e.printStackTrace();
+    // fail("Shouldn't have thrown an exception");
     // }
   }
 
@@ -312,5 +335,189 @@ public class ProjectSerializerTest {
     sb.append("<title>project</title>");
     sb.append("<\\project>");
     return sb.toString();
+  }
+
+  @Test
+  public void testGetFirstElement() {
+    try {
+      // Given
+      ProjectSerializer projSerializer = new ProjectSerializer(anyString());
+      Document doc =
+          getDocument("<tag><tag1><tag2>another tag</tag2></tag1></tag>");
+      Element root = doc.getDocumentElement();
+
+      // When
+
+      Node firstElement = (Node) projSerializer.getFirstElement(root, "tag1");
+      String nodeName = firstElement.getNodeName();
+      String nodeValue = firstElement.getNodeValue();
+
+      // Then
+      Assertions.assertEquals("tag1", nodeName);
+      Assertions.assertEquals(null, nodeValue);
+
+    } catch (Exception e) {
+      Assertions.fail();
+      e.printStackTrace();
+    }
+  }
+
+  @Test
+  public void getEndXmlElement() {
+    try {
+      // Given
+      SAXTransformerFactory tf =
+          (SAXTransformerFactory) SAXTransformerFactory.newInstance();
+      TransformerHandler hd = tf.newTransformerHandler();
+
+      // When
+      ProjectSerializer.endXmlElement(hd, "<tag>lala</tag>");
+
+      // TODO: what assertion?
+    } catch (Exception e) {
+      Assertions.fail();
+      e.printStackTrace();
+    }
+  }
+
+  @Test
+  public void addXmlElement_1() {
+    // TODO: in the text explain the redundancy in the branches.
+    try {
+      // Given
+      SAXTransformerFactory tf =
+          (SAXTransformerFactory) SAXTransformerFactory.newInstance();
+      TransformerHandler hd = tf.newTransformerHandler();
+      String element = "<tag>element</tag>";
+
+      // When
+      ProjectSerializer.addXmlElement(hd, element, null, null);
+
+      // Then
+      // TODO: what assertion?
+    } catch (Exception e) {
+      Assertions.fail();
+      e.printStackTrace();
+    }
+  }
+
+  @Test
+  public void addXmlElement_2() {
+    try {
+      // Given
+      SAXTransformerFactory tf =
+          (SAXTransformerFactory) SAXTransformerFactory.newInstance();
+      TransformerHandler hd = tf.newTransformerHandler();
+      String element = "<tag>element</tag>";
+      AttributesImpl atts = new AttributesImpl();
+      String data = "title";
+
+      // When
+      ProjectSerializer.addXmlElement(hd, element, atts, data);
+
+      // Then
+      // TODO: what assertion?
+    } catch (Exception e) {
+      Assertions.fail();
+      e.printStackTrace();
+    }
+  }
+
+  @Test
+  public void testAddXmlAttribute() {
+    try {
+      // Given
+      String attribute = "title";
+      AttributesImpl atts = new AttributesImpl();
+      String data = "title";
+
+      // When
+      ProjectSerializer.addXmlAttribute(atts, attribute, data);
+
+      // Then
+      // TODO: what assertion?
+    } catch (Exception e) {
+      Assertions.fail();
+      e.printStackTrace();
+    }
+  }
+
+  @Test
+  public void startXmlElement_1() {
+    try {
+      // Given
+      SAXTransformerFactory tf =
+          (SAXTransformerFactory) SAXTransformerFactory.newInstance();
+      TransformerHandler hd = tf.newTransformerHandler();
+      String element = "<tag>element</tag>";
+      AttributesImpl atts = new AttributesImpl();
+
+      // When
+      ProjectSerializer.startXmlElement(hd, element, atts);
+
+      // Then
+      // TODO: what assertion?
+    } catch (Exception e) {
+      Assertions.fail();
+      e.printStackTrace();
+    }
+  }
+
+  @Test
+  public void startXmlElement_2() {
+    try {
+      // Given
+      SAXTransformerFactory tf =
+          (SAXTransformerFactory) SAXTransformerFactory.newInstance();
+      TransformerHandler hd = tf.newTransformerHandler();
+      String element = "<tag>element</tag>";
+
+      // When
+      ProjectSerializer.startXmlElement(hd, element, null);
+
+      // Then
+      // TODO: what assertion?
+    } catch (Exception e) {
+      Assertions.fail();
+      e.printStackTrace();
+    }
+  }
+
+  @ParameterizedTest
+  @ValueSource(
+      strings = {
+        "docs/05_assignment/inputDir/projectTest",
+      })
+  public void readXml(String filepath)
+      throws ParserConfigurationException, SAXException, IOException {
+    ProjectSerializer p = new ProjectSerializer(filepath);
+    ArrayList<Project> projectList = p.readXml();
+ 
+    // Then 
+    Assertions.assertEquals(2, projectList.size());
+
+    Assertions.assertEquals("", projectList.get(0).getNotes());
+    Assertions.assertEquals("", projectList.get(0).getTitle());
+    Assertions.assertEquals("Wed Nov 09 14:59:58 WET 2022", projectList.get(0).getTimeCreated().toString());
+    Assertions.assertEquals("Wed Nov 09 14:59:58 WET 2022", projectList.get(0).getTimeStart().toString());
+    Assertions.assertEquals(false, projectList.get(0).isRunning());
+    Assertions.assertEquals(false, projectList.get(0).isChecked());
+    Assertions.assertEquals(0, projectList.get(0).getSecondsOverall());
+    Assertions.assertEquals(0, projectList.get(0).getSecondsToday());
+    Assertions.assertEquals(0, projectList.get(0).getQuotaOverall());
+    Assertions.assertEquals(0, projectList.get(0).getQuotaToday());
+    Assertions.assertEquals(null, projectList.get(0).getColor());
+
+    Assertions.assertEquals("New project", projectList.get(1).getTitle());
+    Assertions.assertEquals("A nice note", projectList.get(1).getNotes());
+    Assertions.assertEquals(true, projectList.get(1).isRunning());
+    Assertions.assertEquals(true, projectList.get(1).isChecked());
+    Assertions.assertEquals(0, projectList.get(1).getQuotaOverall());
+    Assertions.assertEquals(600, projectList.get(1).getQuotaToday());
+    Assertions.assertEquals(new Color(122,194,229,255), projectList.get(1).getColor());
+
+
+
+    
   }
 }
