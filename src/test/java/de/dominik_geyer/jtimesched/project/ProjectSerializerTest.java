@@ -36,7 +36,6 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
-
 import java.awt.Color;
 
 public class ProjectSerializerTest {
@@ -326,22 +325,22 @@ public class ProjectSerializerTest {
     sb.append("<\\project>");
     return sb.toString();
   }
-  
-  @Test 
+
+  @Test
   public void testGetFirstElement() {
     try {
-      // Given 
+      // Given
       ProjectSerializer projSerializer = new ProjectSerializer(anyString());
       Document doc = getDocument("<tag><tag1><tag2>another tag</tag2></tag1></tag>");
       Element root = doc.getDocumentElement();
 
-      //When
+      // When
 
       Node firstElement = (Node) projSerializer.getFirstElement(root, "tag1");
       String nodeName = firstElement.getNodeName();
-      String nodeValue = firstElement.getNodeValue(); 
+      String nodeValue = firstElement.getNodeValue();
 
-      // Then 
+      // Then
       Assertions.assertEquals("tag1", nodeName);
       Assertions.assertEquals(null, nodeValue);
 
@@ -351,22 +350,80 @@ public class ProjectSerializerTest {
     }
   }
 
-  @Test 
+  @Test
   public void getEndXmlElement() {
     try {
-      // Given 
+      // Given
       SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
       TransformerHandler hd = tf.newTransformerHandler();
 
-      // When 
+      // When
       ProjectSerializer.endXmlElement(hd, "<tag>lala</tag>");
 
-      //TODO: what assertion?
+      // TODO: what assertion?
     } catch (Exception e) {
       Assertions.fail();
       e.printStackTrace();
     }
   }
 
+  @Test
+  public void addXmlElement_1() {
+    // TODO: in the text explain the redundancy in the branches. 
+    try {
+      // Given
+      SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
+      TransformerHandler hd = tf.newTransformerHandler();
+      String element = "<tag>element</tag>";
 
+      // When
+      ProjectSerializer.addXmlElement(hd, element, null, null);
+
+      // Then
+      // TODO: what assertion?
+    } catch (Exception e) {
+      Assertions.fail();
+      e.printStackTrace();
+    }
+  }
+
+  @Test
+  public void addXmlElement_2() {
+    try {
+      // Given
+      SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
+      TransformerHandler hd = tf.newTransformerHandler();
+      String element = "<tag>element</tag>";
+      AttributesImpl atts = new AttributesImpl();
+      String data = "title";
+
+      // When
+      ProjectSerializer.addXmlElement(hd, element, atts, data);
+
+      // Then
+      // TODO: what assertion?
+    } catch (Exception e) {
+      Assertions.fail();
+      e.printStackTrace();
+    }
+  }
+
+  @Test 
+  public void testAddXmlAttribute(){
+    try {
+      // Given
+      String attribute = "title";
+      AttributesImpl atts = new AttributesImpl();
+      String data = "title";
+
+      // When
+      ProjectSerializer.addXmlAttribute(atts, attribute, data);
+
+      // Then
+      // TODO: what assertion?
+    } catch (Exception e) {
+      Assertions.fail();
+      e.printStackTrace();
+    }
+  }
 }
