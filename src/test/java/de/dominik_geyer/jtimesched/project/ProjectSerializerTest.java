@@ -388,6 +388,8 @@ public class ProjectSerializerTest {
     return sb.toString();
   }
 
+  // ASSIGMENT 5 ========================================================== 
+
   // @Test
   // public void testGetFirstElement() {
   // try {
@@ -436,14 +438,17 @@ public class ProjectSerializerTest {
     // TODO: in the text explain the redundancy in the branches.
     try {
       // Given
-      SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
-      TransformerHandler hd = tf.newTransformerHandler();
+      setup(); 
       String element = "title";
 
       // When
+      hd.startDocument();
       ProjectSerializer.addXmlElement(hd, element, null, null);
+      hd.endDocument();
 
       // Then
+      Assertions.assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?><title/>", new String(bytearr.toByteArray())); 
+
       // TODO: what assertion?
     } catch (Exception e) {
       Assertions.fail();
