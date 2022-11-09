@@ -202,7 +202,7 @@ public class ProjectTest {
       Mockito.doReturn(2).when(spy).getElapsedSeconds();
 
       // When
-      spy.pause();   
+      spy.pause();
 
       // Then
       Assertions.assertEquals(2, spy.getSecondsOverall());
@@ -270,7 +270,20 @@ public class ProjectTest {
     Assertions.assertEquals(true, project.isRunning());
   }
 
-  // TODO: how to test the catch of toggle? Mockito
+  @Test
+  public void exceptionToggleTest() {
+    try {
+      // Given
+      Project project = new Project();
+      Project spy = Mockito.spy(project);
+      Mockito.doThrow(ProjectException.class).when(spy).start();
+
+      // When and Then
+      Assertions.assertDoesNotThrow(() -> spy.toggle());
+    } catch (ProjectException e) {
+      fail("Shouldn't have thrown any exception");
+    }
+  }
 
   // getSecondsOverall
   @Test
@@ -301,8 +314,8 @@ public class ProjectTest {
       // Given
       Project project = new Project();
       project.setSecondsOverall(10);
-      project.setRunning(false);
-      
+      project.setRunning(true);
+
       Project spy = Mockito.spy(project);
       Mockito.doThrow(ProjectException.class).when(spy).getElapsedSeconds();
 
@@ -373,7 +386,7 @@ public class ProjectTest {
       // Given
       Project project = new Project();
       project.setSecondsToday(10);
-      project.setRunning(false);
+      project.setRunning(true);
 
       Project spy = Mockito.spy(project);
       Mockito.doThrow(ProjectException.class).when(spy).getElapsedSeconds();

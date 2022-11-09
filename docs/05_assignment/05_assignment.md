@@ -49,11 +49,8 @@ Yet, each test case covered its target function at 100% in both _line coverage_ 
 
 ### Project class
 
-We were able to achieve 100% branch coverage and 97% line coverage for the `Project Class`.
+We were able to achieve 100% branch coverage and 100% line coverage for the `Project Class`.
 ![](./figures/projectClass-report.png)
-
-The only lines that were not tested are presented below.
-![](./figures/projectClassOnlyLinesMissing-report.png)
 
 #### Test 6 - setSecondsOverall
 
