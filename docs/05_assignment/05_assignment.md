@@ -15,7 +15,7 @@ However, when not considering the _gui_ classes, this coverage increases to:
 
 $$ line\space coverage = [1- \frac{273+48+6}{316+48+6}] \times 100\% = 11.62\%$$
 
-<!-- TODO: o branch coverage está certo?-->
+<!-- TODO: o branch coverage está certo? Acho que não :(-->
 
 $$ branch\space coverage = [1-\frac{87+12+2}{106+12+2}] \times 100\% = 15.83\%$$
 
