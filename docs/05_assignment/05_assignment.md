@@ -224,16 +224,16 @@ In this test we followed exactly the same approach as in the previous tests for 
 
 ### ProjectTableModel class 
 
-Before we talk about the created tests, it's important to highlight the actions performed before the test. For the next few lines, the `initProjectTableModel` function will be explained. 
+Before we talk about the created tests, it's essential to highlight the actions performed initially as a setup. Therefore, we will explain the `initProjectTableModel` function in the following few lines. 
 
 ```java 
 @BeforeEach 
 public void initProjectTableModel(); 
 ```
 
-This function is responsible for initializing the `Logger` using java reflection and setup an instance of the `ProjectTableModel` class with one `Project` inside it. 
+This function is responsible for initializing the `Logger` using **java reflection** and setup an instance of the `ProjectTableModel` class with one `Project` inside it. 
 
-Also, after the execution of each test the instance of the `project` is set to null:
+In addition to that, after the execution of each test, the instance of the `project` is set to null:
 
 ```java
   @AfterEach
@@ -255,7 +255,7 @@ For this test it used an `Assertions.assertEquals`:
 #### Test [x-x] - testGetRowCount 
 
 It checks the number of projects in the `ProjectTableModel`. 
-In the end performs an `Assertions.assertEquals` over the number of projects, which is expected to be 1. 
+In the end, performs an `Assertions.assertEquals` over the number of projects, which is expected to be 1. 
 
 ``` java 
 Assertions.assertEquals(rowCount, 1);
