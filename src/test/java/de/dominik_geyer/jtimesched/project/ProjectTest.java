@@ -2,7 +2,6 @@ package de.dominik_geyer.jtimesched.project;
 
 import java.awt.Color;
 
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -117,13 +116,14 @@ public class ProjectTest {
   public void resetTodayTest() {
     // Given
     Project project = new Project();
+    Date now = new Date();
 
     // When
     project.resetToday();
 
     Assertions.assertEquals(0, project.getSecondsToday());
     Assertions.assertEquals(0, project.getQuotaToday());
-    // TODO: how to test the date
+    Assertions.assertTrue(project.getTimeStart().compareTo(now) >= 0);
   }
 
   // toString
@@ -219,6 +219,7 @@ public class ProjectTest {
   public void idleStartTest() {
     // Given
     Project project = new Project();
+    Date now = new Date();
 
     try {
       // When
@@ -227,10 +228,9 @@ public class ProjectTest {
       fail("Shouldn't throw an exception");
     }
 
-    // TODO: how to test the Date?
-
     // Then
-    Assert.assertTrue(project.isRunning());
+    Assertions.assertTrue(project.isRunning());
+    Assertions.assertTrue(project.getTimeStart().compareTo(now) >= 0);
   }
 
   @Test
@@ -286,7 +286,7 @@ public class ProjectTest {
       int result = project.getSecondsOverall();
 
       // Then
-      Assert.assertEquals(2, result);
+      Assertions.assertEquals(2, result);
 
     } catch (InterruptedException e) {
       e.printStackTrace();
@@ -310,7 +310,7 @@ public class ProjectTest {
       int result = spy.getSecondsOverall();
 
       // Then
-      Assert.assertEquals(10, result);
+      Assertions.assertEquals(10, result);
     } catch (ProjectException e) {
       fail("Shouldn't throw an exception");
     }
@@ -327,7 +327,7 @@ public class ProjectTest {
     int result = project.getSecondsOverall();
 
     // Then
-    Assert.assertEquals(10, result);
+    Assertions.assertEquals(10, result);
   }
 
   // getSecondsToday
@@ -344,7 +344,7 @@ public class ProjectTest {
       int result = project.getSecondsToday();
 
       // Then
-      Assert.assertEquals(2, result);
+      Assertions.assertEquals(2, result);
 
     } catch (InterruptedException e) {
       e.printStackTrace();
@@ -364,7 +364,7 @@ public class ProjectTest {
     int result = project.getSecondsToday();
 
     // Then
-    Assert.assertEquals(10, result);
+    Assertions.assertEquals(10, result);
   }
 
   @Test
@@ -382,7 +382,7 @@ public class ProjectTest {
       int result = spy.getSecondsToday();
 
       // Then
-      Assert.assertEquals(10, result);
+      Assertions.assertEquals(10, result);
     } catch (ProjectException e) {
       fail("Shouldn't throw an exception");
     }
@@ -399,7 +399,7 @@ public class ProjectTest {
     project.setTitle(title);
 
     // Then
-    Assert.assertEquals(title, project.getTitle());
+    Assertions.assertEquals(title, project.getTitle());
   }
 
   // setNotes
@@ -413,10 +413,9 @@ public class ProjectTest {
     project.setNotes(notes);
 
     // Then
-    Assert.assertEquals(notes, project.getNotes());
+    Assertions.assertEquals(notes, project.getNotes());
   }
 
-  // TODO: check if mock is appropriate here
   // setColor
   @Test
   public void setColorTest() {
@@ -428,7 +427,7 @@ public class ProjectTest {
     project.setColor(color);
 
     // Then
-    Assert.assertEquals(color, project.getColor());
+    Assertions.assertEquals(color, project.getColor());
   }
 
   // setChecked
@@ -442,10 +441,9 @@ public class ProjectTest {
     project.setChecked(checked);
 
     // Then
-    Assert.assertTrue(project.isChecked());
+    Assertions.assertTrue(project.isChecked());
   }
 
-  // TODO: check if mock is appropriate here
   // setTimeCreated
   @Test
   public void setTimeCreatedTest() {
@@ -457,7 +455,7 @@ public class ProjectTest {
     project.setTimeCreated(date);
 
     // Then
-    Assert.assertEquals(date, project.getTimeCreated());
+    Assertions.assertEquals(date, project.getTimeCreated());
   }
 
   // setTimeStart
@@ -471,6 +469,6 @@ public class ProjectTest {
     project.setTimeStart(date);
 
     // Then
-    Assert.assertEquals(date, project.getTimeStart());
+    Assertions.assertEquals(date, project.getTimeStart());
   }
 }
