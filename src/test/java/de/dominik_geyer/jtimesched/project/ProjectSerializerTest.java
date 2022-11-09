@@ -514,7 +514,7 @@ public class ProjectSerializerTest {
     Assertions.assertEquals(true, projectList.get(1).isChecked());
     Assertions.assertEquals(0, projectList.get(1).getQuotaOverall());
     Assertions.assertEquals(600, projectList.get(1).getQuotaToday());
-    Assertions.assertEquals(new Color(122,194,229,255);, projectList.get(1).getColor());
+    Assertions.assertEquals(new Color(122,194,229,255), projectList.get(1).getColor());
 
 
 
