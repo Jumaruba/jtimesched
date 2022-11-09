@@ -350,4 +350,23 @@ public class ProjectSerializerTest {
       e.printStackTrace();
     }
   }
+
+  @Test 
+  public void getEndXmlElement() {
+    try {
+      // Given 
+      SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
+      TransformerHandler hd = tf.newTransformerHandler();
+
+      // When 
+      ProjectSerializer.endXmlElement(hd, "<tag>lala</tag>");
+
+      //TODO: what assertion?
+    } catch (Exception e) {
+      Assertions.fail();
+      e.printStackTrace();
+    }
+  }
+
+
 }
