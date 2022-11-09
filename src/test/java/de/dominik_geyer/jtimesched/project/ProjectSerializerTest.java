@@ -484,13 +484,13 @@ public class ProjectSerializerTest {
       // Given
       String attribute = "title";
       AttributesImpl atts = new AttributesImpl();
-      String data = "title";
+      String data = "my-title";
 
       // When
       ProjectSerializer.addXmlAttribute(atts, attribute, data);
 
       // Then
-      // TODO: what assertion?
+      Assertions.assertEquals("my-title", atts.getValue("title"));
     } catch (Exception e) {
       Assertions.fail();
       e.printStackTrace();
