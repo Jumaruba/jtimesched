@@ -214,7 +214,7 @@ public class ProjectTest {
     }
   }
 
-  // play
+  // start
   @Test
   public void idleStartTest() {
     // Given
@@ -294,13 +294,13 @@ public class ProjectTest {
       project.setRunning(true);
 
       Project spy = Mockito.spy(project);
-      Mockito.doReturn(2).when(spy).getElapsedSeconds();
+      Mockito.doReturn(10).when(spy).getElapsedSeconds();
 
       // When
       int result = spy.getSecondsOverall();
 
       // Then
-      Assertions.assertEquals(2, result);
+      Assertions.assertEquals(10, result);
 
     } catch (ProjectException e) {
       fail("Shouldn't throw an exception");
@@ -351,13 +351,13 @@ public class ProjectTest {
       project.setRunning(true);
 
       Project spy = Mockito.spy(project);
-      Mockito.doReturn(2).when(spy).getElapsedSeconds();
+      Mockito.doReturn(10).when(spy).getElapsedSeconds();
 
       // When
       int result = spy.getSecondsToday();
 
       // Then
-      Assertions.assertEquals(2, result);
+      Assertions.assertEquals(10, result);
 
     } catch (ProjectException e) {
       fail("Shouldn't throw an exception");

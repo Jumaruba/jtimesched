@@ -61,7 +61,7 @@ To create this test we used the ParameterizedTest `setSecondsTodayTest`, which u
 
 **Outcome**: The test passed successfully.
 
-#### Tests [7 - 14]
+#### Tests [7 - 14] - setters
 
 To test most of the setters of the `Project` class, mainly the methods:
 
@@ -88,22 +88,26 @@ To test most of the setters of the `Project` class, mainly the methods:
 
 **Outcome**: The tests passed successfully.
 
-#### Test 15 - adjustSecondsToday
+#### Test 15 - resetToday
 
 **Inputs**:
 **Outcome**: The tests passed successfully.
 
-#### Test 16 - resetToday
+#### Tests [16 - 17] - toString
+This method represents the project as a String. It has 2 conditions:
+- the first is used to print "yes" or "no" depending on the value of the `running` flag;
+- the second is used to print "yes" or "no" depending on the value of the `checked` flag.
+With this in mind, we created the tests:
+- `newProjectToStringTest`: which tests if the output of the `toString` method is the expected when called on a new project, which by default is not running and not checked;
+-  `runningAndCheckedProjectToStringTest`: which tests if the output of the `toString` method is the expected when called on a project that is running and checked;
 
 **Inputs**:
+- `running` = false and `checked` = true
+- `running` = true and `checked` = true.
+
 **Outcome**: The tests passed successfully.
 
-#### Test 16 - toString
-
-**Inputs**:
-**Outcome**: The tests passed successfully.
-
-#### Test 17 - adjustSecondsToday
+#### Test 18 - adjustSecondsToday
 The function `adjustSecondsToday` includes a single if condition. For this reason, two different input values were tested, one that makes the condition evaluate to false (`secondsToday` >= 0) and another that makes it evaluate to true (`secondsToday` < 0).
 To create this test we used the ParameterizedTest `adjustSecondsTodayTest`, which uses the MethodSource `genAdjustSecondsToday` to feed the test with:
 - `secondsToday`: parameter passed to `adjustSecondsToday`;
@@ -111,11 +115,10 @@ To create this test we used the ParameterizedTest `adjustSecondsTodayTest`, whic
 - `oldSecondsOverall`: original value of `secondsOverall` before calling `adjustSecondsToday`;
 - `expectedSecondsToday`: the expected value of `secondsToday` after calling `adjustSecondsToday`;
 - `expectedSecondsOverall`: the expected value of `secondsOverall` after calling `adjustSecondsToday`;
-We used `olSecondsToday` and `oldSecondsOverall` to set the initial values of the respective variables of the project. After that, we call the function `adjustSecondsToday`.
+The parameters `oldSecondsToday` and `oldSecondsOverall` are used to set the initial values of the respective variables of the project. After that, the function `adjustSecondsToday` is called.
 We then assert that the values of `secondsOverall` and `secondsToday` are changed according to the input.
 
 **Inputs**:  
-
 - Case 1 - `secondsToday` < 0:
   - `secondsToday`: -2;
   - `olSecondsToday`: 10;
@@ -131,50 +134,82 @@ We then assert that the values of `secondsOverall` and `secondsToday` are change
 
 **Outcome**: The tests passed successfully.
 
-#### Test 18 - resetToday
+#### Tests [19 - 20] - getElapsedSeconds
+This method has only one condition that checks if the project is running. For this reason, we developed two different tests - `idleElapsedSecondsTest` and `runningElapsedSecondsTest`; where the first tests this function when the project is idle and the second when it is running. If the project is not running we use `assertThrows` to verify if the exception is thrown. Otherwise, we verify if we can successfully retrieve the elapsed seconds.
 
 **Inputs**:
+- `running` = false (the default value when a new project is created);
+- `running` = true (we use `setTunning(true)` to set this value).
+
 **Outcome**: The tests passed successfully.
 
-#### Test 19 - elapsedSeconds
-This method as a single condition that checks if the project is running. For this reason, we developed two different tests - `idleElapsedSecondsTest` and `runningElapsedSecondsTest`; where the first tests this function when the project is idle and the second when it is running. If the project is not running we use `assertThrows` to make sure that an exception is thrown. Otherwise, we verify if we can successfully retrieve the elapsed seconds.
+#### Test [21 - 22] - start
+The outcome of the `start` method depends on the state of the project - when the project is running it must throw an exception, otherwise the `running` flag must be set to true and the `timeStart` should be higher or equal to the actual time.
+For the first case we use `runningStartTest` where we assert that an exception is thrown by using the `assertThrows`method.
+For the second test we use `idleStartTest`, where we assert that the `running` flag is set to true and that the start time of the project is equal or higher to the actual time. For that we use the `assertTrue` method.
 
 **Inputs**:
 - running = false (the default value when a new project is created);
-- running = true (we use `setTunning(true)` to set this value).
+- running = true;
 
 **Outcome**: The tests passed successfully.
 
-#### Test 20 - start
-
-#### Test 21 - pause
-Similarly to the last method, the outcome of the `pause` method depend on the state of the project - when the project is running we must be able to call this method and pause the project, otherwise an exception should be thrown.
-For the first case we use `runningPauseTest` where we `start` the project, wait 2 seconds and `pause` it. We then verify if the  `secondsOverall`, `secondsToday` and `running` variables were correctly updated.
+#### Test [23 - 24] - pause
+Similarly to the last method, the outcome of the `pause` method depends on the state of the project - when the project is running we must be able to call this method, which should pause the project and update its time and `running` flag, otherwise an exception should be thrown.
+For the first case we use `runningPauseTest` where we:
+- set the project `running`flag to true;
+- create a spy using Mockito;
+- use Mockito to make `getElapsedSeconds` return 2;
+- call the `pause` method;
+- verify if `secondsOverall` and `secondsToday` were updated to 2 and that the `running` variable is false.
 For the second test we use `idlePauseTest`, where we assert that an exception is thrown with `assertThrows`.
 
 **Inputs**:
-- running = false (the default value when a new project is created);
-- running = true (we use `play()` to set this value).
+- `running` = false (the default value when a new project is created);
+- `running` = true;
+> In this case we also assume that the elapsed time is 2 seconds;
 
 **Outcome**: The tests passed successfully.
 
+#### Test [25 - 27] - toggle
 
 **Inputs**:
 **Outcome**: The tests passed successfully.
 
-#### Test 22 - toggle
+#### Test [28 - 30] - getSecondsOverall
+This method has a condition and `try catch` statement. For this reason, we decided to develop 3 tests to get full coverage:
+- `runningGetSecondsOverallTest`: Verifies the behavior of the method when the project is running(condition evaluates to true);
+- `idleGetSecondsOverallTest`: Verifies the behavior of the method when the project is idle (condition evaluates to false);
+- `exceptionGetSecondsOverallTest`: Tests the behavior when the condition evaluate to true and an exception occurs in the `pause` method.
+
+When using this method while the project is running, we must assure that the value reflects the elapsed time. For this reason, in the `runningGetSecondsOverallTest` we used a spy to ensure that the `getElapsedSeconds` method returned 10 seconds and then verified if the `timeOverall` was correctly updated to 10 seconds.
+If this method is called while the project is idle or if an exception occurs we need to make sure that the `timeOverall` will not change. For this reason, in the `idleGetSecondsTodayTest` we set the initial `timeOverall` to 10 and then verified if after calling the `getElapsedSeconds` method the value was the same. In the `exceptionGetSecondsOverallTest` we also set the initial value of the `timeOverall` to 10 and used a spy to ensure that the `getElapsedSeconds` method throws an exception. We then tested if the `timeOverall` was the same as the initial.
 
 **Inputs**:
+- `runningGetSecondsOverallTest`: 
+  - running = true;
+  > In this case we also assume that the elapsed time is 10 seconds;
+- `idleGetSecondsOverallTest`: 
+  - initial `secondsOverall` = 10;
+  - `running` = false;
+- `exceptionGetSecondsOverallTest`:
+  - initial `secondsOverall` = 10;
+  - `running` = false;
 **Outcome**: The tests passed successfully.
 
-#### Test 23 - getSecondsOverall
+#### Test [31 - 33] - getSecondsToday
+In this test we followed exactly the same approach as in the previous tests for the `getSecondsOverall`, so we are not going to extend ourselves. The tests developed were the following: ``runningGetSecondsTodayTest`, `idleGetSecondsTodayTest` and `exceptionGetSecondsTodayTest`.
 
-**Inputs**:
-**Outcome**: The tests passed successfully.
-
-#### Test 24 - getSecondsToday
-
-**Inputs**:
+**Inputs**:-
+ `runningGetSecondsTodayTest`: 
+  - running = true;
+  > In this case we also assume that the elapsed time is 10 seconds;
+- `idleGetSecondsTodayTest`: 
+  - initial `secondsToday` = 10;
+  - `running` = false;
+- `exceptionGetSecondsTodayTest`:
+  - initial `secondsToday` = 10;
+  - `running` = false;
 **Outcome**: The tests passed successfully.
 
 ### Line and Branch Coverage
