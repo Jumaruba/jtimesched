@@ -2,12 +2,12 @@
     <project>
         <title>New Project</title>
         <notes/>
-        <created>1667946953461</created>
-        <started>1667946953461</started>
+        <created>1667990803405</created>
+        <started>1667990803405</started>
         <running>no</running>
         <checked>yes</checked>
-        <time overall="1" today="1"/>
+        <time overall="0" today="0"/>
         <quota overall="0" today="0"/>
-        <color red="0" green="0" blue="0" alpha="0"/>
+        <color red="219" green="148" blue="112" alpha="255"/>
     </project>
 </projects>

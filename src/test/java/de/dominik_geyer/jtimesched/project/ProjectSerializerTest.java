@@ -2,6 +2,7 @@ package de.dominik_geyer.jtimesched.project;
 
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.BufferedReader;
@@ -12,6 +13,8 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.sax.SAXTransformerFactory;
@@ -234,7 +237,7 @@ public class ProjectSerializerTest {
         new ProjectSerializer(outputDir + "zeroProjectsTest");
     List<Project> projects = new ArrayList<Project>();
     Project proj = new Project();
-    Color color = Mockito.mock(Color.class);
+    Color color = new Color(219, 148, 112);
     proj.setColor(color);
     proj.setTitle("New Project");
     proj.setChecked(true);
@@ -247,15 +250,18 @@ public class ProjectSerializerTest {
     } catch (Exception e) {
       fail("Unexpected exception");
     }
+    String expected = getProjectsXml1();
+    Pattern classPattern = Pattern.compile(expected);
 
-    // Then
-    String expected = getProjectExpectedXml1();
-    // try {
-    //   assertEquals(expected, readProjectsFile());
-    // } catch (IOException e) {
-    //   e.printStackTrace();
-    //   fail("Shouldn't have thrown an exception");
-    // }
+    try {
+      // Then
+      String result = readProjectsFile();
+      Matcher m = classPattern.matcher(result);
+      assertTrue(m.matches());
+    } catch (IOException e) {
+      e.printStackTrace();
+      fail("Shouldn't have thrown an exception");
+    }
   }
 
   @Test
@@ -276,41 +282,69 @@ public class ProjectSerializerTest {
     } catch (Exception e) {
       fail("Unexpected exception");
     }
+    String expected = getProjectsXml2();
+    Pattern classPattern = Pattern.compile(expected);
 
-    // Then
-    // String expected = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><projects
-    // version=\"unknown\"/>";
-    // try {
-    //   assertEquals(expected, readProjectsFile());
-    // } catch (IOException e) {
-    //   e.printStackTrace();
-    //   fail("Shouldn't have thrown an exception");
-    // }
+    try {
+      // Then
+      String result = readProjectsFile();
+      Matcher m = classPattern.matcher(result);
+      assertTrue(m.matches());
+    } catch (IOException e) {
+      e.printStackTrace();
+      fail("Shouldn't have thrown an exception");
+    }
   }
 
   public String readProjectsFile() throws IOException {
     File file = new File(outputDir + "zeroProjectsTest");
-    System.out.println(file.getAbsolutePath());
     BufferedReader br = new BufferedReader(new FileReader(file));
     String st = "", tmp = "";
 
     while ((tmp = br.readLine()) != null) {
-      st += tmp;
+      if (tmp.trim() != "") {
+        st += tmp.trim();
+      }
     }
+    br.close();
 
     return st;
   }
 
-  public String getProjectExpectedXml1() {
+  public String getProjectsXml1() {
     StringBuilder sb = new StringBuilder();
-    sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+    sb.append("<\\?xml version=\"1\\.0\" encoding=\"UTF-8\"\\?>");
     sb.append("<projects version=\"unknown\">");
     sb.append("<project>");
     sb.append("<title>New Project</title>");
     sb.append("<notes/>");
-    // TODO: find a way to mock the date
-    sb.append("<title>project</title>");
-    sb.append("<\\project>");
+    sb.append("<created>\\d+</created>");
+    sb.append("<started>\\d+</started>");
+    sb.append("<running>no</running>");
+    sb.append("<checked>yes</checked>");
+    sb.append("<time overall=\"\\d+\" today=\"\\d+\"/>");
+    sb.append("<quota overall=\"0\" today=\"0\"/>");
+    sb.append("<color red=\"219\" green=\"148\" blue=\"112\" alpha=\"255\"/>");
+    sb.append("</project>");
+    sb.append("</projects>");
+    return sb.toString();
+  }
+
+  public String getProjectsXml2() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("<\\?xml version=\"1\\.0\" encoding=\"UTF-8\"\\?>");
+    sb.append("<projects version=\"unknown\">");
+    sb.append("<project>");
+    sb.append("<title>New Project</title>");
+    sb.append("<notes/>");
+    sb.append("<created>\\d+</created>");
+    sb.append("<started>\\d+</started>");
+    sb.append("<running>no</running>");
+    sb.append("<checked>no</checked>");
+    sb.append("<time overall=\"0\" today=\"0\"/>");
+    sb.append("<quota overall=\"0\" today=\"0\"/>");
+    sb.append("</project>");
+    sb.append("</projects>");
     return sb.toString();
   }
 }
