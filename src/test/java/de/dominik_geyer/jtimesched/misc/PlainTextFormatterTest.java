@@ -1,5 +1,8 @@
 package de.dominik_geyer.jtimesched.misc;
 
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
@@ -16,11 +19,15 @@ public class PlainTextFormatterTest {
     long millis = 1668014664908l;
     log.setMillis(millis);
 
-    String result = ptf.format(log);
+    Locale.setDefault(Locale.Category.FORMAT, Locale.ROOT);
 
+    SimpleDateFormat sdf = new SimpleDateFormat("E");
+    Date dt = new Date(millis);
+    String weekDay = sdf.format(dt);
     String date = "2022-11-09";
-    String weekDay = "quarta";
     String time = "17:24:24";
+
+    String result = ptf.format(log);
 
     String expected =
         String.format("%s (%s) %s [ALL]: This is a log\n", date, weekDay, time);

@@ -734,11 +734,7 @@ Assertions.assertTrue(d.compareTo(result) == 0);
 **Outcome**: The test passed successfully.
 
 #### Test 44 - formatDate
-To test the `formatDate` function we verify if it is able to convert the `Date`represented by the epoch timestamp 1667779200000 to the appropriate String. For that, we use an `assertEquals` that checks if the comparison of the expected date and the actual return value of the function is the same:
-
-```java
-Assertions.assertEquals(expected, result);
-```
+To test the `formatDate` function we verify if it is able to convert the `Date`represented by the epoch timestamp 1667779200000 to the appropriate String. For that, we use an `assertEquals` that checks if the comparison of the expected date and the actual return value of the function is the same.
 
 **Inputs used**: Date(1667779200000l)
 
