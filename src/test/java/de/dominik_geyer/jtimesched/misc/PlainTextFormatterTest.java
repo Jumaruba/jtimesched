@@ -21,7 +21,7 @@ public class PlainTextFormatterTest {
     String date = "2022-11-09";
     String weekDay = "quarta";
     String time = "17:24:24";
-    System.out.println(result);
+
     String expected =
         String.format("%s (%s) %s [ALL]: This is a log\n", date, weekDay, time);
     Assertions.assertEquals(expected, result);

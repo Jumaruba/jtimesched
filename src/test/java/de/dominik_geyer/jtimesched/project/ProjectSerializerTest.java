@@ -4,7 +4,6 @@ import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
-import static org.mockito.ArgumentMatchers.anyString;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -240,7 +239,8 @@ public class ProjectSerializerTest {
     return writer;
   }
 
-  // Assignment 5
+  // ASSIGNMENT 5 ==========================================================
+
   // writeXml
   @Test
   public void zeroProjectsWriteXmlTest() {
@@ -385,8 +385,6 @@ public class ProjectSerializerTest {
     return sb.toString();
   }
 
-  // ASSIGMENT 5 ==========================================================
-
   @Test
   public void testGetEndXmlElement() {
     try {
@@ -526,7 +524,7 @@ public class ProjectSerializerTest {
   public void testGetFirstElement() {
     try {
       // Given
-      ProjectSerializer projSerializer = new ProjectSerializer(anyString());
+      ProjectSerializer projSerializer = new ProjectSerializer("");
       Document doc =
           getDocument("<tag><tag1><tag2>another tag</tag2></tag1></tag>");
       Element root = doc.getDocumentElement();

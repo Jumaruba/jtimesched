@@ -697,6 +697,40 @@ In total there're 19 assertions in this tests. All of them are `assertEquals` ve
 **Outcome**: The tests passed successfully.
 
 
+#### x - writeXml
+
+To test the `writeXml` method we decided to create 3 different tests to cover all the branches:
+- `zeroProjectsWriteXmlTest`: tests if the `writeXml` outputs the expected XML when there are no projects;
+- `colorRunningCheckedWriteXmlTest`: to test if the output is the expected when the project is running, checked and has a color;
+- `noColorIdleUncheckedWriteXmlTest`: to test if the output is the expected when there is a project that is unchecked and that has a `null` color.
+
+In order to compare the output of this method with the expected, we defined the filename of the `ProjectSerializer` and used the auxiliary function `readProjectsFile` to read this file. We then used the `assertTrue` method to verify that the output matched the expected regular expression.
+
+**Inputs used**:
+- `zeroProjectsWriteXmlTest`: empty list of projects;
+- `colorRunningCheckedWriteXmlTest`: a list of projects with a single project; This project must have a color, `running`= true and `checked` = true;
+- `noColorIdleUncheckedWriteXmlTest`: a list of projects with a single project; This project must have a null color, `running` = false and `checked` = false; 
+
+**Outcome**: The test passed successfully.
+
+### PlainTextFormatter class
+
+#### Test x - format
+To test the `format` function we simply create a `LogRecord`, use it as input and verify if the output of the `format` function is the expected by using the `assertEquals` method.
+
+**Inputs used**: A `LogRecord` with the message "This is a log", Level.ALL; and 1668014664908 milliseconds.
+
+**Outcome**: The test passed successfully.
+
+### JTimeScheApp class
+
+Given the complexity of the `main` function, the lack of `dependency injection` i.e. most of the variables are created inside the function instead of being provided in the parameters; and the usage of private methods, we developed a single test for this method: `testConfFolder`.
+In this test we verify if that the configuration folder is created when it does not exist. For that, we use both the `assertFalse` method to check that the configuration file doesn't exist before calling the `main` function (pre-condition) and then the `assertTrue` to verify if it exists after calling it.
+
+**Outcome**: The test passed successfully.
+
+#### Test x - main
+
 ### Line and Branch Coverage
 
 
