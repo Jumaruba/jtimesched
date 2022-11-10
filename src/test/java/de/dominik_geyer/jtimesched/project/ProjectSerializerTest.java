@@ -61,7 +61,6 @@ public class ProjectSerializerTest {
     }
   }
 
-
   public static Document getDocument(String xml)
       throws ParserConfigurationException, SAXException, IOException {
     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -547,10 +546,11 @@ public class ProjectSerializerTest {
       e.printStackTrace();
     }
   }
-  @Test 
+
+  @Test
   public void readXml()
       throws ParserConfigurationException, SAXException, IOException {
-    String filepath = "docs/05_assignment/inputDir/projectTest"; 
+    String filepath = "docs/05_assignment/inputDir/projectTest";
     ProjectSerializer p = new ProjectSerializer(filepath);
     ArrayList<Project> projectList = p.readXml();
 
