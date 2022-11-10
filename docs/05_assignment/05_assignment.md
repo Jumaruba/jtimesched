@@ -204,7 +204,17 @@ try {
 #### Test [21 - 22] - start
 The outcome of the `start` method depends on the state of the project - when the project is running it must throw an exception, otherwise the `running` flag must be set to true and the `timeStart` should be higher or equal to the actual time.
 For the first case we use `runningStartTest` where we assert that an exception is thrown by using the `assertThrows`method.
-For the second test we use `idleStartTest`, where we assert that the `running` flag is set to true and that the start time of the project is equal or higher to the actual time. For that we use the `assertTrue` method.
+For the second test we use `idleStartTest`, where we assert that the `running` flag is set to true and that the start time of the project is equal or higher to the actual time. For that we use the `assertTrue` method. 
+
+The assertions can be checked below: 
+```java 
+// idleStartTest 
+Assertions.assertTrue(project.isRunning());
+Assertions.assertTrue(project.getTimeStart().compareTo(now) >= 0); 
+
+// runningStartTest 
+Assertions.assertThrows(ProjectException.class, () -> project.start()); 
+```
 
 **Inputs**:
 - running = false (the default value when a new project is created);
@@ -219,8 +229,20 @@ For the first case we use `runningPauseTest` where we:
 - create a spy using Mockito;
 - use Mockito to make `getElapsedSeconds` return 2;
 - call the `pause` method;
-- verify if `secondsOverall` and `secondsToday` were updated to 2 and that the `running` variable is false.
-For the second test we use `idlePauseTest`, where we assert that an exception is thrown with `assertThrows`.
+- verify if `secondsOverall` and `secondsToday` were updated to 2 and that the `running` variable is false.  
+
+For the second test we use `idlePauseTest`, where we assert that an exception is thrown with `assertThrows`. The assertions can be checked below:  
+
+```java  
+// idlePauseTest 
+Assertions.assertThrows(ProjectException.class, () -> project.pause()); 
+
+//runningPauseTest  
+Assertions.assertEquals(2, spy.getSecondsOverall());
+Assertions.assertEquals(2, spy.getSecondsToday());
+Assertions.assertEquals(false, spy.isRunning());
+```  
+
 
 **Inputs**:
 - `running` = false (the default value when a new project is created);
@@ -235,6 +257,17 @@ The toggle method also depends on the state of the project - if it is running th
 - `idleToggleTest`: tests if the `running` flag is set to true when the `toggle` method is called while the project is idle;
 - `exceptionToggleTest`: tests if the `toggle` method is able to catch an exception thrown by the  `start` call. For this, we use Mockito to create a spy and use the method `doThrow` to simulate an exception on the `start` method.
 
+The assertions can be checked below: 
+```java 
+//runningToggleTest 
+Assertions.assertEquals(false, project.isRunning()); 
+//idleToggleTest 
+Assertions.assertEquals(true, project.isRunning()); 
+//exceptionToggleTest 
+Assertions.assertDoesNotThrow(() -> spy.toggle());
+``` 
+
+
 **Inputs**:
 - `runningToggleTest`: `running` = true; 
 - `idleToggleTest`: `running` = false;
@@ -245,12 +278,20 @@ The toggle method also depends on the state of the project - if it is running th
 
 #### Test [28 - 30] - getSecondsOverall
 This method has a condition and `try catch` statement. For this reason, we decided to develop 3 tests to get full coverage:
-- `runningGetSecondsOverallTest`: Verifies the behavior of the method when the project is running(condition evaluates to true);
-- `idleGetSecondsOverallTest`: Verifies the behavior of the method when the project is idle (condition evaluates to false);
-- `exceptionGetSecondsOverallTest`: Tests the behavior when the condition evaluate to true and an exception occurs in the `pause` method.
+- `runningGetSecondsOverallTest`: Verifies the behavior of the method when the project is running(condition evaluates to true);  
+- `idleGetSecondsOverallTest`: Verifies the behavior of the method when the project is idle (condition evaluates to false);  
+- `exceptionGetSecondsOverallTest`: Tests the behavior when the condition evaluate to true and an exception occurs in the `pause` method.  
 
 When using this method while the project is running, we must assure that the value reflects the elapsed time. For this reason, in the `runningGetSecondsOverallTest` we used a spy to ensure that the `getElapsedSeconds` method returned 10 seconds and then verified if the `timeOverall` was correctly updated to 10 seconds.
 If this method is called while the project is idle or if an exception occurs we need to make sure that the `timeOverall` will not change. For this reason, in the `idleGetSecondsTodayTest` we set the initial `timeOverall` to 10 and then verified if after calling the `getElapsedSeconds` method the value was the same. In the `exceptionGetSecondsOverallTest` we also set the initial value of the `timeOverall` to 10 and used a spy to ensure that the `getElapsedSeconds` method throws an exception. We then tested if the `timeOverall` was the same as the initial.
+
+The assertions can be checked below: 
+```java 
+//runningGetSecondsOverallTest 
+Assertions.assertEquals(10, result); 
+//exceptionGetSecondsOverallTest 
+Assertions.assertEquals(10, result);
+``` 
 
 **Inputs**:
 - `runningGetSecondsOverallTest`: 
@@ -265,7 +306,12 @@ If this method is called while the project is idle or if an exception occurs we 
 **Outcome**: The tests passed successfully.
 
 #### Test [31 - 33] - getSecondsToday
-In this test we followed exactly the same approach as in the previous tests for the `getSecondsOverall`, so we are not going to extend ourselves. The tests developed were the following: ``runningGetSecondsTodayTest`, `idleGetSecondsTodayTest` and `exceptionGetSecondsTodayTest`.
+In this test we followed exactly the same approach as in the previous tests for the `getSecondsOverall`, so we are not going to extend ourselves. The tests developed were the following: `runningGetSecondsTodayTest`, `idleGetSecondsTodayTest` and `exceptionGetSecondsTodayTest`. The assertions can be checked below: 
+
+```java 
+//runningGetSecondsToday & idleGetSecondsToday 
+Assertions.assertEquals(10, result); 
+```
 
 **Inputs**:-
  `runningGetSecondsTodayTest`: 
