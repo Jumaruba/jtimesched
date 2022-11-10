@@ -125,6 +125,7 @@ public class ProjectTest {
     // When
     project.resetToday();
 
+    // Then
     Assertions.assertEquals(0, project.getSecondsToday());
     Assertions.assertEquals(0, project.getQuotaToday());
     Assertions.assertTrue(project.getTimeStart().compareTo(now) >= 0);

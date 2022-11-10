@@ -60,15 +60,6 @@ public class ProjectSerializerTest {
     }
   }
 
-  @AfterEach
-  public void finish() {
-    try {
-      hd.endDocument();
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-
   public static Document getDocument(String xml)
       throws ParserConfigurationException, SAXException, IOException {
     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -413,8 +404,9 @@ public class ProjectSerializerTest {
     }
   }
 
+  // addXmlElement
   @Test
-  public void addXmlElement_1() {
+  public void testAddXmlElementNull() {
     try {
       // Given
       setup();
@@ -437,7 +429,7 @@ public class ProjectSerializerTest {
   }
 
   @Test
-  public void addXmlElement_2() {
+  public void testAddXmlElementNotNull() {
     try {
       // Given
       setup();
@@ -461,8 +453,9 @@ public class ProjectSerializerTest {
     }
   }
 
+  // startXmlElement
   @Test
-  public void startXmlElement_1() {
+  public void startXmlElementWithAtts() {
     try {
       // Given
       setup();
@@ -486,7 +479,7 @@ public class ProjectSerializerTest {
   }
 
   @Test
-  public void startXmlElement_2() {
+  public void startXmlElementNoAtts() {
     try {
       // Given
       setup();
@@ -552,13 +545,10 @@ public class ProjectSerializerTest {
     }
   }
 
-  @ParameterizedTest
-  @ValueSource(
-      strings = {
-        "docs/05_assignment/inputDir/projectTest",
-      })
-  public void readXml(String filepath)
+  @Test
+  public void readXml()
       throws ParserConfigurationException, SAXException, IOException {
+    String filepath = "docs/05_assignment/inputDir/projectTest";
     ProjectSerializer p = new ProjectSerializer(filepath);
     ArrayList<Project> projectList = p.readXml();
 
