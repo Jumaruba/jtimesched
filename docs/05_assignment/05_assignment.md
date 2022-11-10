@@ -242,7 +242,7 @@ In addition to that, after the execution of each test, the instance of the `proj
   }
 ```
 
-#### Test x - testGetColumnCount 
+#### Test 34 - testGetColumnCount 
 
 Tests if the number of columns matches the supposed one: 8. 
 For this test it used an `Assertions.assertEquals`: 
@@ -252,7 +252,7 @@ For this test it used an `Assertions.assertEquals`:
 ```
 
 
-#### Test [x-x] - testGetRowCount 
+#### Test 35 - testGetRowCount 
 
 It checks the number of projects in the `ProjectTableModel`. 
 In the end, performs an `Assertions.assertEquals` over the number of projects, which is expected to be 1. 
@@ -261,12 +261,12 @@ In the end, performs an `Assertions.assertEquals` over the number of projects, w
 Assertions.assertEquals(rowCount, 1);
 ``` 
 
-#### Test x - testColumnName 
+#### Test 36 - testColumnName 
 
 Tests if the name of the columns is read well. 
 Performs an `Assertions.assertEquals` over the name returned: the second column, which should be `Title`. 
 
-#### Test x - testAddProject 
+#### Test 37 - testAddProject 
 
 This function verifies if the addition of a project in the `ProjectTableModel` is performed with success. 
 The test adds a project and then verifies whether the number of projects in the `ProjectTableModel` instance is 2. 
@@ -278,7 +278,7 @@ Assertions.assertEquals("Project1", projectName);
 Assertions.assertEquals(2, projectCount);
 ```
 
-#### Test x - testRemoveProject 
+#### Test 38 - testRemoveProject 
 
 This test verifies if the removal of a project in the `ProjectTableModel` is performed successfully. 
 
@@ -288,7 +288,7 @@ After removing a project, it's checked if the number of projects in the `Project
 Assertions.assertEquals(0, projectCount);
 ```
 
-#### Test x - testColumnClass 
+#### Test 39 - testColumnClass 
 
 This test verifies if the class type of a column is correct.  
 Inside the `getColumnClass` function there is a switch case, which receives the **number of the column** and **return the expected class**. 
@@ -307,7 +307,7 @@ In the end an `Assertions.assertEquals` is made to check the column class return
 Assertions.assertEquals(expected, columnClass); 
 ``` 
 
-#### Test x - testGetValueAt
+#### Test 40 - testGetValueAt
 <!-- TODO: stopped reviewing here -->
 This test assesses a value of a project in a specific position in the `ProjectTableModel` instance.  
 
@@ -330,7 +330,7 @@ It is used an `Assertions.assertEquals` in this test as it follows:
 Assertions.assertEquals(expected, obj);
 ```
 
-#### x - testSetValueAt
+#### 41 - testSetValueAt
 
 This test is similar to the `testGetValueAt`, but instead of retrieving values, it sets.  
 
@@ -354,7 +354,7 @@ Assertions.assertEquals(value, actualValue);
 
 ### ProjectSerializerTest class
 
-#### [x-x] Tests 
+#### [42-46] Tests 
 The tests from x - x are: 
 - `getEndXmlElement`; 
 - `addXmlElement_1`; 
@@ -362,7 +362,7 @@ The tests from x - x are:
 - `startXmlElement_1`; 
 - `startXmlElement_2`; 
 
-These tests follows a similar pattern: 
+These tests follow a similar pattern: 
 
 - First a `setup()` function is called. This function sets a `TransformerHandler hd`, where its results are stored in a `ByteArrayOutputStream bytearr`. This means that everytime an information is added to `hd` it is written in the `bytearr`, so as the output can be analysed with `bytearr.toByteArray()`. An example is: 
 
@@ -370,7 +370,7 @@ These tests follows a similar pattern:
   Assertions.assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?></projects>", new String(bytearr.toByteArray()));
 ```
 
-Still, to the changes in the `TransformerHandler` triggers effects, the operation must be envolved between `hd.startDocument()` and `hd.endDocument()`. An example is the `testgetEndXmlElement`() 
+Still, in order to the changes in the `TransformerHandler` triggers effects, the operation must be envolved between `hd.startDocument()` and `hd.endDocument()`. An example is the `testgetEndXmlElement()`: 
 
 ```java
       // Given
@@ -386,11 +386,11 @@ Still, to the changes in the `TransformerHandler` triggers effects, the operatio
           new String(bytearr.toByteArray()));
 ```
 
-In this case, the `ProjectSerializer.endXmlElement(hd, "projects");` is envolved by `hd.startDocument()` and hd.endDocument()`.
+In this case, the `ProjectSerializer.endXmlElement(hd, "projects");` is envolved by `hd.startDocument()` and `hd.endDocument()`.
 
 All the tests passes with success. 
 
-#### x - testAddXmlAttribute 
+#### 47 - testAddXmlAttribute 
 
 This test verifies if an attribute addition to a xml element is performed correctly. 
 
@@ -400,9 +400,10 @@ To perform this, an `Assertions.assertEquals()` function is called, as:
 Assertions.assertEquals("my-title", atts.getValue("title"));
 ```
 
-#### x- testGetFirstElement 
+#### 48 - testGetFirstElement 
 
-This function verifies if the first child element of an xml tag is selected with success. 
+This function verifies if the first child element of an xml tag is retrieved with success. 
+
 
 Two assertions are made in this test: 
 
@@ -411,13 +412,13 @@ Assertions.assertEquals("tag1", nodeName);
 Assertions.assertEquals(null, nodeValue);
 ```
 
-The first checks the name of the tag, the second checks for a value associated, which is this case is none. 
+The first checks the name of the tag, the second checks the value associated, which is this case is none. 
 The test passes with success. 
 
 
-#### x - readXml 
+#### 49 - readXml 
 
-This test reads a `xml` file and verifies if all information contained in it was stored. For this, we have created a file to be read located at docs/05_assignment/inputDir/projectTest.  
+This test reads a `xml` file and verifies if all information contained in it was stored. For this, we have created a file to be read located at `docs/05_assignment/inputDir/projectTest`.  
 
 This file contains two projects. The first one was designed to be the simplest as possible: there is no title, quotas, color, it's not checked neither running and no notes. The second project, on the other hand, was designed to be as complete as possible. 
 
