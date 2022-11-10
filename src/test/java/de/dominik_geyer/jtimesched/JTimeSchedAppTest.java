@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 public class JTimeSchedAppTest {
   @Test
   public void testConfFolder() {
+    // Given 
     File conf = new File(JTimeSchedApp.CONF_PATH);
     try {
       FileUtils.deleteDirectory(conf);
@@ -18,7 +19,10 @@ public class JTimeSchedAppTest {
     }
     Assertions.assertFalse(conf.exists());
 
+    // When
     JTimeSchedApp.main(null);
+
+    // Then
     Assertions.assertTrue(conf.exists());
   }
 }
