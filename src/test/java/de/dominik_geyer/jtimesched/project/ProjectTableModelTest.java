@@ -162,7 +162,7 @@ public class ProjectTableModelTest {
         Arguments.of(ProjectTableModel.COLUMN_CREATED, new Date(0), 0),
         Arguments.of(ProjectTableModel.COLUMN_TIMEOVERALL, 1, 0),
         Arguments.of(ProjectTableModel.COLUMN_TIMETODAY, 1, 0),
-        Arguments.of(8, 1, 0));
+        Arguments.of(8, "wtf?", 0));
   }
 
   @Test

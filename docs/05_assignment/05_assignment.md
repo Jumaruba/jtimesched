@@ -76,10 +76,10 @@ To test most of the setters of the `Project` class, mainly the methods:
 - `setTimeStart`;
 - `setTimeCreated`;  
 
-We used simple junit Tests that assert if the properties were effectively changed to the expected value. As these methods don't have any conditions and consist of a single line of code, the test is also very simple.   
+We used simple junit Tests that assert if the properties were effectively changed to the expected value. As these methods don't have any conditions and consist of a single line of code, the tests are also very simple.   
 Additionally, for the `setColor`, `setTimeStart` and `setTimeCreated` we use Mockito to mock the `Color` and `Date` classes.  
 
-An example of assert is the following, which is located at the `setQuotaTodayTest()`:  
+An example of an assert is the following, which is used at the `setQuotaTodayTest`:  
 ```java
 Assertions.assertEquals(5, project.getQuotaToday());
 ```
@@ -100,7 +100,7 @@ Assertions.assertEquals(5, project.getQuotaToday());
 #### Test 15 - resetToday
 This test only verifies if the `resetToday` method successfully resets the values of the `secondsToday` and `quotaToday` to 0 and that the date was reset.  
 
-For that purpose, we first set the `secondsToday` and `quotaToday` to 2 seconds and the `timeStart` to yesterday. After that call the `resetToday` method and assert that the values were reset: 
+For that purpose, we first set the `secondsToday` and `quotaToday` to 2 seconds and the `timeStart` to yesterday. After that, we call the `resetToday` method and assert that the values were reset: 
 
 ```java 
 Assertions.assertEquals(0, project.getSecondsToday());
@@ -111,7 +111,7 @@ Assertions.assertTrue(project.getTimeStart().compareTo(now) >= 0);
 **Inputs**:
 - An idle project with `secondsToday` = 2, `quotaToday` = 2 and `timeStarted` = yesterday;   
 
-**Outcome**: The tests passed successfully.
+**Outcome**: The test passed successfully.
 
 #### Tests [16 - 17] - toString
 This method represents the project as a String. It has 2 conditions:  
@@ -120,13 +120,13 @@ This method represents the project as a String. It has 2 conditions:
 - the second is used to print "yes" or "no" depending on the value of the `checked` flag.
 With this in mind, we created the tests:
 - `newProjectToStringTest`: tests if the output of the `toString` method is the expected when called on a new project, which by default is not running and not checked;
--  `runningAndCheckedProjectToStringTest`: which tests if the output of the `toString` method is the expected when called on a project that is running and checked;
+- `runningAndCheckedProjectToStringTest`: which tests if the output of the `toString` method is the expected when called on a project that is running and checked.
 
-the following  assertions were made: 
+The following assertions were made: 
 
 ```java 
-// newProjectToStrinTest() 
- String result = project.toString();
+// newProjectToStringTest() 
+String result = project.toString();
 String expected =
       "Project [title=New Project, running=no, secondsOverall=0, secondsToday=0, checked=no]";
 Assertions.assertEquals(expected, result); 
@@ -146,7 +146,7 @@ Assertions.assertEquals(expected, result);
 
 #### Test 18 - adjustSecondsToday
 The function `adjustSecondsToday` includes a single if condition. For this reason, two different input values were tested, one that makes the condition evaluate to false (`secondsToday` >= 0) and another that makes it evaluate to true (`secondsToday` < 0).
-To create this test we used the **ParameterizedTest** `adjustSecondsTodayTest`, which uses the **MethodSource** `genAdjustSecondsToday` to feed the test with:  
+To create this test we used the `ParameterizedTest` `adjustSecondsTodayTest`, which uses the `MethodSource` `genAdjustSecondsToday` to feed the test with:  
 - `secondsToday`: parameter passed to `adjustSecondsToday`;
 - `olSecondsToday`: original value of `secondsToday`, before calling `adjustSecondsToday`;
 - `oldSecondsOverall`: original value of `secondsOverall` before calling `adjustSecondsToday`;
@@ -154,9 +154,7 @@ To create this test we used the **ParameterizedTest** `adjustSecondsTodayTest`, 
 - `expectedSecondsOverall`: the expected value of `secondsOverall` after calling `adjustSecondsToday`;  
 
 The parameters `oldSecondsToday` and `oldSecondsOverall` are used to set the initial values of the respective variables of the project. After that, the function `adjustSecondsToday` is called.
-We then assert that the values of `secondsOverall` and `secondsToday` are changed according to the input.  
-
-It's used `Assertions.assertEquals` to verify the values: 
+We then assert that the values of `secondsOverall` and `secondsToday` are changed according to the input by using the `Assertions.assertEquals` method: 
 
 ```java  
 Assertions.assertEquals(expectedSecondsToday, project.getSecondsToday());
@@ -242,7 +240,6 @@ Assertions.assertEquals(2, spy.getSecondsOverall());
 Assertions.assertEquals(2, spy.getSecondsToday());
 Assertions.assertEquals(false, spy.isRunning());
 ```  
-
 
 **Inputs**:
 - `running` = false (the default value when a new project is created);
@@ -358,6 +355,7 @@ For this test it used an `Assertions.assertEquals`:
 **Inputs**: No input was provided to the this test. 
 
 **Outcome**: The test passed successfully.
+
 #### Test 35 - testGetRowCount 
 
 It checks the number of projects in the `ProjectTableModel`. 
@@ -369,11 +367,11 @@ Assertions.assertEquals(rowCount, 1);
 
 **Input**: A project was added upon the creation of the class. 
 
-**Outcome**: The tests passed successfully.
+**Outcome**: The test passed successfully.
 
-;#### Test 36 - testColumnName 
+#### Test 36 - testColumnName 
 
-Tests if the name of the columns is read well. 
+Tests if the name of the column is read well. 
 Performs an `Assertions.assertEquals` over the name returned: the second column, which should be `Title`:  
 
 ```java 
@@ -383,7 +381,8 @@ Assertions.assertEquals(columnName, "Title");
 **Inputs**: 
   - `column`: 2  
   
-**Outcome**: The tests passed successfully.
+**Outcome**: The test passed successfully.
+
 #### Test 37 - testAddProject 
 
 This function verifies if the addition of a project in the `ProjectTableModel` is performed with success.   
@@ -515,19 +514,19 @@ Assertions.assertEquals(value, actualValue);
 
 ### ProjectSerializerTest class
 
-The tests from x - x follow a similar pattern: 
+The tests 34 to 36 follow a similar pattern: 
 
 - `getEndXmlElement`; 
 - `addXmlElement`; 
 - `startXmlElement`; 
 
-- First a `setup()` function is called. This function sets a `TransformerHandler hd`, where its results are stored in  `ByteArrayOutputStream bytearr`. This means that everytime an information is added to `hd` it is written in the `bytearr`, so as the output can be analysed with `bytearr.toByteArray()`. An example is: 
+- First a `setup()` function is called. This function sets a `static TransformerHandler hd`, whose data is stored in `static ByteArrayOutputStream bytearr`. This means that everytime that new information is added to `hd` it is written in the `bytearr`, so that the output can be analysed by parsing the result to string with `new String(bytearr.toByteArray())`. An example is: 
 
 ```java 
   Assertions.assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?></projects>", new String(bytearr.toByteArray()));
 ```
 
-Still, in order to the changes in the `TransformerHandler` triggers effects, the operation must be envolved between `hd.startDocument()` and `hd.endDocument()`. An example is the `testGetEndXmlElement()`: 
+Still, for the changes in the `TransformerHandler` to trigger this effect, the operation must be envolved between `hd.startDocument()` and `hd.endDocument()`. An example is the `testGetEndXmlElement()`: 
 
 ```java
       // Given
@@ -544,9 +543,11 @@ Still, in order to the changes in the `TransformerHandler` triggers effects, the
 ```
 
 In this case, the `ProjectSerializer.endXmlElement(hd, "projects");` is envolved by `hd.startDocument()` and `hd.endDocument()`.
-#### 42 - testGetEndXmlElement 
 
-This test verifies the `endXmlElement(TransformerHadnler hd, String element);` adds an end element to the xml.  
+
+#### 36 - testGetEndXmlElement 
+
+This test verifies the `endXmlElement(TransformerHandler hd, String element);` adds an end element to the xml.  
 
 This test performs an `Assertion.assertEquals`: 
 
@@ -558,9 +559,9 @@ Assertions.assertEquals( "<?xml version=\"1.0\" encoding=\"UTF-8\"?></projects>"
   - `TransformerHandler hd`;
   - `element`: `projects`. 
   - 
-**Outcome**: The tests passed successfully. 
+**Outcome**: The test passed successfully. 
 
-#### 43 - testAddXmlElement 
+#### 37 - testAddXmlElement 
 
 The `addXmlElement` adds an xml element to the document. 
 
@@ -568,7 +569,7 @@ The `addXmlElement` adds an xml element to the document.
 protected static void addXmlElement(TransformerHandler hd, String element, AttributesImpl atts, Object data); 
 ``` 
 
-There two conditions in this function and one doesn't influence the other. 
+There are two conditions in this function and one doesn't influence the other. 
 ```java 
 if (atts == null)
 if (data != null)
@@ -578,15 +579,14 @@ To cover the branch cases, we have separated two test cases:
 - `testAddXmlElementNull`; 
 - `testAddXmlElementNotNull`; 
 
+The difference between both resides on the `atts` and `data` parameters being null or not. In other words, in the `testAddXmlElementNull` the values of these two parameters are null and in the other case test they aren't. 
 
-The difference between both resides on the `atts` and `data` parameters being null or not. In other words, in the `testAddXmlElementNull` the values of these two parameters are null and the other case test they aren't. 
-
-We didn't test all the combinations between `atts` and `data`, since it would be redudant to test the cases below, due to the fact that, as explained before, one condicition doesn't influece the other. 
+We didn't test all the combinations between `atts` and `data`, since it would be redundant to test the cases below, due to the fact that, as explained before, one condition doesn't influence the other. 
 
 - `atts` = null, `data` != null;  
 - `atts` != null, `data` = null
 
-Both tests performs an `Assertions.assertEquals`: 
+Both tests use an `Assertions.assertEquals`: 
 
 ```java 
 // testAddXmlElementNull 
@@ -609,7 +609,7 @@ Assertions.assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?><element>titl
  
 **Outcome**: The tests passed successfully.
 
-#### 44 - testStartXmlElement 
+#### 38 - testStartXmlElement 
 
 The `startXmlElement` adds a starting element to xml. 
 
@@ -622,11 +622,11 @@ This function contains the following condition:
 if (atts == null)
 ```
 
-To cover all the branches related to this conditions, two test were created: 
+To cover all the branches related to this condition, two tests were created: 
 - `startXmlElementWithAtts`: the given `atts` to the function is not null; 
 - `startXmlElementNoAtts`: the given `atts` to the function is null; 
 
-Yet, this test performs the following assertions: 
+This test performs the following assertions: 
 
 ```java
 // startXmlElementWithAtts 
@@ -646,7 +646,7 @@ Assertions.assertEquals( "<?xml version=\"1.0\" encoding=\"UTF-8\"?><tag>", new 
 
 **Outcome**: The tests passed successfully.
 
-#### 45 - testAddXmlAttribute  
+#### 39 - testAddXmlAttribute  
 
 This test verifies if an attribute addition to a xml element is performed correctly. 
 
@@ -661,12 +661,11 @@ Assertions.assertEquals("my-title", atts.getValue("title"));
     - `attribute`: `"title"`; 
     - `data`: `"my-title"`;  
   
-**Outcome**: The tests passed successfully.
+**Outcome**: The test passed successfully.
 
-#### 48 - testGetFirstElement 
+#### 40 - testGetFirstElement 
 
 This function verifies if the first child element of an xml tag is retrieved with success. 
-
 
 Two assertions are made in this test: 
 
@@ -675,31 +674,31 @@ Assertions.assertEquals("tag1", nodeName);
 Assertions.assertEquals(null, nodeValue);
 ```
 
-The first checks the name of the tag, the second checks the value associated, which is this case is none. 
+The first checks the name of the tag, the second checks the value associated, which in this case is none. 
 
 **Inputs**:   
   - `e`: The root of the following xml: `"<tag><tag1><tag2>another tag</tag2></tag1></tag>"`. 
   - `name`: "tag1"
   
-**Outcome**: The tests passed successfully.
+**Outcome**: The test passed successfully.
 
 
-#### 49 - readXml 
+#### 41 - readXml 
 
-This test reads a `xml` file and verifies if all information contained in it was stored. For this, we have created a file to be read located at `docs/05_assignment/inputDir/projectTest`.  
+This test reads a `xml` file and verifies if all information contained in it was stored. For this, we have created a file to be read, located at `docs/05_assignment/inputDir/projectTest`.  
 
-This file contains two projects. The first one was designed to be the simplest as possible: there is no title, quotas, color, it's not checked neither running and no notes. The second project, on the other hand, was designed to be as complete as possible. This approach allows to test all the possible cases of conditions inside the `readXml` function. 
+This file contains two projects. The first one was designed to be the simplest as possible: there is no title, quotas, color, it's not checked neither running and no notes. The second project, on the other hand, was designed to be as complete as possible. This approach allows to test all the possible cases of conditions inside the `readXml` function. <!--TODO -->
 
 In total there're 19 assertions in this tests. All of them are `assertEquals` verifications. 
 
 **Inputs**: The name of the document upon initializing the `ProjectSerializer` class: `"docs/05_assignment/inputDir/projectTest"`. 
 
-**Outcome**: The tests passed successfully.
+**Outcome**: The test passed successfully.
 
 
-#### x - writeXml
+#### 42 - writeXml
 
-To test the `writeXml` method we decided to create 3 different tests to cover all the branches:
+To test the `writeXml` method, we decided to create 3 different tests to cover all the branches:
 - `zeroProjectsWriteXmlTest`: tests if the `writeXml` outputs the expected XML when there are no projects;
 - `colorRunningCheckedWriteXmlTest`: to test if the output is the expected when the project is running, checked and has a color;
 - `noColorIdleUncheckedWriteXmlTest`: to test if the output is the expected when there is a project that is unchecked and that has a `null` color.
@@ -715,8 +714,8 @@ In order to compare the output of this method with the expected, we defined the 
 
 ### PlainTextFormatter class
 
-#### Test x - format
-To test the `format` function we simply create a `LogRecord`, use it as input and verify if the output of the `format` function is the expected by using the `assertEquals` method.
+#### Test 44 - format
+To test the `format` function we simply create a `LogRecord`, used it as input and verified if the output of the `format` function is the expected by using the `assertEquals` method.
 
 **Inputs used**: A `LogRecord` with the message "This is a log", Level.ALL; and 1668014664908 milliseconds.
 
@@ -724,16 +723,34 @@ To test the `format` function we simply create a `LogRecord`, use it as input an
 
 ### ProjectTime class
 
-TODO
+#### Test 43 - parseDate
+To test the `parseDate` function we verify if it is able to convert the String "2022-11-7" to the appropriate date. For that, we use an `assertTrue` that checks if the comparison of the expected date and the actual return value of the function is the same by using the `compareTo` method of the `Date`class:
+```java
+Assertions.assertTrue(d.compareTo(result) == 0);
+```
+
+**Inputs used**: "2022-11-7"
+
+**Outcome**: The test passed successfully.
+
+#### Test 44 - formatDate
+To test the `formatDate` function we verify if it is able to convert the `Date`represented by the epoch timestamp 1667779200000 to the appropriate String. For that, we use an `assertEquals` that checks if the comparison of the expected date and the actual return value of the function is the same:
+
+```java
+Assertions.assertEquals(expected, result);
+```
+
+**Inputs used**: Date(1667779200000l)
+
+**Outcome**: The test passed successfully.
 
 ### JTimeScheApp class
 
+#### Test 45 - main
 Given the complexity of the `main` function, the lack of `dependency injection` i.e. most of the variables are created inside the function instead of being provided in the parameters; and the usage of private methods, we developed a single test for this method: `testConfFolder`.
 In this test we verify if that the configuration folder is created when it does not exist. For that, we use both the `assertFalse` method to check that the configuration file doesn't exist before calling the `main` function (pre-condition) and then the `assertTrue` to verify if it exists after calling it.
 
 **Outcome**: The test passed successfully.
-
-#### Test x - main
 
 ### Line and Branch Coverage
 
