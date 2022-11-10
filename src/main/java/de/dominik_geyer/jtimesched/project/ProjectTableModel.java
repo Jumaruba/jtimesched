@@ -96,7 +96,6 @@ public class ProjectTableModel extends AbstractTableModel {
     return o;
   }
 
-  
   public Project getProjectAt(int row) {
     return this.arPrj.get(row);
   }
