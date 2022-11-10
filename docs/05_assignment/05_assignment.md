@@ -53,7 +53,11 @@ We were able to achieve 100% branch coverage and 100% line coverage for the `Pro
 #### Test 6 - setSecondsOverall
 
 The function `setSecondsOverall` includes a single if condition. For this reason, two different input values were tested, one that makes the condition evaluate to false (`secondsOverall` >= 0) and another that makes it evaluate to true (`secondsOverall` < 0).
-To create this test we used the ParameterizedTest `setSecondsTodayTest`, which uses the MethodSource `genSecondsOverall` to feed the function with the input values. We then assert that the value of `secondsOverall` was effectively changed.
+To create this test we used the **ParameterizedTest** `setSecondsTodayTest`, which uses the **MethodSource** `genSecondsOverall` to feed the function with the input values. We then assert that the value of `secondsOverall` was effectively changed, with an `Assertions.assertEquals`: 
+
+```java 
+Assertions.assertEquals(expected, project.getSecondsOverall());
+``` 
 
 **Inputs used**: -2 and 10
 
@@ -70,11 +74,17 @@ To test most of the setters of the `Project` class, mainly the methods:
 - `setColor`;
 - `setChecked`;
 - `setTimeStart`;
-- `setTimeCreated`;
-  we used simple junit Tests that assert if the properties were effectively changed to the expected value. As this methods don't have any conditions and consist of a single line of code, the test is also very simple.
-  Additionally, for the `setColor`, `setTimeStart` and `setTimeCreated` we use Mockito to mock the `Color` and `Date` classes.
+- `setTimeCreated`;  
 
-**Inputs used**:
+We used simple junit Tests that assert if the properties were effectively changed to the expected value. As these methods don't have any conditions and consist of a single line of code, the test is also very simple.   
+Additionally, for the `setColor`, `setTimeStart` and `setTimeCreated` we use Mockito to mock the `Color` and `Date` classes.  
+
+An example of assert is the following, which is located at the `setQuotaTodayTest()`:  
+```java
+Assertions.assertEquals(5, project.getQuotaToday());
+```
+
+**Inputs used**: 
 - `setQuotaToday` - 5;
 - `setQuotaOverall` - 5;
 - `setTitle` - "New Project";
@@ -86,22 +96,48 @@ To test most of the setters of the `Project` class, mainly the methods:
 
 **Outcome**: The tests passed successfully.
 
+
 #### Test 15 - resetToday
-This test only verifies if the `resetToday` method successfully resets the values of the `secondsToday` and `quotaToday` to 0 and that the date was reset.
-For that purpose, we first set the `secondsToday` and `quotaToday` to 2 seconds and the `timeStart` to yesterday. After that call the `resetToday` method and assert that the values were reset.
+This test only verifies if the `resetToday` method successfully resets the values of the `secondsToday` and `quotaToday` to 0 and that the date was reset.  
+
+For that purpose, we first set the `secondsToday` and `quotaToday` to 2 seconds and the `timeStart` to yesterday. After that call the `resetToday` method and assert that the values were reset: 
+
+```java 
+Assertions.assertEquals(0, project.getSecondsToday());
+Assertions.assertEquals(0, project.getQuotaToday());
+Assertions.assertTrue(project.getTimeStart().compareTo(now) >= 0);
+```   
 
 **Inputs**:
-- An idle project with `secondsToday` = 2, `quotaToday` = 2 and `timeStarted` = yesterday;
+- An idle project with `secondsToday` = 2, `quotaToday` = 2 and `timeStarted` = yesterday;   
+
 **Outcome**: The tests passed successfully.
 
 #### Tests [16 - 17] - toString
-This method represents the project as a String. It has 2 conditions:
+This method represents the project as a String. It has 2 conditions:  
+
 - the first is used to print "yes" or "no" depending on the value of the `running` flag;
 - the second is used to print "yes" or "no" depending on the value of the `checked` flag.
 With this in mind, we created the tests:
-- `newProjectToStringTest`: which tests if the output of the `toString` method is the expected when called on a new project, which by default is not running and not checked;
+- `newProjectToStringTest`: tests if the output of the `toString` method is the expected when called on a new project, which by default is not running and not checked;
 -  `runningAndCheckedProjectToStringTest`: which tests if the output of the `toString` method is the expected when called on a project that is running and checked;
 
+the following  assertions were made: 
+
+```java 
+// newProjectToStrinTest() 
+ String result = project.toString();
+String expected =
+      "Project [title=New Project, running=no, secondsOverall=0, secondsToday=0, checked=no]";
+Assertions.assertEquals(expected, result); 
+
+// runningAndCheckedProjectToStringTest()  
+String result = project.toString();
+String expected =
+        "Project [title=New Project, running=yes, secondsOverall=0, secondsToday=0, checked=yes]";
+Assertions.assertEquals(expected, result);
+```
+ 
 **Inputs**:
 - `running` = false and `checked` = true
 - `running` = true and `checked` = true.
