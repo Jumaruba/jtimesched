@@ -264,13 +264,13 @@ Assertions.assertEquals(rowCount, 1);
 #### Test x - testColumnName 
 
 Tests if the name of the columns is read well. 
-Performs an `Assertions.assertEquals` over the name returned: the second column, which the name should be `Title`. 
+Performs an `Assertions.assertEquals` over the name returned: the second column, which should be `Title`. 
 
 #### Test x - testAddProject 
 
 This function verifies if the addition of a project in the `ProjectTableModel` is performed with success. 
-The test adds a project and then verifies the number of projects in the `ProjectTableModel` instance is 2. 
-It also verifies if the project is located in the correct position in the array. 
+The test adds a project and then verifies whether the number of projects in the `ProjectTableModel` instance is 2. 
+It also verifies whether the project is located in the correct position in the array. 
 To achieve this, 2 `Assertions.assertEquals` were used: 
  
 ```java
@@ -280,9 +280,9 @@ Assertions.assertEquals(2, projectCount);
 
 #### Test x - testRemoveProject 
 
-This test verifies if the removal of a project in the `ProjectTableModel` is performed with success. 
+This test verifies if the removal of a project in the `ProjectTableModel` is performed successfully. 
 
-After removing a project, it's checked if the number of projects in the `ProjectTableModel` instance is done with success. For this a `Assertions.assertEquals` was used: 
+After removing a project, it's checked if the number of projects in the `ProjectTableModel` instance is the expected using `Assertions.assertEquals`:
 
 ```java
 Assertions.assertEquals(0, projectCount);
@@ -291,7 +291,7 @@ Assertions.assertEquals(0, projectCount);
 #### Test x - testColumnClass 
 
 This test verifies if the class type of a column is correct.  
-Inside the `getColumnClass` function there is a switch case, which receives the number of the column and return the expected class. 
+Inside the `getColumnClass` function there is a switch case, which receives the **number of the column** and **return the expected class**. 
 
 This is a `@ParameterizedTest` test, which receives the **column value** and the **expected class** to be returned, from a function called `genGetValueAt`: 
 
@@ -308,7 +308,7 @@ Assertions.assertEquals(expected, columnClass);
 ``` 
 
 #### Test x - testGetValueAt
-
+<!-- TODO: stopped reviewing here -->
 This test assesses a value of a project in a specific position in the `ProjectTableModel` instance.  
 
 This test works with two projects, in order to cover the branches. 

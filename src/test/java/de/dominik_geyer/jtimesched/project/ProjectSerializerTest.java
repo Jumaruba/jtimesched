@@ -49,7 +49,8 @@ public class ProjectSerializerTest {
 
   public void setup() {
     try {
-      SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
+      SAXTransformerFactory tf =
+          (SAXTransformerFactory) SAXTransformerFactory.newInstance();
       hd = tf.newTransformerHandler();
       bytearr = new ByteArrayOutputStream();
       OutputStreamWriter out = new OutputStreamWriter(bytearr, "UTF8");
@@ -58,7 +59,6 @@ public class ProjectSerializerTest {
     } catch (Exception e) {
       e.printStackTrace();
     }
-
   }
 
   @AfterEach
@@ -121,7 +121,8 @@ public class ProjectSerializerTest {
     }
 
     // Then
-    final String expected = xmlProlog + "<color r=\"24\" g=\"165\" b=\"67\">#18a542</color>";
+    final String expected =
+        xmlProlog + "<color r=\"24\" g=\"165\" b=\"67\">#18a542</color>";
     assertEquals(writer.toString(), expected);
   }
 
@@ -144,7 +145,8 @@ public class ProjectSerializerTest {
     }
 
     // Then
-    final String expected = xmlProlog + "<time format=\"seconds\">1664828078692</time>";
+    final String expected =
+        xmlProlog + "<time format=\"seconds\">1664828078692</time>";
     assertEquals(writer.toString(), expected);
   }
 
@@ -189,8 +191,9 @@ public class ProjectSerializerTest {
       fail("Exception should not be thrown");
     }
 
-    final String expected = xmlProlog
-        + "<project><createdAt>1664828078692</createdAt><startedAt value=\"1664828011325\"/></project>";
+    final String expected =
+        xmlProlog
+            + "<project><createdAt>1664828078692</createdAt><startedAt value=\"1664828011325\"/></project>";
     assertEquals(writer.toString(), expected);
   }
 
@@ -235,7 +238,8 @@ public class ProjectSerializerTest {
   // Auxiliary methods
   public TransformerHandler getTransformerHandler()
       throws TransformerConfigurationException {
-    SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
+    SAXTransformerFactory tf =
+        (SAXTransformerFactory) SAXTransformerFactory.newInstance();
     return tf.newTransformerHandler();
   }
 
@@ -250,7 +254,8 @@ public class ProjectSerializerTest {
   @Test
   public void zeroProjectsWriteXmlTest() {
     // Given
-    ProjectSerializer ps = new ProjectSerializer(outputDir + "zeroProjectsTest");
+    ProjectSerializer ps =
+        new ProjectSerializer(outputDir + "zeroProjectsTest");
     List<Project> projects = new ArrayList<Project>();
 
     // When
@@ -261,7 +266,8 @@ public class ProjectSerializerTest {
     }
 
     // Then
-    String expected = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><projects version=\"unknown\"/>";
+    String expected =
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?><projects version=\"unknown\"/>";
     try {
       assertEquals(expected, readProjectsFile());
     } catch (IOException e) {
@@ -273,7 +279,8 @@ public class ProjectSerializerTest {
   @Test
   public void colorRunningCheckedWriteXmlTest() {
     // Given
-    ProjectSerializer ps = new ProjectSerializer(outputDir + "zeroProjectsTest");
+    ProjectSerializer ps =
+        new ProjectSerializer(outputDir + "zeroProjectsTest");
     List<Project> projects = new ArrayList<Project>();
     Project proj = new Project();
     Color color = new Color(219, 148, 112);
@@ -306,7 +313,8 @@ public class ProjectSerializerTest {
   @Test
   public void noColorIdleUncheckedWriteXmlTest() {
     // Given
-    ProjectSerializer ps = new ProjectSerializer(outputDir + "zeroProjectsTest");
+    ProjectSerializer ps =
+        new ProjectSerializer(outputDir + "zeroProjectsTest");
     List<Project> projects = new ArrayList<Project>();
     Project proj = new Project();
     proj.setTitle("New Project");
@@ -388,7 +396,6 @@ public class ProjectSerializerTest {
 
   // ASSIGMENT 5 ==========================================================
 
-
   @Test
   public void testGetEndXmlElement() {
     try {
@@ -400,7 +407,8 @@ public class ProjectSerializerTest {
       hd.endDocument();
 
       // Then
-      Assertions.assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?></projects>",
+      Assertions.assertEquals(
+          "<?xml version=\"1.0\" encoding=\"UTF-8\"?></projects>",
           new String(bytearr.toByteArray()));
     } catch (Exception e) {
       e.printStackTrace();
@@ -420,7 +428,9 @@ public class ProjectSerializerTest {
       hd.endDocument();
 
       // Then
-      Assertions.assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?><title/>", new String(bytearr.toByteArray()));
+      Assertions.assertEquals(
+          "<?xml version=\"1.0\" encoding=\"UTF-8\"?><title/>",
+          new String(bytearr.toByteArray()));
 
     } catch (Exception e) {
       Assertions.fail();
@@ -443,14 +453,14 @@ public class ProjectSerializerTest {
       hd.endDocument();
 
       // Then
-      Assertions.assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?><element>title</element>",
+      Assertions.assertEquals(
+          "<?xml version=\"1.0\" encoding=\"UTF-8\"?><element>title</element>",
           new String(bytearr.toByteArray()));
 
     } catch (Exception e) {
       Assertions.fail();
       e.printStackTrace();
     }
-
   }
 
   @Test
@@ -467,7 +477,8 @@ public class ProjectSerializerTest {
       hd.endDocument();
 
       // Then
-      Assertions.assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?><element>",
+      Assertions.assertEquals(
+          "<?xml version=\"1.0\" encoding=\"UTF-8\"?><element>",
           new String(bytearr.toByteArray()));
 
     } catch (Exception e) {
@@ -489,7 +500,8 @@ public class ProjectSerializerTest {
       hd.endDocument();
 
       // Then
-      Assertions.assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?><tag>",
+      Assertions.assertEquals(
+          "<?xml version=\"1.0\" encoding=\"UTF-8\"?><tag>",
           new String(bytearr.toByteArray()));
 
     } catch (Exception e) {
@@ -497,7 +509,7 @@ public class ProjectSerializerTest {
       e.printStackTrace();
     }
   }
- 
+
   @Test
   public void testAddXmlAttribute() {
     try {
@@ -516,20 +528,19 @@ public class ProjectSerializerTest {
       e.printStackTrace();
     }
   }
- 
- 
+
   @Test
   public void testGetFirstElement() {
     try {
       // Given
       ProjectSerializer projSerializer = new ProjectSerializer(anyString());
-      Document doc = getDocument("<tag><tag1><tag2>another tag</tag2></tag1></tag>");
+      Document doc =
+          getDocument("<tag><tag1><tag2>another tag</tag2></tag1></tag>");
       Element root = doc.getDocumentElement();
 
       // When
 
-      Node firstElement = (Node) projSerializer.getFirstElement(root,
-          "tag1");
+      Node firstElement = (Node) projSerializer.getFirstElement(root, "tag1");
       String nodeName = firstElement.getNodeName();
       String nodeValue = firstElement.getNodeValue();
 
@@ -544,9 +555,10 @@ public class ProjectSerializerTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {
-      "docs/05_assignment/inputDir/projectTest",
-  })
+  @ValueSource(
+      strings = {
+        "docs/05_assignment/inputDir/projectTest",
+      })
   public void readXml(String filepath)
       throws ParserConfigurationException, SAXException, IOException {
     ProjectSerializer p = new ProjectSerializer(filepath);
