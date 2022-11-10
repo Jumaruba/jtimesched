@@ -146,14 +146,22 @@ Assertions.assertEquals(expected, result);
 
 #### Test 18 - adjustSecondsToday
 The function `adjustSecondsToday` includes a single if condition. For this reason, two different input values were tested, one that makes the condition evaluate to false (`secondsToday` >= 0) and another that makes it evaluate to true (`secondsToday` < 0).
-To create this test we used the ParameterizedTest `adjustSecondsTodayTest`, which uses the MethodSource `genAdjustSecondsToday` to feed the test with:
+To create this test we used the **ParameterizedTest** `adjustSecondsTodayTest`, which uses the **MethodSource** `genAdjustSecondsToday` to feed the test with:  
 - `secondsToday`: parameter passed to `adjustSecondsToday`;
 - `olSecondsToday`: original value of `secondsToday`, before calling `adjustSecondsToday`;
 - `oldSecondsOverall`: original value of `secondsOverall` before calling `adjustSecondsToday`;
 - `expectedSecondsToday`: the expected value of `secondsToday` after calling `adjustSecondsToday`;
-- `expectedSecondsOverall`: the expected value of `secondsOverall` after calling `adjustSecondsToday`;
+- `expectedSecondsOverall`: the expected value of `secondsOverall` after calling `adjustSecondsToday`;  
+
 The parameters `oldSecondsToday` and `oldSecondsOverall` are used to set the initial values of the respective variables of the project. After that, the function `adjustSecondsToday` is called.
-We then assert that the values of `secondsOverall` and `secondsToday` are changed according to the input.
+We then assert that the values of `secondsOverall` and `secondsToday` are changed according to the input.  
+
+It's used `Assertions.assertEquals` to verify the values: 
+
+```java  
+Assertions.assertEquals(expectedSecondsToday, project.getSecondsToday());
+Assertions.assertEquals(expectedSecondsOverall, project.getSecondsOverall());
+```
 
 **Inputs**:  
 - Case 1 - `secondsToday` < 0:
@@ -172,7 +180,20 @@ We then assert that the values of `secondsOverall` and `secondsToday` are change
 **Outcome**: The tests passed successfully.
 
 #### Tests [19 - 20] - getElapsedSeconds
-This method has only one condition that checks if the project is running. For this reason, we developed two different tests - `idleElapsedSecondsTest` and `runningElapsedSecondsTest`; where the first tests this function when the project is idle and the second when it is running. If the project is not running we use `assertThrows` to verify if the exception is thrown. Otherwise, we verify if we can successfully retrieve the elapsed seconds.
+This method has only one condition that checks if the project is running. For this reason, we developed two different tests - `idleElapsedSecondsTest` and `runningElapsedSecondsTest`; where the first tests this function when the project is idle and the second when it is running. If the project is not running we use `assertThrows` to verify if the exception is thrown. Otherwise, we verify if we can successfully retrieve the elapsed seconds:
+
+```java 
+// idleElapsedSecondsTest  
+Assertions.assertThrows(ProjectException.class, () -> project.getElapsedSeconds()); 
+
+// runnignElapsedSecondsTest 
+// When and Then
+try {
+  Assertions.assertEquals(0, project.getElapsedSeconds());
+} catch (ProjectException e) {
+  fail("Exception shouldn't be thrown");
+}
+```
 
 **Inputs**:
 - `running` = false (the default value when a new project is created);
