@@ -313,8 +313,8 @@ In this test we followed exactly the same approach as in the previous tests for 
 Assertions.assertEquals(10, result); 
 ```
 
-**Inputs**:-
- `runningGetSecondsTodayTest`: 
+**Inputs**:  
+-`runningGetSecondsTodayTest`: 
   - running = true;
   > In this case we also assume that the elapsed time is 10 seconds;
 - `idleGetSecondsTodayTest`: 
@@ -322,7 +322,8 @@ Assertions.assertEquals(10, result);
   - `running` = false;
 - `exceptionGetSecondsTodayTest`:
   - initial `secondsToday` = 10;
-  - `running` = false;
+  - `running` = false;  
+
 **Outcome**: The tests passed successfully.
 
 ### ProjectTableModel class 
@@ -354,6 +355,9 @@ For this test it used an `Assertions.assertEquals`:
     Assertions.assertEquals(columnCount, 8);
 ```
 
+**Inputs**: No input was provided to the this test. 
+
+**Outcome**: The test passed successfully.
 
 #### Test 35 - testGetRowCount 
 
@@ -364,22 +368,38 @@ In the end, performs an `Assertions.assertEquals` over the number of projects, w
 Assertions.assertEquals(rowCount, 1);
 ``` 
 
+**Input**: A project was added upon the creation of the class. 
+
+**Outcome**: The tests passed successfully.
 #### Test 36 - testColumnName 
 
 Tests if the name of the columns is read well. 
-Performs an `Assertions.assertEquals` over the name returned: the second column, which should be `Title`. 
+Performs an `Assertions.assertEquals` over the name returned: the second column, which should be `Title`:  
 
+```java 
+Assertions.assertEquals(columnName, "Title");
+```
+
+**Inputs**: 
+  - `column`: 2  
+  
+**Outcome**: The tests passed successfully.
 #### Test 37 - testAddProject 
 
-This function verifies if the addition of a project in the `ProjectTableModel` is performed with success. 
+This function verifies if the addition of a project in the `ProjectTableModel` is performed with success.   
 The test adds a project and then verifies whether the number of projects in the `ProjectTableModel` instance is 2. 
-It also verifies whether the project is located in the correct position in the array. 
-To achieve this, 2 `Assertions.assertEquals` were used: 
+It also verifies whether the project is located in the correct position in the rows, which is expected to be in the end. 
+To achieve this, two `Assertions.assertEquals` were used: 
  
 ```java
 Assertions.assertEquals("Project1", projectName);
 Assertions.assertEquals(2, projectCount);
 ```
+
+**Inputs**: 
+  - A `new Projet("Project1")` is used as input. 
+  
+**Outcome**: The tests passed successfully.
 
 #### Test 38 - testRemoveProject 
 
@@ -391,10 +411,14 @@ After removing a project, it's checked if the number of projects in the `Project
 Assertions.assertEquals(0, projectCount);
 ```
 
+**Inputs**: A project is added to the `ProjectTableModel` class upon its creation.  
+
+**Outcome**: The tests passed successfully.
+
 #### Test 39 - testColumnClass 
 
 This test verifies if the class type of a column is correct.  
-Inside the `getColumnClass` function there is a switch case, which receives the **number of the column** and **return the expected class**. 
+Inside the `getColumnClass` function there is a **switch case**, which receives the **number of the column** and **return the expected class**. 
 
 This is a `@ParameterizedTest` test, which receives the **column value** and the **expected class** to be returned, from a function called `genGetValueAt`: 
 
@@ -409,6 +433,19 @@ In the end an `Assertions.assertEquals` is made to check the column class return
 ```java 
 Assertions.assertEquals(expected, columnClass); 
 ``` 
+
+**Inputs**: 
+  - `value`:
+    - `ProjectTableModel.COLUMN_COLOR`;
+    - `ProjectTableModel.COLUMN_CREATED`;
+    - `ProjectTableModel.COLUMN_TIMEOVERALL`;
+    - `ProjectTableModel.COLUMN_TIMETODAY`;
+    - `ProjectTableModel.COLUMN_CHECK`;
+    - `ProjectTableModel.COLUMN_ACTION_DELETE`;
+    - `ProjectTableModel.COLUMN_ACTION_START_PAUSE`;
+    - 8; this is an out of bounds value. Thus tests the default condition of the switch case.   
+- 
+**Outcome**: The tests passed successfully.
 
 #### Test 40 - testGetValueAt
 <!-- TODO: stopped reviewing here -->
@@ -449,11 +486,32 @@ public void testSetValueAt(int column, Object value, int row);
 
 The `column` is the identification number of the column to set the value, the `value` is the value to be set, and the `row` is the position of the project inside the `ProjectTableModel` instance.  
 
+This function contains a switch case and inside the `ProjectTableModel.COLUMN_TIMEOVERALL` and `ProjectTableModel.COLUMN_TIMETODAY`, it has a condition: 
+
+```
+if (column == ProjectTableModel.COLUMN_TIMEOVERALL)
+```
+
+Testing all the options in the switch case, automatically covers the cases when this condition is `true` and `false`.  
+
 This test uses an `Assertions.assertEquals`: 
 
 ```java 
 Assertions.assertEquals(value, actualValue); 
-```
+``` 
+
+**Inputs**: 
+  - Two projects are added to the `ProjectTableModel`, where one project contains default values and the other is configured as it follows: 
+    - `title`: "title"; 
+    - `checked`: true;
+    - `color`: Color.BLUE; 
+    - `timeCreated`: new Date(0); 
+    - `secondsOverall`: 1; 
+    - `secondsToday`: 1; 
+    - `running`: true;
+  - `row`: {`0`,`1`}, where the `0` is default project and `1` is the "personalized" one;
+  - `column`: [`1`, `8`].
+**Outcome**: The tests passed successfully.
 
 ### ProjectSerializerTest class
 
