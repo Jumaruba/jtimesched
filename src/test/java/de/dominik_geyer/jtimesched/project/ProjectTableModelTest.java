@@ -1,6 +1,5 @@
 package de.dominik_geyer.jtimesched.project;
 
-import org.junit.Before;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -126,7 +125,7 @@ public class ProjectTableModelTest {
     testRowParameter(row);
   }
 
-  // Assignemnt 5
+  // Assignment 5
   // ===========================================================================
 
   public static Stream<Arguments> genGetColumnsClass() {

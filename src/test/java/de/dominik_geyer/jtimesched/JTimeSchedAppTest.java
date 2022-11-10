@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 public class JTimeSchedAppTest {
   @Test
   public void testConfFolder() {
-    // Given 
+    // Given
     File conf = new File(JTimeSchedApp.CONF_PATH);
     try {
       FileUtils.deleteDirectory(conf);
