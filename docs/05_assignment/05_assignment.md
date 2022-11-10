@@ -358,7 +358,6 @@ For this test it used an `Assertions.assertEquals`:
 **Inputs**: No input was provided to the this test. 
 
 **Outcome**: The test passed successfully.
-
 #### Test 35 - testGetRowCount 
 
 It checks the number of projects in the `ProjectTableModel`. 
@@ -371,7 +370,8 @@ Assertions.assertEquals(rowCount, 1);
 **Input**: A project was added upon the creation of the class. 
 
 **Outcome**: The tests passed successfully.
-#### Test 36 - testColumnName 
+
+;#### Test 36 - testColumnName 
 
 Tests if the name of the columns is read well. 
 Performs an `Assertions.assertEquals` over the name returned: the second column, which should be `Title`:  
@@ -515,23 +515,19 @@ Assertions.assertEquals(value, actualValue);
 
 ### ProjectSerializerTest class
 
-#### [42-46] Tests 
-The tests from x - x are: 
+The tests from x - x follow a similar pattern: 
+
 - `getEndXmlElement`; 
-- `addXmlElement_1`; 
-- `addXmlElement_2`; 
-- `startXmlElement_1`; 
-- `startXmlElement_2`; 
+- `addXmlElement`; 
+- `startXmlElement`; 
 
-These tests follow a similar pattern: 
-
-- First a `setup()` function is called. This function sets a `TransformerHandler hd`, where its results are stored in a `ByteArrayOutputStream bytearr`. This means that everytime an information is added to `hd` it is written in the `bytearr`, so as the output can be analysed with `bytearr.toByteArray()`. An example is: 
+- First a `setup()` function is called. This function sets a `TransformerHandler hd`, where its results are stored in  `ByteArrayOutputStream bytearr`. This means that everytime an information is added to `hd` it is written in the `bytearr`, so as the output can be analysed with `bytearr.toByteArray()`. An example is: 
 
 ```java 
   Assertions.assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?></projects>", new String(bytearr.toByteArray()));
 ```
 
-Still, in order to the changes in the `TransformerHandler` triggers effects, the operation must be envolved between `hd.startDocument()` and `hd.endDocument()`. An example is the `testgetEndXmlElement()`: 
+Still, in order to the changes in the `TransformerHandler` triggers effects, the operation must be envolved between `hd.startDocument()` and `hd.endDocument()`. An example is the `testGetEndXmlElement()`: 
 
 ```java
       // Given
@@ -548,18 +544,124 @@ Still, in order to the changes in the `TransformerHandler` triggers effects, the
 ```
 
 In this case, the `ProjectSerializer.endXmlElement(hd, "projects");` is envolved by `hd.startDocument()` and `hd.endDocument()`.
+#### 42 - testGetEndXmlElement 
 
-All the tests passes with success. 
+This test verifies the `endXmlElement(TransformerHadnler hd, String element);` adds an end element to the xml.  
 
-#### 47 - testAddXmlAttribute 
+This test performs an `Assertion.assertEquals`: 
+
+```java 
+Assertions.assertEquals( "<?xml version=\"1.0\" encoding=\"UTF-8\"?></projects>", new String(bytearr.toByteArray())); 
+```
+
+**Input**: 
+  - `TransformerHandler hd`;
+  - `element`: `projects`. 
+  - 
+**Outcome**: The tests passed successfully. 
+
+#### 43 - testAddXmlElement 
+
+The `addXmlElement` adds an xml element to the document. 
+
+```java 
+protected static void addXmlElement(TransformerHandler hd, String element, AttributesImpl atts, Object data); 
+``` 
+
+There two conditions in this function and one doesn't influence the other. 
+```java 
+if (atts == null)
+if (data != null)
+```
+
+To cover the branch cases, we have separated two test cases: 
+- `testAddXmlElementNull`; 
+- `testAddXmlElementNotNull`; 
+
+
+The difference between both resides on the `atts` and `data` parameters being null or not. In other words, in the `testAddXmlElementNull` the values of these two parameters are null and the other case test they aren't. 
+
+We didn't test all the combinations between `atts` and `data`, since it would be redudant to test the cases below, due to the fact that, as explained before, one condicition doesn't influece the other. 
+
+- `atts` = null, `data` != null;  
+- `atts` != null, `data` = null
+
+Both tests performs an `Assertions.assertEquals`: 
+
+```java 
+// testAddXmlElementNull 
+Assertions.assertEquals( "<?xml version=\"1.0\" encoding=\"UTF-8\"?><title/>", new String(bytearr.toByteArray()));  
+// testAddXmlElementNotNull 
+Assertions.assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?><element>title</element>", new String(bytearr.toByteArray()));  
+```
+
+**Inputs**:
+  - `testAddXmlElementNull`: 
+    - `hd`: `TransformerHandler` created in the setup; 
+    - `element`: "title"; 
+    - `atts`: null; 
+    - `data`: null; 
+  - `testAddXmlElementNotNull`: 
+    - `hd`: `TransformerHandler` created in the setup; 
+    - `element`: "element"; 
+    - `atts`: new AttributesImpl(); 
+    - `data`: "title"; 
+ 
+**Outcome**: The tests passed successfully.
+
+#### 44 - testStartXmlElement 
+
+The `startXmlElement` adds a starting element to xml. 
+
+```java 
+protected static void startXmlElement( TransformerHandler hd, String element, AttributesImpl atts); 
+```
+
+This function contains the following condition: 
+```java 
+if (atts == null)
+```
+
+To cover all the branches related to this conditions, two test were created: 
+- `startXmlElementWithAtts`: the given `atts` to the function is not null; 
+- `startXmlElementNoAtts`: the given `atts` to the function is null; 
+
+Yet, this test performs the following assertions: 
+
+```java
+// startXmlElementWithAtts 
+Assertions.assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?><element>", new String(bytearr.toByteArray()));
+// startXmlElementNoAtts 
+Assertions.assertEquals( "<?xml version=\"1.0\" encoding=\"UTF-8\"?><tag>", new String(bytearr.toByteArray())); 
+``` 
+**Inputs**: 
+  - `startXmlElementWithAtts`: 
+    - `hd`: `TransformerHandler` created in the setup; 
+    - `element`: "element`;
+    - `atts`: `new AttributesImpl()` 
+  - `startXmlElementNoAtts`: 
+    - `hd`: `TransformerHandler` created in the setup; 
+    - `element`: "tag`;
+    - `atts`: null; 
+
+**Outcome**: The tests passed successfully.
+
+#### 45 - testAddXmlAttribute  
 
 This test verifies if an attribute addition to a xml element is performed correctly. 
 
 To perform this, an `Assertions.assertEquals()` function is called, as: 
 
-```
+```java 
 Assertions.assertEquals("my-title", atts.getValue("title"));
 ```
+
+**Inputs**:
+    - `atts`: `new AttributesImpl()`; 
+    - `attribute`: `"title"`; 
+    - `data`: `"my-title"`;  
+  
+**Outcome**: The tests passed successfully.
 
 #### 48 - testGetFirstElement 
 
@@ -574,18 +676,26 @@ Assertions.assertEquals(null, nodeValue);
 ```
 
 The first checks the name of the tag, the second checks the value associated, which is this case is none. 
-The test passes with success. 
+
+**Inputs**:   
+  - `e`: The root of the following xml: `"<tag><tag1><tag2>another tag</tag2></tag1></tag>"`. 
+  - `name`: "tag1"
+  
+**Outcome**: The tests passed successfully.
 
 
 #### 49 - readXml 
 
 This test reads a `xml` file and verifies if all information contained in it was stored. For this, we have created a file to be read located at `docs/05_assignment/inputDir/projectTest`.  
 
-This file contains two projects. The first one was designed to be the simplest as possible: there is no title, quotas, color, it's not checked neither running and no notes. The second project, on the other hand, was designed to be as complete as possible. 
+This file contains two projects. The first one was designed to be the simplest as possible: there is no title, quotas, color, it's not checked neither running and no notes. The second project, on the other hand, was designed to be as complete as possible. This approach allows to test all the possible cases of conditions inside the `readXml` function. 
 
 In total there're 19 assertions in this tests. All of them are `assertEquals` verifications. 
 
-Currently, the test returns desired results. 
+**Inputs**: The name of the document upon initializing the `ProjectSerializer` class: `"docs/05_assignment/inputDir/projectTest"`. 
+
+**Outcome**: The tests passed successfully.
+
 
 ### Line and Branch Coverage
 
