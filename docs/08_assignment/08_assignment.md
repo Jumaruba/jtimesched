@@ -53,9 +53,68 @@ This application allows the user to manually change the overall time of a task a
 
 #### All-uses 
 ![](./images/alluses_startXmlElement.png)
+
 ### Unit Tests
 <!-- for each coverage criteria -->
+#### All-defs 
+- **hd**
+  - **all_defs::pairId_0**:   
 
+  ```java
+  SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
+  TransformerHandler hd = tf.newTransformerHandler();
+  ```` 
+
+    This value is parsed to the function as a parameter and contains only one definition. It only needs to be declared with any acceptable value in order to pass through the patht `<0,1,3>`. Following the path defined in pair id 1 or 2 depends on the `atts` variable. 
+
+- **element**
+  - **all_defs::pairId_1**: 
+  ```java
+  String element = new String("element"); 
+  ```
+
+  It's in a similar situation of `hd` parameter. Thus, it only needs to be declared with any acceptable value. 
+
+- **atts**
+
+  - **all_defs::pairId_1**: 
+
+  ```java 
+  AttributesImpl atts = null; 
+  ```
+
+  To the condition return **true**, the `atts` must be `null`. 
+  - **all_defs::pairId_3**:  
+
+  ```java
+  AttributesImpl atts = new AttributesImpl();
+  ```
+
+  To follow the path `<0,1,3>` the condition `(atts == null)` must be false. Then `atts` must hhave a value different from null. 
+    - **all_defs::pairId_4**: 
+
+    ```java
+      AttributesImpl atts = null; 
+    ```
+    This test is similar to **all_defs::pairId_1**. To be declared in `2`, `atts` must be `null`. 
+#### All-c-uses
+To avoid some repetition, this section might reference some tests from the **all-defs** section, since they are the same. 
+
+- **hd**
+  - **all_c_uses::PairId_1**:   
+  Uses the test described in **All-defs::pairId_1**. 
+- **element**: 
+  - **all_c_uses::pairId_1**:   
+  Uses the test described in **All-defs::pairId_1**. 
+- **atts**: 
+  - **all_c_uses::pairId_3**:  
+  Uses the test described in **All_defs::pairId_3**: 
+  - **all_c_uses::pairId_4**:   
+  Uses the test described in **All_defs::pairId_4**: 
+
+
+#### All-p-uses
+#### All-uses
 
 ## getSecondsToday 
 
