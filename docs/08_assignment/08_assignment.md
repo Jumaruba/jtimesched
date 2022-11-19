@@ -37,14 +37,22 @@ This application allows the user to manually change the overall time of a task a
 <!-- Why test this function? AKA copy paste -->
 #### Dataflow diagram 
 
+![](./images/diagram_startXmlElement.png)
+
+#### Dataflow table 
+
+![](./images/tables_startXmlElement.png)
+
 #### All-defs 
+![](./images/alldefs-startXmlElement.png)
 
 #### All-c-uses 
-
+![](./images/allcuses_startXmlElement.png)
 #### All-p-uses 
+![](./images/allpuses_startXmlElement.png)
 
 #### All-uses 
-
+![](./images/alluses_startXmlElement.png)
 ### Unit Tests
 <!-- for each coverage criteria -->
 
