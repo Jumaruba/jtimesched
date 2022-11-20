@@ -102,19 +102,49 @@ To avoid some repetition, this section might reference some tests from the **all
 
 - **hd**
   - **all_c_uses::PairId_1**:   
-  Uses the test described in **All-defs::pairId_1**. 
+  Uses the test described in **all_defs::pairId_1**. 
 - **element**: 
   - **all_c_uses::pairId_1**:   
-  Uses the test described in **All-defs::pairId_1**. 
+  Uses the test described in **all_defs::pairId_1**. 
 - **atts**: 
   - **all_c_uses::pairId_3**:  
-  Uses the test described in **All_defs::pairId_3**: 
+  Uses the test described in **all_defs::pairId_3**: 
   - **all_c_uses::pairId_4**:   
-  Uses the test described in **All_defs::pairId_4**: 
+  Uses the test described in **all_defs::pairId_4**: 
 
 
 #### All-p-uses
+As well as in **All-c-uses** section, this section might reference some tests from the previous sections, since they are the same. 
+
+- **atts**: 
+  - **all_c_uses::pairId_1**:  
+  Uses the test described in **all_defs::pairId_1**: 
+  - **all_c_uses_pairId_2**:    
+  ```java
+  AttributesImpl atts = new AttributesImpl();
+  ```   
+
+  To follow the path `<0,1,3>` the condition `(atts == null)` must be false. In this case it's necessary to declare the variable and parse it as a parameter to the function.  
 #### All-uses
+
+The **All-uses** criteria uses tests from the **All-c-uses** and **All-p-uses**, once, in our case, $all\_p\_uses\cup all\_c\_uses = all\_uses$. 
+
+- **hd**
+  - **all_c_uses::PairId_1**:   
+  Uses the test described in **all_defs::pairId_1**. 
+- **element**: 
+  - **all_c_uses::pairId_1**:   
+  Uses the test described in **all_defs::pairId_1**. 
+- **atts**: 
+  - **all_c_uses::pairId_1**:  
+  Uses the test described in **all_defs::pairId_1**: 
+  - **all_c_uses_pairId_2**:    
+  Uses the test described in **all_p_uses::pairId_2** 
+  - **all_c_uses::pairId_3**:  
+  Uses the test described in **all_defs::pairId_3**: 
+  - **all_c_uses::pairId_4**:   
+  Uses the test described in **all_defs::pairId_4**: 
+
 
 ## getSecondsToday 
 
