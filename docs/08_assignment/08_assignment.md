@@ -10,13 +10,21 @@ This application allows the user to manually change the overall time of a task a
 <!-- for each variable. We are interesting in seeing a tabular summary for each variable, as the one presented in lecture #9 and all paths for each coverage criteria: all-defs, all-c-uses, all-p-uses, and all-uses.-->
 #### Dataflow diagram 
 
+![](./images/diagram_parseSeconds.png)
+
 #### All-defs 
 
-#### All-c-uses 
+![](./images/alldefs_parseSeconds.png)
 
+#### All-c-uses
+![](./images/allcuses_parseSeconds.png)
+    
 #### All-p-uses 
 
+![](./images/allpuses_parseSeconds.png)
+
 #### All-uses 
+![](./images/alluses_parseSeconds.png)
 
 ### Unit Tests and Outcome
 <!-- for each coverage criteria -->
@@ -30,8 +38,6 @@ This application allows the user to manually change the overall time of a task a
 #### All-uses 
 
 ## startXmlElement
-
-<!-- xuliane -->
 
 ### What is the purpose of this function and why should it be tested ?
 <!-- Why test this function? AKA copy paste -->
