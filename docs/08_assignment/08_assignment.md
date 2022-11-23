@@ -35,23 +35,23 @@ This application allows the user to manually change the overall time of a task a
 
 ### What is the purpose of this function and why should it be tested ?
 <!-- Why test this function? AKA copy paste -->
-#### Dataflow diagram 
+### Dataflow diagram 
 
 ![](./images/diagram_startXmlElement.png)
 
-#### Dataflow table 
+### Dataflow table 
 
 ![](./images/tables_startXmlElement.png)
 
-#### All-defs 
+### All-defs 
 ![](./images/alldefs-startXmlElement.png)
 
-#### All-c-uses 
+### All-c-uses 
 ![](./images/allcuses_startXmlElement.png)
-#### All-p-uses 
+### All-p-uses 
 ![](./images/allpuses_startXmlElement.png)
 
-#### All-uses 
+### All-uses 
 ![](./images/alluses_startXmlElement.png)
 
 ### Unit Tests
@@ -90,7 +90,7 @@ This application allows the user to manually change the overall time of a task a
   AttributesImpl atts = new AttributesImpl();
   ```
 
-  To follow the path `<0,1,3>` the condition `(atts == null)` must be false. Then `atts` must hhave a value different from null. 
+  To follow the path `<0,1,3>` the condition `(atts == null)` must be false. Then `atts` must have a value different from null. 
     - **all_defs::pairId_4**: 
 
     ```java
@@ -151,15 +151,40 @@ The **All-uses** criteria uses tests from the **All-c-uses** and **All-p-uses**,
 ### What is the purpose of this function and why should it be tested ?
 <!-- Why test this function? AKA copy paste --> 
 
-#### Dataflow diagram 
+### Dataflow diagram 
 
-#### All-defs 
+### All-defs 
 
-#### All-c-uses 
+### All-c-uses 
 
-#### All-p-uses 
+### All-p-uses 
 
-#### All-uses 
+### All-uses 
 
 ### Unit Tests
 <!-- for each coverage criteria -->
+#### All-defs 
+**seconds**:
+- **all_defs::pairId_1**: To test this path, the `seconds` variable must be defined, which requires the class attribute `secondsToday` to also be defined. Furthermore, the condition of node 2 (`isRunning`) must return true. Thus, the project must be running.
+Having this in mind, we must set the `secondsToday` to any integer and the `isRunning` flag to true. 
+- **all_defs::pairId_3**: In node 3, the `seconds` variable is redefined and used (added to the result of `getElapsedSeconds`). To reach this node, the conditions of the previous case must hold. ?...e mais...?
+
+**secondsToday**:
+- **all_defs::pairId_1**: To test this path, the attribute `secondsToday` of the `Project` instance must exist, so that it can be copied to the `seconds` variable.
+
+**e**:
+- **all_defs::pairId_1**: To reach node 5, the conditions to reach node 3 must also hold. Furthermore, the `getElapsedSeconds()` method must throw a `ProjectException`.
+
+#### All-uses (and All-c-uses) 
+**seconds**:
+- **all_uses::pairId_1**: Already described in **all_defs::pairId_1** of the `seconds` variable.
+- **all_uses::pairId_2**: To test this path, the `seconds` variable must be defined, which requires the class attribute `secondsToday` to also be defined. Furthermore, the condition of node 2 (`isRunning`) must return false. Thus, the project must not be running.
+Having this in mind, we must set the `secondsToday` to any integer and the `isRunning` flag to false. The return value must be equivalent to the value of `secondsToday`.
+- **all_uses::pairId_3**: Already described in **all_defs::pairId_3** of the `seconds` variable.
+- **all_uses::pairId_4**: To reach node 3, where `seconds` is redefined, the `seconds` variable must have been created, which requires the class attribute `secondsToday` to also exist. Furthermore, the condition of node 2 (`isRunning`) must return true. Thus, the project must be running. The, the function `getSecondsToday` must not throw an exception, so that it goes directly to the return node (7).
+
+**secondsToday**:
+- **all_uses::pairId_1**: Already described in **all_defs::pairId_1** of the `secondsToday` variable.
+
+**e**:
+- **all_uses::pairId_1**:  Already described in **all_defs::pairId_1** of the variable `e`.

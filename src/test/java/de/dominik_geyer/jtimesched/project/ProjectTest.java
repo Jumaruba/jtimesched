@@ -40,7 +40,7 @@ public class ProjectTest {
     Assertions.assertEquals(expected, project.getSecondsToday());
   }
 
-  // Assignment 5
+  // Assignment 5 =========================================
   // setSecondsOverall
   @ParameterizedTest
   @MethodSource("genSecondsOverall")
@@ -487,4 +487,7 @@ public class ProjectTest {
     // Then
     Assertions.assertEquals(date, project.getTimeStart());
   }
+
+  // Assignment 8 =================================
+
 }
