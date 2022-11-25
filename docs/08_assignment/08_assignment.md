@@ -152,36 +152,75 @@ The **All-uses** criteria uses tests from the **All-c-uses** and **All-p-uses**,
 <!-- Why test this function? AKA copy paste --> 
 
 ### Dataflow diagram 
+![](./images/diagram_getSecondsToday.png)
 
 ### All-defs 
+![](./images/alldefs_getSecondsToday.png)
 
 ### All-c-uses 
+![](./images/alluses_getSecondsToday.png)
 
 ### All-p-uses 
+![](./images/table_getSecondsToday.png)
 
 ### All-uses 
+![](./images/alluses_getSecondsToday.png)
 
 ### Unit Tests
 <!-- for each coverage criteria -->
 #### All-defs 
 **seconds**:
-- **all_defs::pairId_1**: To test this path, the `seconds` variable must be defined, which requires the class attribute `secondsToday` to also be defined. Furthermore, the condition of node 2 (`isRunning`) must return true. Thus, the project must be running.
+- **all_defs::pairId_1**: To test this path, the `seconds` variable must be defined, which requires the class attribute `secondsToday` to also be defined, as `seconds` is a copy of `secondsToday`. Furthermore, the condition of node 2 (`isRunning()`) must return true. Thus, the project must be running.
 Having this in mind, we must set the `secondsToday` to any integer and the `isRunning` flag to true. 
-- **all_defs::pairId_3**: In node 3, the `seconds` variable is redefined and used (added to the result of `getElapsedSeconds`). To reach this node, the conditions of the previous case must hold. ?...e mais...?
+- **all_defs::pairId_3**: In node 3, the `seconds` variable is redefined and used (added to the result of `getElapsedSeconds`). Even though this is a def-clear path, programmatically, particularly in Java, it is impossible to reach this node without passing nodes 1 and 2. Therefore, to test this path the conditions established for `all_defs::pairId_1` must also hold.
+
+Considering the impossibility of executing the function from node 3, this two paths were tested together with the `runningGetSecondsTodayTest`:
+  - **Steps**:
+    - Create a Project and set it as running - `project.setRunning(true)`; and set the `secondsToday` variable of the class - `setSecondsToday(10)`;
+    - By using a spy, make `getElapsedSeconds` return 5;
+    - Call the method `getSecondsToday`, which will execute node 1, node 2 and, as `isRunning()` is true must go to node 3, where seconds will be incremented;
+    - Verifies the final value of seconds by checking the return value with `assertEquals`, which must be 10+5 = 15.
+  - **Inputs / Assumptions**: 
+    - initial `secondsToday` = 10;
+    - `getElapsedSeconds()` returns 5;
+    - `isRunning()` returns true.
+  - **Outcome**: The test passes successfully.
 
 **secondsToday**:
-- **all_defs::pairId_1**: To test this path, the attribute `secondsToday` of the `Project` instance must exist, so that it can be copied to the `seconds` variable.
+- **all_defs::pairId_1**: To test this path, the attribute `secondsToday` of the `Project` instance must exist, so that it can be copied to the `seconds` variable. This path was already tested by `runningGetSecondsTodayTest`.
 
 **e**:
-- **all_defs::pairId_1**: To reach node 5, the conditions to reach node 3 must also hold. Furthermore, the `getElapsedSeconds()` method must throw a `ProjectException`.
+- **all_defs::pairId_1**: Even though <4,5> is a def-clear path, to reach node 4 programmatically, the function needs to also go through nodes 1,2 and 3. Therefore, the conditions to reach node 3 must also hold. Additionally, the `getElapsedSeconds()` method must throw a `ProjectException`. Thus, a different test - `exceptionGetSecondsTodayTest`; was used, where we make the method `getElapsedSeconds` throw a `ProjectException` by using a spy. The detail about the test are presented below:
+  - **Steps**:
+    - Create a Project and set it as running - `project.setRunning(true)`; and set the `secondsToday` variable of the class - `setSecondsToday(10)`;
+    - By using a spy, make `getElapsedSeconds` throw a `ProjectException`;
+    - Call the method `getSecondsToday`, which will execute node 1, node 2 and, as `isRunning()` is true must go to node 3, where the `getElapsedSeconds` must throw an exception, so that the flow will continue to node 4;
+    - Verifies the final value of seconds by checking the return value with `assertEquals`, which must be 10;
+    - the `fail` method is used inside a catch block so that we ensure that the flow of the program really went through the catch block and that no `ProjectException` was thrown.
+  - **Inputs / Assumptions**: 
+    - initial `secondsToday` = 10;
+    - `getElapsedSeconds()` throws a `ProjectException`;
+    - `isRunning()` returns true.
+  - **Outcome**: The test passes successfully.
 
 #### All-uses (and All-c-uses) 
+As there are no p-uses, the table for the all-uses and all-c-uses is similar.
+
 **seconds**:
 - **all_uses::pairId_1**: Already described in **all_defs::pairId_1** of the `seconds` variable.
 - **all_uses::pairId_2**: To test this path, the `seconds` variable must be defined, which requires the class attribute `secondsToday` to also be defined. Furthermore, the condition of node 2 (`isRunning`) must return false. Thus, the project must not be running.
-Having this in mind, we must set the `secondsToday` to any integer and the `isRunning` flag to false. The return value must be equivalent to the value of `secondsToday`.
+Having this in mind, we must set the `secondsToday` to any integer and the `isRunning` flag to false. The return value must be equivalent to the value of `secondsToday`. 
+To test this path we used `idleGetSecondsTodayTest`, whose details can be found below:
+  - **Steps**:
+    - Create a Project and set it as idle - `project.setRunning(false)`; and set the `secondsToday` variable of the class - `setSecondsToday(10)`;
+    - Call the method `getSecondsToday`, which will execute node 1, node 2 and, as `isRunning()` is false, must go to node 6;
+    - Verifies the final value of seconds by checking the return value with `assertEquals`, which must be 10.
+  - **Inputs / Assumptions**: 
+    - initial `secondsToday` = 10;
+    - `isRunning()` returns false.
+  - **Outcome**: The test passes successfully.
 - **all_uses::pairId_3**: Already described in **all_defs::pairId_3** of the `seconds` variable.
-- **all_uses::pairId_4**: To reach node 3, where `seconds` is redefined, the `seconds` variable must have been created, which requires the class attribute `secondsToday` to also exist. Furthermore, the condition of node 2 (`isRunning`) must return true. Thus, the project must be running. The, the function `getSecondsToday` must not throw an exception, so that it goes directly to the return node (7).
+- **all_uses::pairId_4**: To reach node 3, where `seconds` is redefined, the `seconds` variable must have been created, which requires the class attribute `secondsToday` to also exist. Furthermore, the condition of node 2 (`isRunning`) must return true. Thus, the project must be running. The, the function `getSecondsToday` must not throw an exception, so that it goes directly to the return node 6. This path was implicitly exercised in test `runningGetSecondsTodayTest`, which was already described.
 
 **secondsToday**:
 - **all_uses::pairId_1**: Already described in **all_defs::pairId_1** of the `secondsToday` variable.

@@ -354,15 +354,16 @@ public class ProjectTest {
       // Given
       Project project = new Project();
       project.setRunning(true);
+      project.setSecondsToday(10);
 
       Project spy = Mockito.spy(project);
-      Mockito.doReturn(10).when(spy).getElapsedSeconds();
+      Mockito.doReturn(5).when(spy).getElapsedSeconds();
 
       // When
       int result = spy.getSecondsToday();
 
       // Then
-      Assertions.assertEquals(10, result);
+      Assertions.assertEquals(15, result);
 
     } catch (ProjectException e) {
       fail("Shouldn't throw an exception");
@@ -487,7 +488,4 @@ public class ProjectTest {
     // Then
     Assertions.assertEquals(date, project.getTimeStart());
   }
-
-  // Assignment 8 =================================
-
 }
