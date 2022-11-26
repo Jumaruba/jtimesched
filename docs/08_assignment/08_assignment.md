@@ -149,7 +149,8 @@ The **All-uses** criteria uses tests from the **All-c-uses** and **All-p-uses**,
 ## getSecondsToday 
 
 ### What is the purpose of this function and why should it be tested ?
-<!-- Why test this function? AKA copy paste --> 
+This method of the `Project` class returns the number of seconds spent on a specific task in the current day. This value will be different depending on the current state of the project. For an idle project, this function must return the time previously spent during the present day. However, when considering a running project, the method must also consider the time that is currently passing and constantly being updated.
+As this method is essential for presenting the correct time spent on each project to the user, it is crucial to test these different behaviors, which map to distinct paths in the function's implementation.
 
 ### Dataflow diagram 
 ![](./images/diagram_getSecondsToday.png)
