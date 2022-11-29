@@ -64,8 +64,10 @@ In this test, the value of the `strTime` input is changed so that the condition 
 
 - m 
   - **all_c_uses::pairId_3** , **all_c_uses::pairId_4**, **all_c_uses::pairId_5**: these cases follow the respective paths: `<2,3,5>`, `<2,3,5,6>`, `<2,3,5,6,7>`. Since the paths **all_c_uses::pairId_3** and **all_c_uses::pairId_4** are contained in the **all_c_uses::pairId_5**, a test that verifies the path of **pairId_5** will also test the paths of ids 3 and 4. The tests applied were created in a previous assignments, and the input consists of valid strings. Valid strings are the ones that match the regex expression `"%d:%02d:%02d"`. An example of a test is the `formatSecondsPartitionTest`. This test makes an `assertEquals` and verifies the output against the expected value. The inputs are: 
-  
-  
+```java
+  "22:5:48",
+  "36:25:8"
+```
   
 #### All-p-uses 
 - m 
