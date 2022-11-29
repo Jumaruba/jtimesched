@@ -38,7 +38,7 @@ This application allows the user to manually change the overall time of a task a
 ```java
 if (!m.matches()) throw new ParseException("Invalid seconds-string", 0);
 ```
-  
+
 Since it returns a `Exception` the test uses an `assertThrows`. The parameters tested can be checked below: 
 ```java
   "",
@@ -59,22 +59,22 @@ Since it returns a `Exception` the test uses an `assertThrows`. The parameters t
 In this test, the value of the `strTime` input is changed so that the condition returns a true value.
 
 **strTime**
-- **all_defs::pairId_1**: To exercise the path `<0,2>`, the `strTime` parameter must be initialized with a valid or invalid argument as shown above. However, here we are only worried about the first usage of this variable, in node 2, where we must assure that this input does not cause any undesired effect when creating the `Matcher` instance. In fact, in past assignments, we had already created multiple tests: `parseSecondsInvalidBoundariesTest`, `parseSecondsValidBoundariesTest`, `parseSecondsInvalidTest` and `parseSecondsValidTest` that exercise this path by setting the `strTime` parameter with different values. However, here it would be enough to test it with `null` and with a non-null value (e.g. ""), because the `matcher` function accepts any `CharSequence`, and a `String` variable, which is the case of `strTime` is also a `CharSequence`. The `parseSecondsInvalidTest` `ParametrizedTest` already tests these cases and, in fact, by using a `assertThrows` to check if a `ParseException` is thrown for these invalid values, shows that the null value generates an unexpected `NullPointerException` instead. To sum up:
+- **all_defs::pairId_1**: To exercise the path `<0,2>`, the `strTime` parameter must be initialized with a valid or invalid argument, as shown above. However, here we are only worried about the first usage of this variable, in node 2, where we must ensure that this input does not cause any undesired effect when creating the `Matcher` instance. In past assignments, we had already made multiple tests: `parseSecondsInvalidBoundariesTest`, `parseSecondsValidBoundariesTest`, `parseSecondsInvalidTest`, and `parseSecondsValidTest` that exercise this path by setting the `strTime` parameter with different values. However, here it would be enough to test it with `null` and with a non-null value (e.g. ""), because the `matcher` function accepts any `CharSequence`, and a `String` variable, which is the case of `strTime` is also a `CharSequence`. The `parseSecondsInvalidTest` `ParametrizedTest` already tests these cases and, in fact, by using a `assertThrows` to check if a `ParseException` is thrown for these invalid values, shows that the null value generates an unexpected `NullPointerException` instead. To sum up:
   - **Inputs**: null, any String (e.g. empty String);
   - **Outcome**: fails for null, passes for empty String.
 
 **hours**
-- **all_defs::pairId_1**: Even though the `hours` variable is only defined in node 5, it is not possible to start executing the function on this node, at least in Java. Therefore, we must assure that the function reaches this node, which requires that the condition in node 3 evaluates to false i.e. a valid time String is used. That scenario was already exercised in the `parseSecondsValidTest` and `parseSecondsValidBoundaries` in previous assignments, where different valid values are used and the output time is verified with `assertEquals`. If we were to create a specific test only to test this path, we believe that it would suffice to test a valid time string with only hours, like "24:0:0", so that the return value of node 8 could be accessed only based on the conversion from hours to seconds. To sum up:
+- **all_defs::pairId_1**: Even though the `hours` variable is only defined in node 5, it is impossible to start executing the function on this node, at least in Java. Therefore, we must ensure that the function reaches this node, which requires that the condition in node 3 evaluates to false i.e., we use a valid time String. In previous assignments, that scenario was already exercised in the `parseSecondsValidTest` and `parseSecondsValidBoundaries`, where different valid values are used and the output time is verified with `assertEquals`. If we were to create a specific test only to test this path, we believe that it would suffice to test a valid time string with only hours, like "24:0:0", so that the return value of node 8 could be accessed only based on the conversion from hours to seconds. To sum up:
   - **Inputs**: "24:0:0" - one of the inputs tested in `parseSecondsValidTest`;
   - **Outcome**: success.
 
 **minutes**
-- **all_defs::pairId_1**: This case is similar to the previous one. However it refers the path `<6,8>`. This path was already exercised in the tests of the previous assignments where we use valid time Strings as input - `parseSecondsValidTest` and `parseSecondsValidBoundaries`. If we were to create a specific test only to test this path, we believe that it would suffice to test a valid time string with only minutes, like "0:59:0", so that the return value of node 8 could be accessed only based on the conversion from minutes to seconds. To sum up:
+- **all_defs::pairId_1**: This case is similar to the previous one. However, it refers to the path `<6,8>`. This path was already exercised in the tests of the earlier assignments where we used valid time Strings as input - `parseSecondsValidTest` and `parseSecondsValidBoundaries`. If we were to create a specific test only to test this path, we believe that it would suffice to test a valid time string with only minutes, like "0:59:0", so that the return value of node 8 could be accessed only based on the conversion from minutes to seconds. To sum up:
   - **Inputs**: "0:59:0" - one of the inputs tested in `parseSecondsValidTest`;
   - **Outcome**: success.
 
 **seconds**
-- **all_defs::pairId_1**: This case is similar to the previous one. However it refers the path `<7,8>`. This path was already exercised in the tests of the previous assignments where we use valid time Strings as input - `parseSecondsValidTest` and `parseSecondsValidBoundaries`. If we were to create a specific test only to test this path, we believe that it would suffice to test a valid time string with only seconds, like "0:0:59", so that the return value of node 8 could be accessed only based on the seconds conversion. To sum up:
+- **all_defs::pairId_1**: This case is similar to the previous one. However, it refers to the path `<7,8>`. This path was already exercised in the tests of the earlier assignments where we used valid time Strings as input - `parseSecondsValidTest` and `parseSecondsValidBoundaries`. If we were to create a specific test only to test this path, we believe that it would suffice to test a valid time string with only seconds, like "0:0:59", so that the return value of node 8 could be accessed only based on the seconds' conversion. To sum up:
   - **Inputs**: "0:0:59" - one of the inputs tested in `parseSecondsValidTest`;
   - **Outcome**: success.
 
