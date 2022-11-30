@@ -57,93 +57,85 @@ The `startXmlElement` method of the `ProjectSerializer` class adds a starting el
 ### Unit Tests
 <!-- for each coverage criteria -->
 #### All-defs 
-- **hd**
-  - **all_defs::pairId_0**:   
+**hd**
+- **all_defs::pairId_0**:   
 
   ```java
   SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
   TransformerHandler hd = tf.newTransformerHandler();
   ```` 
 
-  This value is parsed to the function as a parameter and contains only one definition. It only needs to be declared with any acceptable value to pass through the path `<0,1,3>`. Following the path defined in pair id 1 or 2 depends on the `atts` variable.
+  The `hd` variable is passed to the function as a parameter and contains only one definition. It only needs to be declared with any acceptable value to pass through the path `<0,1,3>`. Following the path defined in pair id 1 or 2 depends on the `atts` variable.
 
-- **element**
+**element**
   - **all_defs::pairId_1**: 
-  ```java
-  String element = new String("element"); 
-  ```
+    ```java
+    String element = new String("element"); 
+    ```
 
-  It's in a similar situation to `hd` parameter. Thus, it only needs to be declared with any acceptable value.
+    It's in a similar situation to `hd` parameter. Thus, it only needs to be declared with any acceptable value.
 
-- **atts**
+**atts**
 
   - **all_defs::pairId_1**: 
 
-  ```java 
-  AttributesImpl atts = null; 
-  ```
+    ```java 
+    AttributesImpl atts = null; 
+    ```
 
-  To the condition return **true**, the `atts` must be `null`. 
+    For the condition to return **true**, the `atts` must be `null`. 
+
   - **all_defs::pairId_3**:  
 
-  ```java
-  AttributesImpl atts = new AttributesImpl();
-  ```
+    ```java
+    AttributesImpl atts = new AttributesImpl();
+    ```
 
-  To follow the path `<0,1,3>`, the condition `(atts == null)` must be false. Then `atts` must have a value different from null.
-    - **all_defs::pairId_4**: 
+    To follow the path `<0,1,3>`, the condition `(atts == null)` must be false. Then `atts` must have a value different from null.
+
+  - **all_defs::pairId_4**: 
 
     ```java
       AttributesImpl atts = null; 
     ```
     This test is similar to **all_defs::pairId_1**. To be declared in `2`, `atts` must be `null`. 
+
 #### All-c-uses
 To avoid some repetition, this section might reference some tests from the **all-defs** section, since they are the same. 
 
-- **hd**
-  - **all_c_uses::PairId_1**:   
-  Uses the test described in **all_defs::pairId_1**. 
-- **element**: 
-  - **all_c_uses::pairId_1**:   
-  Uses the test described in **all_defs::pairId_1**. 
-- **atts**: 
-  - **all_c_uses::pairId_3**:  
-  Uses the test described in **all_defs::pairId_3**: 
-  - **all_c_uses::pairId_4**:   
-  Uses the test described in **all_defs::pairId_4**: 
+**hd**
+- **all_c_uses::pairId_1**: Uses the test described in **all_defs::pairId_1**. 
+**element**: 
+- **all_c_uses::pairId_1**: Uses the test described in **all_defs::pairId_1**. 
+**atts**: 
+- **all_c_uses::pairId_3**: Uses the test described in **all_defs::pairId_3**: 
+- **all_c_uses::pairId_4**: Uses the test described in **all_defs::pairId_4**: 
 
 
 #### All-p-uses
 As well as in **All-c-uses** section, this section might reference some tests from the previous sections since they are the same. 
 
-- **atts**: 
-  - **all_c_uses::pairId_1**:  
-  Uses the test described in **all_defs::pairId_1**: 
+**atts**: 
+  - **all_c_uses::pairId_1**: Uses the test described in **all_defs::pairId_1**.
   - **all_c_uses_pairId_2**:    
-  ```java
-  AttributesImpl atts = new AttributesImpl();
-  ```   
+    ```java
+    AttributesImpl atts = new AttributesImpl();
+    ```   
 
-  To follow the path `<0,1,3>` the condition `(atts == null)` must be false. In this case it's necessary to declare the variable and parse it as a parameter to the function.  
+    To follow the path `<0,1,3>` the condition `(atts == null)` must be false. In this case, it's necessary to declare the variable and parse it as a parameter to the function.  
 #### All-uses
 
-The **All-uses** criteria uses tests from the **All-c-uses** and **All-p-uses**, once, in our case, $all\_p\_uses\cup all\_c\_uses = all\_uses$. 
+The **All-uses** criteria uses tests from the **All-c-uses** and **All-p-uses**, since, in our case, $all\_p\_uses\cup all\_c\_uses = all\_uses$. 
 
-- **hd**
-  - **all_c_uses::PairId_1**:   
-  Uses the test described in **all_defs::pairId_1**. 
-- **element**: 
-  - **all_c_uses::pairId_1**:   
-  Uses the test described in **all_defs::pairId_1**. 
-- **atts**: 
-  - **all_c_uses::pairId_1**:  
-  Uses the test described in **all_defs::pairId_1**: 
-  - **all_c_uses_pairId_2**:    
-  Uses the test described in **all_p_uses::pairId_2** 
-  - **all_c_uses::pairId_3**:  
-  Uses the test described in **all_defs::pairId_3**: 
-  - **all_c_uses::pairId_4**:   
-  Uses the test described in **all_defs::pairId_4**: 
+**hd**
+  - **all_c_uses::PairId_1**: Uses the test described in **all_defs::pairId_1**. 
+**element**: 
+  - **all_c_uses::pairId_1**: Uses the test described in **all_defs::pairId_1**. 
+**atts**: 
+  - **all_c_uses::pairId_1**: Uses the test described in **all_defs::pairId_1**: 
+  - **all_c_uses_pairId_2**: Uses the test described in **all_p_uses::pairId_2** 
+  - **all_c_uses::pairId_3**: Uses the test described in **all_defs::pairId_3**: 
+  - **all_c_uses::pairId_4**: Uses the test described in **all_defs::pairId_4**: 
 
 
 ## getSecondsToday 
