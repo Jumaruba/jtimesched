@@ -58,47 +58,23 @@ The `startXmlElement` method of the `ProjectSerializer` class adds a starting el
 <!-- for each coverage criteria -->
 #### All-defs 
 **hd**
-- **all_defs::pairId_0**:   
+- **all_defs::pairId_0**: To exercise the path `<0,1,2>`, the JVM must verify the condition inside the function as 
+  **true**. In other words, the `atts` parameter passed as an argument to `startXml` must be `null`. Thus, we have 
+  reused the test function `public void startXmlElementNoAtts()` from previous assignments to exercise the path. The `hd` variable is passed to the function as a parameter and contains only one definition. It only needs to be declared with any acceptable value to pass through the path `<0,1,3>`.  
 
   ```java
   SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
   TransformerHandler hd = tf.newTransformerHandler();
   ```` 
 
-  The `hd` variable is passed to the function as a parameter and contains only one definition. It only needs to be declared with any acceptable value to pass through the path `<0,1,3>`. Following the path defined in pair id 1 or 2 depends on the `atts` variable.
-
 **element**
-  - **all_defs::pairId_1**: 
-    ```java
-    String element = new String("element"); 
-    ```
-
-    It's in a similar situation to `hd` parameter. Thus, it only needs to be declared with any acceptable value.
+- **all_defs::pairId_1**: To exercise the path `<0,1,3>`, the JVM must verify the condition inside the function as **false**. In other words, the `atts` parameter passed as an argument to `startXml` must be **not** null. Thus, we have reused the test function `public void startXmlElementWithAtts()` from previous assignments to exercise the path. It's in a similar situation to `hd` parameter. Thus, it only needs to be declared with any acceptable value.
 
 **atts**
+- **all_defs::pairId_3**:  To follow the path `<0,1,3>`, the condition `(atts == null)` must be false. Then `atts` 
+  must have a value **different from null**. Thus, we have reused the test function `public void startXmlElementWithAtts()` from previous assignments to exercise the path. 
 
-  - **all_defs::pairId_1**: 
-
-    ```java 
-    AttributesImpl atts = null; 
-    ```
-
-    For the condition to return **true**, the `atts` must be `null`. 
-
-  - **all_defs::pairId_3**:  
-
-    ```java
-    AttributesImpl atts = new AttributesImpl();
-    ```
-
-    To follow the path `<0,1,3>`, the condition `(atts == null)` must be false. Then `atts` must have a value different from null.
-
-  - **all_defs::pairId_4**: 
-
-    ```java
-      AttributesImpl atts = null; 
-    ```
-    This test is similar to **all_defs::pairId_1**. To be declared in `2`, `atts` must be `null`. 
+- **all_defs::pairId_4**: This test is similar to **all_defs::pairId_1**. To be declared in `2`, `atts` must be `null`. Thus, we have reused the test function `public void startXmlElementNoAtts()` from previous assignments to exercise the path. 
 
 #### All-c-uses
 To avoid some repetition, this section might reference some tests from the **all-defs** section, since they are the same. 
@@ -116,27 +92,26 @@ To avoid some repetition, this section might reference some tests from the **all
 As well as in **All-c-uses** section, this section might reference some tests from the previous sections since they are the same. 
 
 **atts**: 
-  - **all_c_uses::pairId_1**: Uses the test described in **all_defs::pairId_1**.
-  - **all_c_uses_pairId_2**:    
-    ```java
-    AttributesImpl atts = new AttributesImpl();
-    ```   
+- **all_c_uses::pairId_1**: For the condition to return **true**, the `atts` must be `null`. Thus, we have reused the test function `public void startXmlElementNoAtts()` from previous assignments to exercise the path. 
 
-    To follow the path `<0,1,3>` the condition `(atts == null)` must be false. In this case, it's necessary to declare the variable and parse it as a parameter to the function.  
+- **all_c_uses::pairId_2**: To follow the path `<0,1,3>` the condition `(atts == null)` must be false. In this case, it's necessary to declare the variable and parse it as a parameter to the function.  Thus, we have reused the test function `public void startXmlElementWithAtts()` from previous assignments to exercise the path. 
+ 
 #### All-uses
 
 The **All-uses** criteria uses tests from the **All-c-uses** and **All-p-uses**, since, in our case, $all\_p\_uses\cup all\_c\_uses = all\_uses$. 
 
 **hd**
-  - **all_c_uses::PairId_1**: Uses the test described in **all_defs::pairId_1**. 
+  - **all_c_uses::pairId_1**: Uses the test described in **all_defs::pairId_1**. 
 **element**: 
   - **all_c_uses::pairId_1**: Uses the test described in **all_defs::pairId_1**. 
 **atts**: 
   - **all_c_uses::pairId_1**: Uses the test described in **all_defs::pairId_1**: 
-  - **all_c_uses_pairId_2**: Uses the test described in **all_p_uses::pairId_2** 
+  - **all_c_uses::pairId_2**: Uses the test described in **all_p_uses::pairId_2** 
   - **all_c_uses::pairId_3**: Uses the test described in **all_defs::pairId_3**: 
   - **all_c_uses::pairId_4**: Uses the test described in **all_defs::pairId_4**: 
 
+> Note: We are aware that the path `<2,3>` isn't a clean path, since the `atts` is passed as parameter in path node 
+> `0`. However, this matter went into discussion, and we decided to add this path, since the fact that this is not a clean-path doesn't change the necessity of testing it. 
 
 ## getSecondsToday 
 
