@@ -31,10 +31,10 @@ This application allows the user to manually change the overall time of a task a
 
 ## startXmlElement
 
-<!-- xuliane -->
-
 ### What is the purpose of this function and why should it be tested ?
-<!-- Why test this function? AKA copy paste -->
+
+The `startXmlElement` method of the `ProjectSerializer` class adds a starting element to a `TransformerHandler`, a class that, in the context of this project, is used to parse and build the XML document that stores the state of the application before exiting. This method is used to initialize each XML tag of the configuration file, namely the "projects" tag and the "project" tag of each task. Therefore, it is crucial to ensure that this method does not generate any unexpected behavior. Otherwise, the current tasks and their process may be lost.
+
 #### Dataflow diagram 
 
 ![](./images/diagram_startXmlElement.png)
