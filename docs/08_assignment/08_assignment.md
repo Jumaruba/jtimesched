@@ -65,7 +65,7 @@ The `startXmlElement` method of the `ProjectSerializer` class adds a starting el
   TransformerHandler hd = tf.newTransformerHandler();
   ```` 
 
-    This value is parsed to the function as a parameter and contains only one definition. It only needs to be declared with any acceptable value in order to pass through the patht `<0,1,3>`. Following the path defined in pair id 1 or 2 depends on the `atts` variable. 
+  This value is parsed to the function as a parameter and contains only one definition. It only needs to be declared with any acceptable value to pass through the path `<0,1,3>`. Following the path defined in pair id 1 or 2 depends on the `atts` variable.
 
 - **element**
   - **all_defs::pairId_1**: 
@@ -73,7 +73,7 @@ The `startXmlElement` method of the `ProjectSerializer` class adds a starting el
   String element = new String("element"); 
   ```
 
-  It's in a similar situation of `hd` parameter. Thus, it only needs to be declared with any acceptable value. 
+  It's in a similar situation to `hd` parameter. Thus, it only needs to be declared with any acceptable value.
 
 - **atts**
 
@@ -90,7 +90,7 @@ The `startXmlElement` method of the `ProjectSerializer` class adds a starting el
   AttributesImpl atts = new AttributesImpl();
   ```
 
-  To follow the path `<0,1,3>` the condition `(atts == null)` must be false. Then `atts` must hhave a value different from null. 
+  To follow the path `<0,1,3>`, the condition `(atts == null)` must be false. Then `atts` must have a value different from null.
     - **all_defs::pairId_4**: 
 
     ```java
@@ -114,7 +114,7 @@ To avoid some repetition, this section might reference some tests from the **all
 
 
 #### All-p-uses
-As well as in **All-c-uses** section, this section might reference some tests from the previous sections, since they are the same. 
+As well as in **All-c-uses** section, this section might reference some tests from the previous sections since they are the same. 
 
 - **atts**: 
   - **all_c_uses::pairId_1**:  
