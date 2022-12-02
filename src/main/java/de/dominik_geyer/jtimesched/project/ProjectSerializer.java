@@ -224,6 +224,9 @@ public class ProjectSerializer {
   protected static void addXmlElement(
       TransformerHandler hd, String element, AttributesImpl atts, Object data)
       throws SAXException {
+    if (element == null || element.isEmpty()) {
+      throw new SAXException("Invalid element name");
+    }
     if (atts == null) atts = new AttributesImpl();
     hd.startElement("", "", element, atts);
     if (data != null) {

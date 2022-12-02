@@ -217,7 +217,7 @@
                     <excludedClasses>
                        <param>de.dominik_geyer.jtimesched.gui.*</param>
                        <param>de.dominik_geyer.jtimesched.gui.table.*</param>
-                       <param>de.dominik_geyer.jtimesched.JTimeSchedApp.java</param>
+                       <param>de.dominik_geyer.jtimesched.JTimeSchedApp*</param>
                     </excludedClasses>
                     <excludedTestClasses>
                          <param>de.dominik_geyer.jtimesched.JTimeSchedAppTest</param>
