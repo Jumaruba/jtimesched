@@ -24,6 +24,12 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>5.9.1</version>
@@ -36,8 +42,8 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.junit.vintage</groupId>
-            <artifactId>junit-vintage-engine</artifactId>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
             <version>5.9.1</version>
             <scope>test</scope>
         </dependency>
@@ -46,12 +52,6 @@
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
             <version>0.8.8</version>
-        </dependency>
-                <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-module-junit4</artifactId>
-            <version>2.0.2</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.powermock</groupId>
@@ -205,7 +205,32 @@
                     </goals>
                     </execution>
                 </executions>
-            </plugin>    
+            </plugin>  
+            
+            <!-- Pit plugin -->
+            <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <version>1.10.0</version>
+                 <configuration>
+                    <verbose>true</verbose>
+                    <excludedClasses>
+                       <param>de.dominik_geyer.jtimesched.gui.*</param>
+                       <param>de.dominik_geyer.jtimesched.gui.table.*</param>
+                       <param>de.dominik_geyer.jtimesched.JTimeSchedApp.java</param>
+                    </excludedClasses>
+                    <excludedTestClasses>
+                         <param>de.dominik_geyer.jtimesched.JTimeSchedAppTest</param>
+                    </excludedTestClasses>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.pitest</groupId>
+                        <artifactId>pitest-junit5-plugin</artifactId>
+                        <version>1.1.0</version>
+                    </dependency>
+                </dependencies>
+            </plugin>  
 
         </plugins>
     </build>

@@ -108,22 +108,22 @@ public class ProjectTableModelTest {
     }
   }
 
-  @ParameterizedTest
-  @ValueSource(ints = {-2, -1})
-  public void testPartitionE7(int row) {
-    testRowParameter(row);
-  }
+  // @ParameterizedTest
+  // @ValueSource(ints = {-2, -1})
+  // public void testPartitionE7(int row) {
+  //   testRowParameter(row);
+  // }
 
   @Test
   public void testPartitionE8() {
     testRowParameter(0);
   }
 
-  @ParameterizedTest
-  @ValueSource(ints = {1, 2})
-  public void testPartitionE9(int row) {
-    testRowParameter(row);
-  }
+  // @ParameterizedTest
+  // @ValueSource(ints = {1, 2})
+  // public void testPartitionE9(int row) {
+  //   testRowParameter(row);
+  // }
 
   // Assignment 5
   // ===========================================================================
