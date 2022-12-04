@@ -6,8 +6,8 @@ import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
-import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class PlainTextFormatterTest {
   PlainTextFormatter ptf = new PlainTextFormatter();
@@ -28,14 +28,17 @@ public class PlainTextFormatterTest {
     String time = "17:24:24";
 
     String result = ptf.format(log);
-    String expected; 
-    if (System.getProperty("os.name").split(" ")[0].equals("Windows")) { 
-      expected = String.format("%s (%s) %s [ALL]: This is a log\r\n", date, weekDay, time);
+    String expected;
+    if (System.getProperty("os.name").split(" ")[0].equals("Windows")) {
+      expected =
+          String.format(
+              "%s (%s) %s [ALL]: This is a log\r\n", date, weekDay, time);
     } else {
-      expected = String.format("%s (%s) %s [ALL]: This is a log\n", date, weekDay, time);
+      expected =
+          String.format(
+              "%s (%s) %s [ALL]: This is a log\n", date, weekDay, time);
     }
 
-      Assertions.assertEquals(expected, result); 
+    Assertions.assertEquals(expected, result);
   }
 }
-
