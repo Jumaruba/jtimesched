@@ -87,6 +87,9 @@ This mutant replaced this boolean return by `true` and still managed to survive 
 - The tests pass successfully and the mutant is killed:
 ![](./images/project_table_model1_fix.png)
 
+#### Mutant 2
+![](./images/project_table_model2.png).
+
 ### ProjectSerializer 
 
 ### PlainTextFormatter 

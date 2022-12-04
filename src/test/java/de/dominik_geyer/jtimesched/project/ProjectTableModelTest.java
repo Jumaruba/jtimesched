@@ -5,10 +5,13 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Handler;
 import java.util.logging.Level;
+import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 import java.util.Date;
@@ -16,9 +19,12 @@ import java.awt.Color;
 import java.lang.reflect.Field;
 
 import de.dominik_geyer.jtimesched.JTimeSchedApp;
+import net.bytebuddy.jar.asm.Handle;
 
 public class ProjectTableModelTest {
   public static ProjectTableModel projectTableModel;
+  Field reader;
+  Logger l;
 
   @BeforeEach
   public void initProjectTableModel()
@@ -26,10 +32,10 @@ public class ProjectTableModelTest {
           IllegalAccessException {
 
     // Prepare logger, since it's initialized at main class.
-    Field reader = JTimeSchedApp.class.getDeclaredField("LOGGER");
+    reader = JTimeSchedApp.class.getDeclaredField("LOGGER");
     reader.setAccessible(true);
     JTimeSchedApp mainClass = new JTimeSchedApp();
-    Logger l = Logger.getLogger("JTimeSched");
+    l = Logger.getLogger("JTimeSched");
     l.setLevel(Level.ALL);
     reader.set(mainClass, l);
 
@@ -256,8 +262,108 @@ public class ProjectTableModelTest {
     // When
     projectTableModel.setValueAt(value, row, column);
     Object actualValue = projectTableModel.getValueAt(row, column);
-
     // Then
     Assertions.assertEquals(value, actualValue);
+  }
+
+  @Test
+  public void testSetTimeTodayColumn() {
+    LogHandler handler = new LogHandler();
+    l.addHandler(handler);
+    l.setLevel(Level.INFO);
+
+    // Given
+    int row = 0;
+    int col = ProjectTableModel.COLUMN_TIMETODAY;
+    projectTableModel.getProjectAt(0).setSecondsToday(5);
+    projectTableModel.getProjectAt(row).setSecondsOverall(10);
+
+    // When
+    projectTableModel.setValueAt(15, row, col);
+
+    // Then
+    String expected =
+        "Manually set time today for project 'project' from 0:00:05 to 0:00:15";
+    Object actualValue = projectTableModel.getValueAt(row, col);
+    Assertions.assertEquals(15, actualValue);
+    Assertions.assertEquals(expected, handler.getMessage());
+  }
+
+  @Test
+  public void testSetTimeOverallColumn() {
+    LogHandler handler = new LogHandler();
+    l.addHandler(handler);
+    l.setLevel(Level.INFO);
+
+    // Given
+    int row = 0;
+    int col = ProjectTableModel.COLUMN_TIMEOVERALL;
+    projectTableModel.getProjectAt(0).setSecondsToday(5);
+    projectTableModel.getProjectAt(row).setSecondsOverall(10);
+
+    // When
+    projectTableModel.setValueAt(15, row, col);
+
+    // Then
+    String expected =
+        "Manually set time overall for project 'project' from 0:00:10 to 0:00:15";
+    Object actualValue = projectTableModel.getValueAt(row, col);
+    Assertions.assertEquals(15, actualValue);
+    Assertions.assertEquals(expected, handler.getMessage());
+  }
+
+  @Test
+  public void testCheckProject() {
+    LogHandler handler = new LogHandler();
+    l.addHandler(handler);
+    l.setLevel(Level.INFO);
+
+    // Given
+    int row = 0;
+    int col = ProjectTableModel.COLUMN_CHECK;
+    boolean check = true;
+
+    // When
+    projectTableModel.setValueAt(check, row, col);
+
+    // Then
+    String expected = "Set check for project 'project'";
+    Assertions.assertEquals(expected, handler.getMessage());
+  }
+
+  @Test
+  public void testUncheckProject() {
+    LogHandler handler = new LogHandler();
+    l.addHandler(handler);
+    l.setLevel(Level.INFO);
+
+    // Given
+    int row = 0;
+    int col = ProjectTableModel.COLUMN_CHECK;
+    boolean check = false;
+
+    // When
+    projectTableModel.setValueAt(check, row, col);
+
+    // Then
+    String expected = "Unset check for project 'project'";
+    Assertions.assertEquals(expected, handler.getMessage());
+  }
+}
+
+class LogHandler extends Handler {
+  String lastMessage = "";
+
+  public String getMessage() {
+    return lastMessage;
+  }
+
+  public void close() {}
+
+  public void flush() {}
+
+  @Override
+  public void publish(LogRecord record) {
+    lastMessage = record.getMessage();
   }
 }
