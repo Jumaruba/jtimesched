@@ -56,13 +56,12 @@ public class ProjectTimeTest {
         Arguments.of("25:0:0", 90000));
   }
 
-  // // Category-Partition Tests
-  // @ParameterizedTest
-  // @MethodSource("parseSecondsInvalidParams")
-  // public void parseSecondsInvalidTest(String strTime) {
-  //   assertThrows(ParseException.class, () ->
-  // ProjectTime.parseSeconds(strTime));
-  // }
+  // Category-Partition Tests
+  @ParameterizedTest
+  @MethodSource("parseSecondsInvalidParams")
+  public void parseSecondsInvalidTest(String strTime) {
+    assertThrows(ParseException.class, () -> ProjectTime.parseSeconds(strTime));
+  }
 
   static Stream<String> parseSecondsInvalidParams() {
     return Stream.of(
@@ -114,17 +113,17 @@ public class ProjectTimeTest {
     Assertions.assertEquals(expected, result);
   }
 
-  // @ParameterizedTest
-  // @MethodSource("genFormatSecondsPartition")
-  // public void formatSecondsPartitionTest(int s, String expected) {
-  //   testFormatSeconds(s, expected);
-  // }
+  @ParameterizedTest
+  @MethodSource("genFormatSecondsPartition")
+  public void formatSecondsPartitionTest(int s, String expected) {
+    testFormatSeconds(s, expected);
+  }
 
-  // @ParameterizedTest
-  // @MethodSource("genFormatSecondsBoundary")
-  // public void formatSecondsBoundary(int s, String expected) {
-  //   testFormatSeconds(s, expected);
-  // }
+  @ParameterizedTest
+  @MethodSource("genFormatSecondsBoundary")
+  public void formatSecondsBoundary(int s, String expected) {
+    testFormatSeconds(s, expected);
+  }
 
   public static Stream<Arguments> genFormatSecondsPartition() {
     return Stream.of(

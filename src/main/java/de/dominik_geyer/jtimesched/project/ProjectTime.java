@@ -30,10 +30,17 @@ public final class ProjectTime {
   private ProjectTime() {}
 
   public static String formatSeconds(int s) {
+    if (s < 0) {
+      return "0:00:00";
+    }
     return String.format("%d:%02d:%02d", s / 3600, (s % 3600) / 60, (s % 60));
   }
 
   public static int parseSeconds(String strTime) throws ParseException {
+    if (strTime == null) {
+      throw new ParseException("Time string is null", 0);
+    }
+
     Pattern p = Pattern.compile("(\\d+):([0-5]?\\d):([0-5]?\\d)"); // 0:00:00
     Matcher m = p.matcher(strTime);
 
