@@ -28,9 +28,14 @@ public class PlainTextFormatterTest {
     String time = "17:24:24";
 
     String result = ptf.format(log);
+    String expected; 
+    if (System.getProperty("os.name").split(" ")[0].equals("Windows")) { 
+      expected = String.format("%s (%s) %s [ALL]: This is a log\r\n", date, weekDay, time);
+    } else {
+      expected = String.format("%s (%s) %s [ALL]: This is a log\n", date, weekDay, time);
+    }
 
-    String expected =
-        String.format("%s (%s) %s [ALL]: This is a log\n", date, weekDay, time);
-    Assertions.assertEquals(expected, result);
+      Assertions.assertEquals(expected, result); 
   }
 }
+
