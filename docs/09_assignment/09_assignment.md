@@ -16,6 +16,43 @@
 ### Non-killed mutants
 <!--Explain which classes have more non-killed mutants -->
 
+## Irrelevant mutations 
+
+### Project 
+
+There are 9 mutant that survived the tests developed for the `ProjectSerializer`. Where x of them are irrelevant. 
+
+#### Mutant 1
+The `WriteXml()`, contains some non-killed mutant tests. One of them, is related to the `atts.clear()` statement. 
+
+![](./images/projectSerializer_writeXml_2.png) 
+
+The `atts.clear()` is responsible for cleaning the list of attributes in a `AttributesImpl` object. However, notice that `[1]` has the same attributes of `[2]`. Although the values of the attributes are different, the `atts.clear()` isn't necessary, since the values of each attribute are replaced by new ones in `[2]`. Thus, there's no way we can change the test code so that the `atts.clear()` becomes necessary. 
+
+#### Mutant 2 
+This mutation regards the `WriteXml()` function and excludes the following line from the source code:  
+
+![](./images/projectSerializer_writeXml_3.png) 
+
+As the [documentation](https://www.ibm.com/docs/en/sdi/7.1.1?topic=parsers-xml-sax-parser) says, the default enconding for the `XML SAX Parser` is UTF-8, which means that the speficication of the enconding isn't necessary. Thus, there are no changes that could kill the mutation. 
+
+#### Mutant 3 and 4 
+
+The mutation regards the `WriteXml()` function and excludes the following lines from the source code: 
+
+![](./images/projectSerializer_writeXml_4.png)
+![](./images/projectSerializer_writeXml_5.png) 
+
+These statements are responsible for beautifying the output xml text, which means that this is not a critical piece of code and doesn't affect the program execution. Thus, it doesn't make sense testing or verifying it in our test functions. 
+
+#### Mutant 5 
+![](./images/projectSerializer_writeXml_6.png) 
+
+#### Mutant 6 and 7 
+![](./images/projectSerializer_writeXml_7_8.png) 
+
+#### Mutant 8 
+![](./images/projectSerializer_writeXml_9.png) 
 ## Equivalent mutants
 <!-- for each class -->
 
@@ -40,7 +77,7 @@
 ### ProjectSerializer 
 There are 9 mutant that survived the tests developed for the `ProjectSerializer`. 
 
-#### Mutant1 
+#### Mutant 9 
 
 In the function `readXml()`, although the `set` statments are removed from the function, the test still passes: 
 
@@ -80,36 +117,6 @@ With this modifications, the mutant tests are killed.
 ![](./images/projectSerialiazer_readXml_KILLED.png) 
 ___ 
 
-#### Mutant 2 
-The `WriteXml()`, contains some non-killed mutant tests. One of then, is related to the `atts.clear()` statement. 
 
-![](./images/projectSerializer_writeXml_2.png) 
-
-The `atts.clear()` is responsible for cleaning the list of attributes in a `AttributesImpl` object. However, notice that `[1]` has the same attributes of `[2]`. Although the values of the attributes are different, the `atts.clear()` isn't necessary, since the values are replaced by new ones in `[2]`. Thus, there's no way we can change the test code so that the `atts.clear()` becomes necessary. 
-
-#### Mutant 3 
-This mutation regards the `WriteXml()` function and excludes the following line from the source code:  
-
-![](./images/projectSerializer_writeXml_3.png) 
-
-As the [documentation](https://www.ibm.com/docs/en/sdi/7.1.1?topic=parsers-xml-sax-parser) says, the default enconding for the `XML SAX Parser` is UTF-8, which means that the speficication of the enconding isn't necessary. Thus, there are no changes that could kill the mutation. 
-
-#### Mutant 4 and 5 
-
-The mutation regards the `WriteXml()` function and excludes the following lines from the source code: 
-
-![](./images/projectSerializer_writeXml_4.png)
-![](./images/projectSerializer_writeXml_5.png) 
-
-These statements are responsible for beautifying the output xml text, which means that this is not a critical piece of code and doesn't affect the program execution. Thus, it doesn't make sense testing or verifying it in our test functions. 
-
-#### Mutant 6 
-![](./images/projectSerializer_writeXml_6.png) 
-
-#### Mutant 7 and 8 
-![](./images/projectSerializer_writeXml_7_8.png) 
-
-#### Mutant 9 
-![](./images/projectSerializer_writeXml_9.png) 
 
 ### PlainTextFormatter 
