@@ -41,10 +41,10 @@ The initial report shows a mutation coverage of 82% and a test strength of 83%.
 ![](./images/report_initial_all.png)
 
 Additionally, if we analyze the mutation coverage for each package individually we verify that the `misc` package has 100% line and mutation coverage and test strength. Therefore, we will focus on improving the mutation score for the `project` package.
-![](./images/report_initial_report.png)
+![](./images/report_initial_misc.png)
 
 Breaking down the coverage by class, we see that the mutation score of the classes varies from 74% (`ProjectTableModel`) and 86% (`Project`), which means that there are still non-killed mutants to be addressed. However, as we will see, not all the reported mutants should be considered (there are some equivalent mutants).
-![](./images/report_initial_misc.png)
+![](./images/report_initial_project.png)
 
 
 ### Non-killed mutants
