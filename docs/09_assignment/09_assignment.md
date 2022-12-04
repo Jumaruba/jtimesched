@@ -43,12 +43,14 @@ The initial report shows a mutation coverage of 82% and a test strength of 83%.
 Additionally, if we analyze the mutation coverage for each package individually we verify that the `misc` package has 100% line and mutation coverage and test strength. Therefore, we will focus on improving the mutation score for the `project` package.
 ![](./images/report_initial_misc.png)
 
-Breaking down the coverage by class, we see that the mutation score of the classes varies from 74% (`ProjectTableModel`) and 86% (`Project`), which means that there are still non-killed mutants to be addressed. However, as we will see, not all the reported mutants should be considered (there are some equivalent mutants).
+Breaking down the coverage by class, we see that the mutation score of the classes varies from 75% (`ProjectTableModel`) and 94% (`ProjectTime`), which means that there are still non-killed mutants to be addressed. However, as we will see, not all the reported mutants should be considered (there are some equivalent mutants).
 ![](./images/report_initial_project.png)
 
 
 ### Non-killed mutants
-<!--Explain which classes have more non-killed mutants -->
+The class with more non-killed mutants is therefore the `ProjectSerializer`, with 12/70 mutants that survive the tests developed in previous assignments. However, it is also the class for which more mutations were generated. Moreover, 9/36 mutants survive the tests developed for the methods of the `ProjectTableModel` class and 6/43 mutations survive the unit tests developed for the `Project` class. Finally, only 1 mutant resists the tests developed for the methods of the `ProjectTime` class.
+
+Some of these mutants are, however, equivalent, as we will see in the [next section](#equivalent-mutants). The other non-killed mutants and the tests developed to handle them will be further explained in the scope of each class in the [Description of the tests](#description-of-the-tests) section of this report.
 
 ## Equivalent mutants
 <!-- for each class -->
