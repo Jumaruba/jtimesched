@@ -72,6 +72,20 @@ Some of these mutants are, however, equivalent, as we will see in the [next sect
 ### ProjectTime 
 
 ### ProjectTableModel 
+There are 9 mutants that survive the tests developed for the `ProjectTableModel` class.
+
+#### Mutant 1
+The first one was introduced by the changes made to the `isCellEditable` function to avoid failing tests:
+![](./images/project_table_model1.png).
+This mutant replaced this boolean return by `true` and still managed to survive the existent tests. Therefore, we improved the `testPartitionE7` and `testPartitionE9` parameterized tests to verify that, when the index is out of bounds, the method return false. For that, we used the `testRowParameter` function.
+**Preconditions**:
+- The project table model has a single project.
+**Inputs**:
+- `testPartitionE7`: -2, -1;
+- `testPartitionE9`: 1, 2.
+**Outcome**
+- The tests pass successfully and the mutant is killed:
+![](./images/project_table_model1_fix.png)
 
 ### ProjectSerializer 
 

@@ -93,19 +93,13 @@ public class ProjectTableModelTest {
   }
 
   public void testRowParameter(int row) {
-    try {
-      // Given
-      // row
+    // Given the `row` parameter
 
-      // When
-      projectTableModel.isCellEditable(row, 0);
+    // When
+    boolean actual = projectTableModel.isCellEditable(row, 0);
 
-      // Then
-      // accept
-    } catch (IndexOutOfBoundsException e) {
-      System.out.println(e.getClass());
-      Assertions.fail("This test should not return this kind of exception");
-    }
+    // Then
+    Assertions.assertEquals(false, actual);
   }
 
   @ParameterizedTest
