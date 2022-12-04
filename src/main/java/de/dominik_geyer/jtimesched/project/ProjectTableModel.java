@@ -128,6 +128,9 @@ public class ProjectTableModel extends AbstractTableModel {
 
   @Override
   public boolean isCellEditable(int row, int column) {
+    if (row < 0 || row >= this.arPrj.size()) {
+      return false;
+    }
     Project prj = this.getProjectAt(row);
 
     switch (column) {
