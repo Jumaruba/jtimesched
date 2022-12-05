@@ -195,27 +195,31 @@ public class ProjectTableModelTest {
   @Test
   public void testAddProject() {
     // Given
+    ProjectTableModel projectTableModelSpy = Mockito.spy(projectTableModel);
     Project p = new Project("Project1");
     // When
-    projectTableModel.addProject(p);
-    String projectName = projectTableModel.getProjectAt(1).getTitle();
-    int projectCount = projectTableModel.getRowCount();
+    projectTableModelSpy.addProject(p);
+    String projectName = projectTableModelSpy.getProjectAt(1).getTitle();
+    int projectCount = projectTableModelSpy.getRowCount();
 
     // Then
     Assertions.assertEquals("Project1", projectName);
     Assertions.assertEquals(2, projectCount);
+    Mockito.verify(projectTableModelSpy).fireTableRowsInserted(1, 1);
   }
 
   @Test
   public void testRemoveProject() {
     // Given
+    ProjectTableModel projectTableModelSpy = Mockito.spy(projectTableModel);
 
     // When
-    projectTableModel.removeProject(0);
-    int projectCount = projectTableModel.getRowCount();
+    projectTableModelSpy.removeProject(0);
+    int projectCount = projectTableModelSpy.getRowCount();
 
     // Then
     Assertions.assertEquals(0, projectCount);
+    Mockito.verify(projectTableModelSpy).fireTableRowsDeleted(0, 0);
   }
 
   @ParameterizedTest
@@ -348,6 +352,21 @@ public class ProjectTableModelTest {
     // Then
     String expected = "Unset check for project 'project'";
     Assertions.assertEquals(expected, handler.getMessage());
+  }
+
+  @Test
+  public void testFireTableRowsUpdated() {
+    // Given
+    int row = 0;
+    int col = ProjectTableModel.COLUMN_TITLE;
+
+    ProjectTableModel projectTableModelSpy = Mockito.spy(projectTableModel);
+
+    // When
+    projectTableModelSpy.setValueAt("test", row, col);
+
+    // Then
+    Mockito.verify(projectTableModelSpy).fireTableRowsUpdated(row, row);
   }
 }
 

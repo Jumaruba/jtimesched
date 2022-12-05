@@ -88,7 +88,20 @@ This mutant replaced this boolean return by `true` and still managed to survive 
 ![](./images/project_table_model1_fix.png)
 
 #### Mutant 2
-![](./images/project_table_model2.png).
+<!-- Set and uncheck -->
+
+#### Mutants 3 & 4
+![](./images/project_table_model_2.png).
+<!-- overall vs today set log-->
+
+#### Mutant 5 to 7
+<!-- na addProject -->
+
+#### Mutant 8
+<!--na removeProject -->
+
+## Mutant 9
+<!-- call tah fireTable no fim da setValueAt -->
 
 ### ProjectSerializer 
 
