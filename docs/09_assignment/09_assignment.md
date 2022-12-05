@@ -232,8 +232,7 @@ In the `addProject` method, 3 mutants had survived our tests because we were not
 Mockito.verify(projectTableModelSpy).fireTableRowsInserted(1, 1);
 ```
 
-**Preconditions**:
-- The project table model has a single project.
+**Preconditions**: The project table model has a single project.
 
 **Inputs**: a `Project` instance with the name "Project1";
 
@@ -244,16 +243,18 @@ Mockito.verify(projectTableModelSpy).fireTableRowsInserted(1, 1);
 
 ![](./images/projectTableModel/non-killed/09.png).
 
-**Mutations**:
+**Mutations**: `removed call to de/dominik_geyer/jtimesched/project/ProjectTableModel::fireTableRowsDeleted`
 
-<!-- Description -->
+This mutation is similar to the one above but now in the `removeProject` method, where we must verify if the `fireTableRowsDeleted` method is being called with the correct parameters. To do so, we followed the same approach as above by updating the test `testRemoveProject` method and verifying with `Mockito.verify` if the method was called exactly once with the correct parameters:
+```java
+Mockito.verify(projectTableModelSpy).fireTableRowsDeleted(0, 0);
+```
 
-**Preconditions**:
+**Preconditions**: The project table model has a single project.
 
-- The project table model has a single project.
-  **Inputs**: ?
-  **Outcome**
-- The test passes successfully and the mutant is killed:
+**Inputs**: `row` = 0.
+
+**Outcome**: The test passes successfully and the mutant is killed:
   ![](./images/projectTableModel/fix/09.png)
 
 #### Final Mutation Score
