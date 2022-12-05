@@ -94,8 +94,7 @@ This mutant replaced the boolean return by `true` and still managed to survive t
   **Inputs**:
 - **`testPartitionE7`**: -2, -1;
 - **`testPartitionE9`**: 1, 2.
-  **Outcome**
-- The tests pass successfully and the mutant is killed:
+  **Outcome**: The tests pass successfully and the mutant is killed:
   ![](./images/projectTableModel/fix/01.png)
 
 #### Mutant 2
@@ -158,8 +157,7 @@ Assertions.assertEquals(expected, handler.getMessage());
   - `value` = `false`;
   - `row` = 0;
   - `col` = `ProjectTableModel.COLUMN_CHECK`.
-    **Outcome**
-- The tests pass successfully and the mutant is killed:
+    **Outcome**: The tests pass successfully and the mutant is killed:
   ![](./images/projectTableModel/fix/02.png)
 
 #### Mutants 3 & 4
@@ -195,8 +193,7 @@ Assertions.assertEquals(expected, handler.getMessage());
   - `value` = 15;
   - `row` = 0;
   - `col` = `ProjectTableModel.COLUMN_TIMEOVERALL`.
-    **Outcome**
-- The tests pass successfully and the mutants are both killed:
+    **Outcome**: The tests pass successfully and the mutants are both killed:
   ![](./images/projectTableModel/fix/03_04.png)
 
 #### Mutant 5
@@ -211,8 +208,7 @@ Assertions.assertEquals(expected, handler.getMessage());
 
 - The project table model has a single project.
   **Inputs**: ?
-  **Outcome**
-- The test passes successfully and the mutant is killed:
+  **Outcome**: The test passes successfully and the mutant is killed:
   ![](./images/projectTableModel/fix/05.png)
 
 #### Mutant 7 - 8
@@ -227,8 +223,7 @@ Assertions.assertEquals(expected, handler.getMessage());
 
 - The project table model has a single project.
   **Inputs**: ?
-  **Outcome**
-- The test passes successfully and the mutants are killed:
+  **Outcome**: The test passes successfully and the mutants are killed:
   ![](./images/projectTableModel/fix/06_08.png)
 
 ## Mutant 9
