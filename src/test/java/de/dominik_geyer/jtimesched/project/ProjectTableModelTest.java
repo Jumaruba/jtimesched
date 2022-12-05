@@ -19,11 +19,9 @@ import java.awt.Color;
 import java.lang.reflect.Field;
 
 import de.dominik_geyer.jtimesched.JTimeSchedApp;
-import net.bytebuddy.jar.asm.Handle;
 
 public class ProjectTableModelTest {
   public static ProjectTableModel projectTableModel;
-  Field reader;
   Logger l;
 
   @BeforeEach
@@ -32,7 +30,7 @@ public class ProjectTableModelTest {
           IllegalAccessException {
 
     // Prepare logger, since it's initialized at main class.
-    reader = JTimeSchedApp.class.getDeclaredField("LOGGER");
+    Field reader = JTimeSchedApp.class.getDeclaredField("LOGGER");
     reader.setAccessible(true);
     JTimeSchedApp mainClass = new JTimeSchedApp();
     l = Logger.getLogger("JTimeSched");
