@@ -371,7 +371,7 @@ public class ProjectTableModelTest {
 }
 
 class LogHandler extends Handler {
-  String lastMessage = "";
+  private String lastMessage = "";
 
   public String getMessage() {
     return lastMessage;

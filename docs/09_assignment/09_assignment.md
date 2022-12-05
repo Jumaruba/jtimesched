@@ -72,27 +72,119 @@ Some of these mutants are, however, equivalent, as we will see in the [next sect
 ### ProjectTime 
 
 ### ProjectTableModel 
-There are 9 mutants that survive the tests developed for the `ProjectTableModel` class.
+There are 9 mutants that survive the tests developed for the `ProjectTableModel` class:
+
+![](./images/projectTableModel/non-killed/all.png)
 
 #### Mutant 1
-The first one was introduced by the changes made to the `isCellEditable` function to avoid failing tests:
-![](./images/project_table_model1.png).
-This mutant replaced this boolean return by `true` and still managed to survive the existent tests. Therefore, we improved the `testPartitionE7` and `testPartitionE9` parameterized tests to verify that, when the index is out of bounds, the method return false. For that, we used the `testRowParameter` function.
+The first mutant was introduced function when we fixed the source code of the `isCellEditable` method to avoid failing tests:
+
+![](./images/projectTableModel/non-killed/01.png)
+
+**Mutation**: `replaced boolean return with true for de/dominik_geyer/jtimesched/project/ProjectTableModel::isCellEditable`
+
+This mutant replaced the boolean return by `true` and still managed to survive the existent tests. Therefore, we improved the `testPartitionE7` and `testPartitionE9` parameterized tests to verify that the method returns false when the row index is out of bounds. For that, we used the `testRowParameter` function, which uses the `assertEquals` to verify if the given row leads to a "false" return value.
 **Preconditions**:
 - The project table model has a single project.
 **Inputs**:
-- `testPartitionE7`: -2, -1;
-- `testPartitionE9`: 1, 2.
+- **`testPartitionE7`**: -2, -1;
+- **`testPartitionE9`**: 1, 2.
 **Outcome**
 - The tests pass successfully and the mutant is killed:
-![](./images/project_table_model1_fix.png)
+![](./images/projectTableModel/fix/01.png)
 
 #### Mutant 2
-<!-- Set and uncheck -->
+
+![](./images/projectTableModel/non-killed/02.png)
+
+**Mutation**: `setValueAt : negated conditional → KILLED`
+
+This mutant shows that the condition that verifies if the project is checked or not is not exercise. Therefore, we had to find a way to verify the output of logger when the `setValueAt` function is called to set the value of the `ProjectTableMode.COLUMN_CHECK` as true or false.
+ For that, we created the tests `testCheckProject` and `testUncheckProject`. Furthermore, to be able to test the output of the logger, we created a custom `Handler` that stores the last message that is published to the logger in a class field:
+ ```java
+class LogHandler extends Handler {
+  private String lastMessage = "";
+
+  public String getMessage() {
+    return lastMessage;
+  }
+
+  public void close() {}
+
+  public void flush() {}
+
+  @Override
+  public void publish(LogRecord record) {
+    lastMessage = record.getMessage();
+  }
+}
+ ```
+Then, in each of the tests, we associate the handler with the logger `l`, which was already initialized in the function annotated with `@BeforeEach`, namely `initProjectTableModel` (explained in assignment 5):
+```java
+    LogHandler handler = new LogHandler();
+    l.addHandler(handler);
+    l.setLevel(Level.INFO);
+```
+The `initProjectTableModel` also initializes the `ProjectTableModel` instance with a single project. After that, in each of the tests, we set the parameter `row` to 0 (the first and only project of the Table), the `col` to `ProjectTableModel.COLUMN_CHECK` and the value to `true` or `false`, to check or uncheck the checkbox of that table cell. After calling the `setValueAt` function with this parameters we then assert that the output of the logger is the expected:
+```java
+// In testCheckProject
+String expected = "Set check for project 'project'";
+Assertions.assertEquals(expected, handler.getMessage());
+
+// In testUncheckProject
+String expected = "Unset check for project 'project'";
+Assertions.assertEquals(expected, handler.getMessage());
+```
+
+**Preconditions**:
+- The project table model has a single project.
+**Inputs**:
+- **`testCheckProject`**: 
+  - `value` = `true`;
+  - `row` = 0;
+  - `col` = `ProjectTableModel.COLUMN_CHECK`. 
+- **`testUncheckProject`**: 
+  - `value` = `false`;
+  - `row` = 0;
+  - `col` = `ProjectTableModel.COLUMN_CHECK`. 
+**Outcome**
+- The tests pass successfully and the mutant is killed:
+![](./images/projectTableModel/fix/02.png)
+
 
 #### Mutants 3 & 4
-![](./images/project_table_model_2.png).
-<!-- overall vs today set log-->
+![](./images/projectTableModel/non-killed/03_04.png).
+
+**Mutations**: `setValueAt : negated conditional → KILLED` (both mutations are of the same type)
+
+This mutants show that our test suit was lacking a test to verify the log generated when the method `setValueAt` is used to update the value of the `ProjectTableModel.COLUMN_TIMETODAY` or `ProjectTableModel.COLUMN_TIMEOVERALL`. When one of these columns is edited, the `oldSeconds` variable is used in the function to store the previous value of the respective attribute (`secondsToday` or `secondsOverall`) so that the log shows what was the old value and what is the new one. To test if the output was the expected when the `ProjectTableModel.COLUMN_TIMETODAY` we used the test `testSetTimeTodayColumn`. To test the other column we used the test `testSetTimeOverallColumn`.
+
+In both tests we start by setting the `LogHandler` as described in the previous tests. Then, we set `secondsOverall` and `secondsToday` class properties of the only project of the `ProjectTableModel`(initialized in `initProjectTableModel`). We used different values for each property so that we could easily verify the old value outputted in the log. We called the `setValueAt` method with the inputs described below and asserted that the log matched what was expected:
+```java
+// testSetTimeOverall
+ String expected = "Manually set time overall for project 'project' from 0:00:10 to 0:00:15";
+    Assertions.assertEquals(expected, handler.getMessage());
+
+// testSetTimeToday
+String expected =
+        "Manually set time today for project 'project' from 0:00:05 to 0:00:15";
+Assertions.assertEquals(expected, handler.getMessage());
+```
+
+**Preconditions**:
+- The project table model has a single project with `secondsOverall` = 10 and `secondsToday` = 5.
+**Inputs**:
+- **`testSetTimeTodayColumn`**: 
+  - `value` = 15;
+  - `row` = 0;
+  - `col` = `ProjectTableModel.COLUMN_TIMETODAY`. 
+- **`testSetTimeOverallColumn`**: 
+  - `value` = 15;
+  - `row` = 0;
+  - `col` = `ProjectTableModel.COLUMN_TIMEOVERALL`. 
+**Outcome**
+- The tests pass successfully and the mutants are both killed:
+![](./images/projectTableModel/fix/03_04.png)
 
 #### Mutant 5 to 7
 <!-- na addProject -->
