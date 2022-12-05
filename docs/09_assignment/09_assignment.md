@@ -88,20 +88,21 @@ The first mutant was introduced function when we fixed the source code of the `i
 **Mutation**: `replaced boolean return with true for de/dominik_geyer/jtimesched/project/ProjectTableModel::isCellEditable`
 
 This mutant replaced the boolean return by `true` and still managed to survive the existent tests. Therefore, we improved the `testPartitionE7` and `testPartitionE9` parameterized tests to verify that the method returns false when the row index is out of bounds. For that, we used the `testRowParameter` function, which uses the `assertEquals` to verify if the given row leads to a "false" return value.
-**Preconditions**:
 
-- The project table model has a single project.
-  **Inputs**:
+**Preconditions**: The project table model has a single project.  
+
+**Inputs**:
 - **`testPartitionE7`**: -2, -1;
 - **`testPartitionE9`**: 1, 2.
-  **Outcome**: The tests pass successfully and the mutant is killed:
+
+**Outcome**: The tests pass successfully and the mutant is killed:
   ![](./images/projectTableModel/fix/01.png)
 
 #### Mutant 2
 
 ![](./images/projectTableModel/non-killed/02.png)
 
-**Mutation**: `setValueAt : negated conditional → KILLED`
+**Mutation**: `setValueAt : negated conditional`
 
 This mutant shows that the condition that verifies if the project is checked or not is not exercise. Therefore, we had to find a way to verify the output of logger when the `setValueAt` function is called to set the value of the `ProjectTableMode.COLUMN_CHECK` as true or false.
 For that, we created the tests `testCheckProject` and `testUncheckProject`. Furthermore, to be able to test the output of the logger, we created a custom `Handler` that stores the last message that is published to the logger in a class field:
@@ -145,10 +146,9 @@ String expected = "Unset check for project 'project'";
 Assertions.assertEquals(expected, handler.getMessage());
 ```
 
-**Preconditions**:
+**Preconditions**: The project table model has a single project.
 
-- The project table model has a single project.
-  **Inputs**:
+**Inputs**:
 - **`testCheckProject`**:
   - `value` = `true`;
   - `row` = 0;
@@ -157,14 +157,15 @@ Assertions.assertEquals(expected, handler.getMessage());
   - `value` = `false`;
   - `row` = 0;
   - `col` = `ProjectTableModel.COLUMN_CHECK`.
-    **Outcome**: The tests pass successfully and the mutant is killed:
+
+**Outcome**: The tests pass successfully and the mutant is killed:
   ![](./images/projectTableModel/fix/02.png)
 
 #### Mutants 3 & 4
 
 ![](./images/projectTableModel/non-killed/03_04.png).
 
-**Mutations**: `setValueAt : negated conditional → KILLED` (both mutations are of the same type)
+**Mutations**: `setValueAt : negated conditional` (both mutations are of the same type)
 
 This mutants show that our test suit was lacking a test to verify the log generated when the method `setValueAt` is used to update the value of the `ProjectTableModel.COLUMN_TIMETODAY` or `ProjectTableModel.COLUMN_TIMEOVERALL`. When one of these columns is edited, the `oldSeconds` variable is used in the function to store the previous value of the respective attribute (`secondsToday` or `secondsOverall`) so that the log shows what was the old value and what is the new one. To test if the output was the expected when the `ProjectTableModel.COLUMN_TIMETODAY` we used the test `testSetTimeTodayColumn`. To test the other column we used the test `testSetTimeOverallColumn`.
 
@@ -181,10 +182,9 @@ String expected =
 Assertions.assertEquals(expected, handler.getMessage());
 ```
 
-**Preconditions**:
+**Preconditions**: The project table model has a single project with `secondsOverall` = 10 and `secondsToday` = 5.
 
-- The project table model has a single project with `secondsOverall` = 10 and `secondsToday` = 5.
-  **Inputs**:
+**Inputs**:
 - **`testSetTimeTodayColumn`**:
   - `value` = 15;
   - `row` = 0;
@@ -193,40 +193,54 @@ Assertions.assertEquals(expected, handler.getMessage());
   - `value` = 15;
   - `row` = 0;
   - `col` = `ProjectTableModel.COLUMN_TIMEOVERALL`.
-    **Outcome**: The tests pass successfully and the mutants are both killed:
+
+**Outcome**: The tests pass successfully and the mutants are both killed:
   ![](./images/projectTableModel/fix/03_04.png)
 
 #### Mutant 5
 
 ![](./images/projectTableModel/non-killed/05.png).
 
-**Mutations**:
+**Mutation**: `setValueAt : removed call to de/dominik_geyer/jtimesched/project/ProjectTableModel::fireTableRowsUpdated`
 
-<!-- Description -->
+The mutation shown above had survived because none of tests performed for the `setValueAt` method was verifying if the `fireTableRowsUpdated` method was called to notify row listeners of the update. To solve this, we created the test `testFireTableRowsUpdated`, where we used a `Mockito.spy` to create a spy of the `ProjectTableModel` ad then used `Mockito.verify` to check if the method was invoked exactly once with the correct row:
+```java
+Mockito.verify(projectTableModelSpy).fireTableRowsUpdated(row, row);
+``` 
 
-**Preconditions**:
+**Preconditions**: The project table model has a single project.
 
-- The project table model has a single project.
-  **Inputs**: ?
-  **Outcome**: The test passes successfully and the mutant is killed:
+**Inputs**: 
+- `row` = 0;
+- `col` = `ProjectTableModel.COLUMN_TITLE`;
+- `value` = "test".
+
+**Outcome**: The test passes successfully and the mutant is killed:
   ![](./images/projectTableModel/fix/05.png)
 
 #### Mutant 7 - 8
 
 ![](./images/projectTableModel/non-killed/06_07_08.png).
 
-**Mutations**:
+**Mutations**: 
+- `addProject : Replaced integer subtraction with addition`
+- `addProject : Replaced integer subtraction with addition`
+- `addProject : removed call to de/dominik_geyer/jtimesched/project/ProjectTableModel::fireTableRowsInserted`
 
-<!-- Description -->
+In the `addProject` method, 3 mutants had survived our tests because we were not verifying it the method `fireTableRowsInserted` was being called to notify the listeners that a new row was inserted in the projects table. To test this, we updated the test `testAddProject` to use a spy of the `ProjectTableModel` and added an additional verification (with `Mockito.verify`) to check if the method was being called exactly once with the correct parameters:
+```java
+Mockito.verify(projectTableModelSpy).fireTableRowsInserted(1, 1);
+```
 
 **Preconditions**:
-
 - The project table model has a single project.
-  **Inputs**: ?
-  **Outcome**: The test passes successfully and the mutants are killed:
+
+**Inputs**: a `Project` instance with the name "Project1";
+
+**Outcome**: The tests pass successfully and the mutants are killed:
   ![](./images/projectTableModel/fix/06_08.png)
 
-## Mutant 9
+#### Mutant 9
 
 ![](./images/projectTableModel/non-killed/09.png).
 
@@ -242,9 +256,9 @@ Assertions.assertEquals(expected, handler.getMessage());
 - The test passes successfully and the mutant is killed:
   ![](./images/projectTableModel/fix/09.png)
 
-## Final Mutation Score
+#### Final Mutation Score
 
-After performing new tests and improving tests from other assignments we achieved a mutation score of 100% for the  `ProjectTableModel` class.
+After performing new tests and improving tests from other assignments we achieved a mutation score of 100% for the `ProjectTableModel` class.
 ![](./images/projectTableModel/fix/all_report.png)
 ![](./images/projectTableModel/fix/all.png)
 
