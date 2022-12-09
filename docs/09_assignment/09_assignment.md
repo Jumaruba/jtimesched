@@ -116,9 +116,9 @@ It wasn't possible to gather enough information about this function, as the [doc
 ![](./images/projectSerializer_writeXml_6.png)
 
 ### ProjectTime
-The condition `if (s < 0)` of the `formatSeconds` method fails for one of the mutations, namely when the conditional boundary is changed. This happens because this mutation is equivalent --- if the operator is changed to `<=` the return value of the method `formatSeconds` is exactly the same for any parameter `s` equal or lower than 0.
+The condition `if (s < 0)` of the `formatSeconds` method fails for one of the mutations, namely when the conditional boundary is changed. This happens because this mutation is equivalent i.e., if the operator is changed to `<=` the return value of the method `formatSeconds` is exactly the same for any parameter `s` equal or lower than 0.
 
-![](./images/project_secondsToday.png)
+![](./images/projecttime_formatSeconds.png)
 
 
 ## Description of the tests
