@@ -334,42 +334,6 @@ public class ProjectSerializerTest {
     }
   }
 
-  @Test
-  public void timeAndQuota() {
-    // Given
-    ProjectSerializer ps =
-        new ProjectSerializer(outputDir + "zeroProjectsTest");
-    List<Project> projects = new ArrayList<Project>();
-    Project proj = new Project();
-    proj.setTitle("New 𠜎");
-    proj.setChecked(false);
-    proj.setRunning(false);
-    proj.setSecondsOverall(1);
-    proj.setSecondsToday(2);
-    proj.setQuotaOverall(3);
-    proj.setQuotaToday(4);
-    projects.add(proj);
-
-    // When
-    try {
-      ps.writeXml(projects);
-    } catch (Exception e) {
-      fail("Unexpected exception");
-    }
-    String expected = getProjectsXml3();
-    Pattern classPattern = Pattern.compile(expected);
-
-    try {
-      // Then
-      String result = readProjectsFile();
-      Matcher m = classPattern.matcher(result);
-      assertTrue(m.matches());
-    } catch (IOException e) {
-      e.printStackTrace();
-      fail("Shouldn't have thrown an exception");
-    }
-  }
-
   public String readProjectsFile() throws IOException {
     File file = new File(outputDir + "zeroProjectsTest");
     BufferedReader br = new BufferedReader(new FileReader(file));

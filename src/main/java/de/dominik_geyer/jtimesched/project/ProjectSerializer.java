@@ -199,7 +199,6 @@ public class ProjectSerializer {
       }
 
       arPrj.add(p);
-      System.out.println(p);
     }
 
     return arPrj;

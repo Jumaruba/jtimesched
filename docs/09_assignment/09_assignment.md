@@ -56,23 +56,55 @@ Some of these mutants are, however, equivalent, as we will see in the [next sect
 ## Irrelevant mutations 
 
 ### Project 
-The *PiTest* has generated 6 non-killed mutant tests, where 2 of them are not relevant. 
+The *PiTest* has generated 6 non-killed mutants, where 2 of them are not relevant. 
 
 #### Mutant 1 and 2
-Before explaining the equivalent mutants, it's important to highlight a possible mutation in the `Project` class is the removal of `e.printStackTrace()` calls. As expected, the tests continues to pass even if this line of code is removed. As the `e.printStackTrace()` is called for debug, log proposals and yet is a java standard function, we decided to ignore this mutation test. 
+Before explaining the equivalent mutants, it's important to highlight that a possible mutation in the `Project` class is the removal of `e.printStackTrace()` calls. As expected, the tests continue to pass even if this line of code is removed. As the `e.printStackTrace()` is called for debug, log proposals and yet is a java standard function, we decided to ignore this mutation test. 
 
 ![](./images/project_getSecondsOverall_printStackTrace.png) 
 ![](./images/project_getSecondsToday_printStackTrace.png) 
 
+### ProjectSerializer
 
-## Irrelevant mutations 
+There are 9 mutants that survived the tests developed for the `ProjectSerializer`. Where 4 of them are irrelevant. 
 
-### Project 
+#### Mutant 1 and 2
+<!-- TODO: Testar :( -->
+The mutation regards the `WriteXml()` function and excludes the following lines from the source code: 
 
-There are 9 mutant that survived the tests developed for the `ProjectSerializer`. Where x of them are irrelevant. 
+![](./images/projectSerializer_writeXml_4.png)
+![](./images/projectSerializer_writeXml_5.png) 
+
+These statements are responsible for beautifying the output xml text, which means that this is not a critical piece of code and doesn't affect the program execution. Thus, it doesn't make sense testing or verifying it in our test functions. 
+
+#### Mutant 3 and 4 
+<!-- TODO: Justificar -->
+![](./images/projectSerializer_writeXml_7_8.png)
+
+## Equivalent mutants
+
+### Project
+The *PiTest* has generated 6 non-killed mutant tests. Where 3 of them are equivalent. 
+
+#### Mutant 1,2 and 3
+
+The conditions `if (secondsOverall < 0)` and `if (secondsToday < 0)`  in the functions `setSecondsOverall`, `setSecondsToday` and `adjustSecondsToday` fail the mutations test, by surviving, when the conditions boundary is changed. 
+However, changing the `<` for ` <=` is an equivalent mutant, since it behaves as the original program. 
+
+![](./images/project_secondsToday.png)
+
+#### Mutant 6 
+<!-- TODO: justificar --> 
+![](./images/projectSerializer_writeXml_6.png)
+
+#### Mutant 7
+<!-- TODO: justificar --> 
+![](./images/projectSerializer_writeXml_9.png) 
+
+### ProjectSerializer
 
 #### Mutant 1
-The `WriteXml()`, contains some non-killed mutant tests. One of them, is related to the `atts.clear()` statement. 
+The `WriteXml()`, contains some non-killed mutants. One of them, is related to the `atts.clear()` statement. 
 
 ![](./images/projectSerializer_writeXml_2.png) 
 
@@ -83,47 +115,7 @@ This mutation regards the `WriteXml()` function and excludes the following line 
 
 ![](./images/projectSerializer_writeXml_3.png) 
 
-As the [documentation](https://www.ibm.com/docs/en/sdi/7.1.1?topic=parsers-xml-sax-parser) says, the default enconding for the `XML SAX Parser` is UTF-8, which means that the speficication of the enconding isn't necessary. Thus, there are no changes that could kill the mutation. 
-
-#### Mutant 3 and 4 
-
-The mutation regards the `WriteXml()` function and excludes the following lines from the source code: 
-
-![](./images/projectSerializer_writeXml_4.png)
-![](./images/projectSerializer_writeXml_5.png) 
-
-These statements are responsible for beautifying the output xml text, which means that this is not a critical piece of code and doesn't affect the program execution. Thus, it doesn't make sense testing or verifying it in our test functions. 
-
-#### Mutant 5 
-![](./images/projectSerializer_writeXml_6.png) 
-
-#### Mutant 6 and 7 
-![](./images/projectSerializer_writeXml_7_8.png) 
-
-#### Mutant 8 
-![](./images/projectSerializer_writeXml_9.png) 
-## Equivalent mutants
-
-<!-- for each class -->
-
-### Project
-The *PiTest* has generated 6 non-killed mutant tests. Where 3 of them are equivalent. 
-
-#### Mutant 3,4 and 5
-
-The conditions `if (secondsOverral < 0)` and `if (secondsToday < 0)`  in the functions `setSecondsOverral`, `setSecondsToday` and `adjustSecondsToday` fails the mutations test, by surviving, when the conditions boundary is changed. 
-However, changing the `<` for ` <=` is an equivalent mutant, since it behaves as the original program and it's expected and will not be treated. 
-
-![](./images/project_secondsToday.png)
-
-
-### ProjectTime
-
-### ProjectTableModel
-
-### ProjectSerializer
-
-### PlainTextFormatter
+As the [documentation](https://www.ibm.com/docs/en/sdi/7.1.1?topic=parsers-xml-sax-parser) says, the default encoding for the `XML SAX Parser` is UTF-8, which means that the specification of the encoding isn't necessary. Thus, there are no changes that could kill the mutation. 
 
 ## Description of the tests
 
@@ -179,11 +171,9 @@ On this way, the test is always expecting to have `259200` as return value and p
 - The project has the `TimeStart` of 3 days.    
 
 **Inputs**: None  
-**Outcome**:   The tests pass sucecssfully and the mutant is killed. 
+**Outcome**: The test passes successfully and the mutant is killed. 
 
 ![](./images/project_getElapsedSeconds_KILLED.png) 
-
-### ProjectTime
 
 ### ProjectTableModel
 
@@ -375,9 +365,6 @@ After performing new tests and improving tests from other assignments we achieve
 ![](./images/projectTableModel/fix/all_report.png)
 ![](./images/projectTableModel/fix/all.png)
 
-### ProjectSerializer
-
-### PlainTextFormatter
 ### ProjectSerializer 
 There are 9 mutant that survived the tests developed for the `ProjectSerializer`. 
 
@@ -420,7 +407,3 @@ With this modifications, the mutant tests are killed.
 
 ![](./images/projectSerialiazer_readXml_KILLED.png) 
 ___ 
-
-
-
-### PlainTextFormatter 
