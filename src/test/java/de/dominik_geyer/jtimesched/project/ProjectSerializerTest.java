@@ -9,14 +9,20 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,6 +34,7 @@ import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TransformerHandler;
 import javax.xml.transform.stream.StreamResult;
 
+import org.codehaus.plexus.util.FileUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
@@ -329,6 +336,39 @@ public class ProjectSerializerTest {
       Matcher m = classPattern.matcher(result);
       assertTrue(m.matches());
     } catch (IOException e) {
+      e.printStackTrace();
+      fail("Shouldn't have thrown an exception");
+    }
+  }
+
+  @Test
+  public void writeXmlIndentationTest() {
+    // Given
+    String filename = "identationTest";
+    ProjectSerializer ps = new ProjectSerializer(outputDir + filename);
+    List<Project> projects = new ArrayList<Project>();
+    Project project = new Project("proj");
+    project.setTimeCreated(new Date(1));
+    project.setTimeStart(new Date(1));
+    projects.add(project);
+
+    // When
+    try {
+      ps.writeXml(projects);
+    } catch (Exception e) {
+      fail("Unexpected exception");
+    }
+
+    // Then
+    try {
+      String expectedFilename = "identationTestExpected";
+      String expected =
+          new String(
+              Files.readAllBytes(Paths.get(outputDir + expectedFilename)));
+      String result =
+          new String(Files.readAllBytes(Paths.get(outputDir + filename)));
+      assertEquals(expected, result);
+    } catch (Exception e) {
       e.printStackTrace();
       fail("Shouldn't have thrown an exception");
     }
