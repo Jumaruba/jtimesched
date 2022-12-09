@@ -213,7 +213,7 @@
                 <artifactId>pitest-maven</artifactId>
                 <version>1.10.0</version>
                  <configuration>
-                    <verbose>true</verbose>
+                    <verbose>false</verbose>
                     <excludedClasses>
                        <param>de.dominik_geyer.jtimesched.gui.*</param>
                        <param>de.dominik_geyer.jtimesched.gui.table.*</param>

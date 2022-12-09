@@ -175,12 +175,14 @@ public class ProjectTest {
   @Test
   public void runningElapsedSecondsTest() {
     // Given
+    long DAY_IN_MS = 1000 * 60 * 60 * 24;
     Project project = new Project();
     project.setRunning(true);
-
+    project.setTimeStart(
+        new Date(System.currentTimeMillis() - (3 * DAY_IN_MS)));
     // When and Then
     try {
-      Assertions.assertEquals(0, project.getElapsedSeconds());
+      Assertions.assertEquals(259200, project.getElapsedSeconds());
     } catch (ProjectException e) {
       fail("Exception shouldn't be thrown");
     }
