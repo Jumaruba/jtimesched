@@ -49,7 +49,7 @@ Breaking down the coverage by class, we see that the mutation score of the class
 
 ### Non-killed mutants
 
-The class with more non-killed mutants is, therefore, the `ProjectSerializer`, with 12/70 mutants that survived the tests developed in previous assignments. However, it is also the class for which more mutations were generated. Moreover, 9/36 mutants survived the tests developed for the methods of the `ProjectTableModel` class, and 6/43 mutations survived the unit tests developed for the `Project` class. Finally, only one mutant resisted the tests developed for the methods of the `ProjectTime` class.
+The class with more non-killed mutants is, therefore, the `ProjectSerializer`, with 11/70 mutants that survived the tests developed in previous assignments. However, it is also the class for which more mutations were generated. Moreover, 9/36 mutants survived the tests developed for the methods of the `ProjectTableModel` class, and 6/43 mutations survived the unit tests developed for the `Project` class. Finally, only one mutant resisted the tests developed for the methods of the `ProjectTime` class.
 
 Some of these mutants are, however, equivalent, as we will see in the [next section](#equivalent-mutants). The other non-killed mutants and the tests developed to handle them will be further explained in the scope of each class in the [Description of the tests](#description-of-the-tests) section of this report.
 
@@ -428,7 +428,7 @@ ___
 
 ## Final Mutation Score
 
-The final report shows a mutation coverage of ?% and a test strength of ?%.
+The final report shows a mutation coverage of 93% and a test strength of 93%.
 ![](./images/report_final_all.png)
 
 Breaking down the coverage by class, we see that the mutation score as also improved.
