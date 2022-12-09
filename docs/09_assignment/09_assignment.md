@@ -64,6 +64,13 @@ Before explaining the equivalent mutants, it's important to highlight that a pos
 ![](./images/project_getSecondsOverall_printStackTrace.png) 
 ![](./images/project_getSecondsToday_printStackTrace.png) 
 
+### ProjectTime
+
+#### Mutant 1
+<!-- TODO: DIANA -->
+
+![](./images/projecttime_constructor.png) 
+
 ### ProjectSerializer
 
 There are 9 mutants that survived the tests developed for the `ProjectSerializer`. Where 4 of them are irrelevant. 
@@ -78,7 +85,7 @@ The mutation regards the `WriteXml()` function and excludes the following lines 
 These statements are responsible for beautifying the output xml text, which means that this is not a critical piece of code and doesn't affect the program execution. Thus, it doesn't make sense testing or verifying it in our test functions. 
 
 #### Mutant 3 and 4 
-<!-- TODO: Justificar -->
+<!-- TODO --> 
 ![](./images/projectSerializer_writeXml_7_8.png)
 
 ## Equivalent mutants
@@ -116,6 +123,12 @@ This mutation regards the `WriteXml()` function and excludes the following line 
 ![](./images/projectSerializer_writeXml_3.png) 
 
 As the [documentation](https://www.ibm.com/docs/en/sdi/7.1.1?topic=parsers-xml-sax-parser) says, the default encoding for the `XML SAX Parser` is UTF-8, which means that the specification of the encoding isn't necessary. Thus, there are no changes that could kill the mutation. 
+
+### ProjectTime
+The condition `if (s < 0)` of the `formatSeconds` method fails for one of the mutations, namely when the conditional boundary is changed. This happens because this mutation is equivalent --- if the operator is changed to `<=` the return value of the method `formatSeconds` is exactly the same for any parameter `s` equal or lower than 0.
+
+![](./images/project_secondsToday.png)
+
 
 ## Description of the tests
 
