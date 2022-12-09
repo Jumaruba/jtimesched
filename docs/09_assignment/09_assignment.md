@@ -14,7 +14,19 @@
 -->
 
 ### Non-killed mutants
-<!--Explain which classes have more non-killed mutants -->
+<!--Explain which classes have more non-killed mutants --> 
+
+## Irrelevant mutations 
+
+### Project 
+The *PiTest* has generated 6 non-killed mutant tests, where 2 of them are not relevant. 
+
+#### Mutant 1 and 2
+Before explaining the equivalent mutants, it's important to highlight a possible mutation in the `Project` class is the removal of `e.printStackTrace()` calls. As expected, the tests continues to pass even if this line of code is removed. As the `e.printStackTrace()` is called for debug, log proposals and yet is a java standard function, we decided to ignore this mutation test. 
+
+![](./images/project_getSecondsOverall_printStackTrace.png) 
+![](./images/project_getSecondsToday_printStackTrace.png) 
+
 
 ## Irrelevant mutations 
 
@@ -57,6 +69,15 @@ These statements are responsible for beautifying the output xml text, which mean
 <!-- for each class -->
 
 ### Project
+The *PiTest* has generated 6 non-killed mutant tests. Where 3 of them are equivalent. 
+
+#### Mutant 3,4 and 5
+
+The conditions `if (secondsOverral < 0)` and `if (secondsToday < 0)`  in the functions `setSecondsOverral`, `setSecondsToday` and `adjustSecondsToday` fails the mutations test, by surviving, when the conditions boundary is changed. 
+However, changing the `<` for ` <=` is an equivalent mutant, since it behaves as the original program and it's expected and will not be treated. 
+
+![](./images/project_secondsToday.png)
+
 
 ### ProjectTime
 
@@ -69,6 +90,60 @@ These statements are responsible for beautifying the output xml text, which mean
 ## Description of the tests 
 
 ###  Project 
+There are 6 mutants that survived the tests developed for the `Project` class in the `getElapsedSeconds` method. 
+
+![](./images/project_getElapsedSeconds.png)
+
+The *PiTest* mutates `getElapsedSeconds` by **replacing the return condition for 0 (zero)**. 
+
+In fact, the test created to verify this method (`runningElapsedSecondsTest()`) expects that it returns a zero value, since the `timeStart` is not set and its default value is 0 (zero) as well: 
+
+```java
+  @Test
+  public void runningElapsedSecondsTest() {
+    // Given
+    Project project = new Project();
+    project.setRunning(true);
+    // When and Then
+    try {
+      Assertions.assertEquals(0, project.getElapsedSeconds());
+    } catch (ProjectException e) {
+      fail("Exception shouldn't be thrown");
+    }
+  }
+```
+
+Thus, we have set a value for the `startTime` variable which is equivalent of three days before the test execution: 
+
+```java
+@Test
+public void runningElapsedSecondsTest() {
+    // Given
++   long DAY_IN_MS = 1000 * 60 * 60 * 24;
+    Project project = new Project();
+    project.setRunning(true);
++   project.setTimeStart(
++       new Date(System.currentTimeMillis() - (3 * DAY_IN_MS)));
+    // When and Then
+    try {
++       Assertions.assertEquals(259200, project.getElapsedSeconds());
+-       Assertions.assertEquals(0, project.getElapsedSeconds());
+    } catch (ProjectException e) {
+        fail("Exception shouldn't be thrown");
+    }
+}
+```
+
+On this way, the test is always expecting to have `259200` as return value and passes the mutation test.   
+
+**Preconditions**:   
+- The project is running;   
+- The project has the `TimeStart` of 3 days.    
+
+**Inputs**: None  
+**Outcome**:   The tests pass sucecssfully and the mutant is killed. 
+
+![](./images/project_getElapsedSeconds_KILLED.png) 
 
 ### ProjectTime 
 
