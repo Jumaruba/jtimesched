@@ -64,23 +64,6 @@ Before explaining the equivalent mutants, it's important to highlight that a pos
 ![](./images/project_getSecondsOverall_printStackTrace.png) 
 ![](./images/project_getSecondsToday_printStackTrace.png) 
 
-### ProjectTime
-
-#### Mutant 1
-<!-- TODO: DIANA -->
-
-![](./images/projecttime_constructor.png) 
-
-### ProjectSerializer
-
-There are 9 mutants that survived the tests developed for the `ProjectSerializer`. Where 2 of them are irrelevant. 
-
-#### Mutant 1 and 2
-The mutation exercised here removes the `out.flush()` and the `out.close()` statements. 
-Closing a file is [essential to minimize the virtual machine resources](https://www.ibm.com/docs/en/zvm/7.2?topic=io-closing-files) required to run the program and helps keep files and directories available for other users. It is not mandatory, and its absence is acceptable. Thus the `out.close()` is equivalent. 
-The `out.flush()` operation [is not mandatory](https://stackoverflow.com/questions/2340106/what-is-the-purpose-of-flush-in-java-streams), but it ensures that all the stream's data is written. As it works as an assurance, we considered this an equivalent mutation.
-![](./images/projectSerializer_writeXml_7_8.png)
-
 ## Equivalent mutants
 
 ### Project
@@ -92,16 +75,6 @@ The conditions `if (secondsOverall < 0)` and `if (secondsToday < 0)`  in the fun
 However, changing the `<` for ` <=` is an equivalent mutant, since it behaves as the original program. 
 
 ![](./images/project_secondsToday.png)
-
-#### Mutant 4
-The mutation exercised removes the `hd.startDocument()` statement from the program. 
-It wasn't possible to gather enough information about this function, as the [documentation](https://docs.oracle.com/en/java/javase/11/docs/api/java.xml/org/xml/sax/ContentHandler.html#startDocument()) only says that it receives a notification of the beginning of a document. As the tests survive after removing the statement and there are no visible alterations on the program, we considered this an equivalent mutation.
-![](./images/projectSerializer_writeXml_9.png) 
-
-#### Mutant 5
-The mutation exercised removes the `hd.endDocument()` statement from the program. 
-It wasn't possible to gather enough information about this function, as the [documentation](https://docs.oracle.com/en/java/javase/11/docs/api/java.xml/org/xml/sax/ContentHandler.html#endDocument()) only says that it receives a notification of the end of a document. As the tests survive after removing the statement and there are no visible alterations on the program, we considered this an equivalent mutation.
-![](./images/projectSerializer_writeXml_6.png)
 
 ### ProjectSerializer
 
@@ -124,7 +97,23 @@ The mutation exercised removes the following line from the code:
 
 ![](./images/projectSerializer_writeXml_4.png)
 
-The default identation of SAXTransformerFactory aparently depends on the java implementation according to the [documentation](https://docs.oracle.com/javase/7/docs/api/javax/xml/transform/TransformerFactory.html#setAttribute(java.lang.String,%20java.lang.Object)). It was tested that the default identation for java 11 and 17 is 4 spaces, which makes the mutation in these versions equivalent, since removing it doesn't affect the program. 
+The default indentation of SAXTransformerFactory apparently depends on the java implementation according to the [documentation](https://docs.oracle.com/javase/7/docs/api/javax/xml/transform/TransformerFactory.html#setAttribute(java.lang.String,%20java.lang.Object)). It was tested that the default indentation for java 11 and 17 is 4 spaces, which makes the mutation in these versions equivalent, since removing it doesn't affect the program. 
+
+#### Mutant 4 and 5
+The mutation exercised here removes the `out.flush()` and the `out.close()` statements. 
+Closing a file is [essential to minimize the virtual machine resources](https://www.ibm.com/docs/en/zvm/7.2?topic=io-closing-files) required to run the program and helps keep files and directories available for other users. It is not mandatory, and its absence is acceptable. Thus the `out.close()` is equivalent. 
+The `out.flush()` operation [is not mandatory](https://stackoverflow.com/questions/2340106/what-is-the-purpose-of-flush-in-java-streams), but it ensures that all the stream's data is written. As it works as an assurance, we considered this an equivalent mutation.
+![](./images/projectSerializer_writeXml_7_8.png)
+
+#### Mutant 6
+The mutation exercised removes the `hd.startDocument()` statement from the program. 
+It wasn't possible to gather enough information about this function, as the [documentation](https://docs.oracle.com/en/java/javase/11/docs/api/java.xml/org/xml/sax/ContentHandler.html#startDocument()) only says that it receives a notification of the beginning of a document. As the tests survive after removing the statement and there are no visible alterations on the program, we considered this an equivalent mutation.
+![](./images/projectSerializer_writeXml_9.png) 
+
+#### Mutant 7
+The mutation exercised removes the `hd.endDocument()` statement from the program. 
+It wasn't possible to gather enough information about this function, as the [documentation](https://docs.oracle.com/en/java/javase/11/docs/api/java.xml/org/xml/sax/ContentHandler.html#endDocument()) only says that it receives a notification of the end of a document. As the tests survive after removing the statement and there are no visible alterations on the program, we considered this an equivalent mutation.
+![](./images/projectSerializer_writeXml_6.png)
 
 ### ProjectTime
 The condition `if (s < 0)` of the `formatSeconds` method fails for one of the mutations, namely when the conditional boundary is changed. This happens because this mutation is equivalent --- if the operator is changed to `<=` the return value of the method `formatSeconds` is exactly the same for any parameter `s` equal or lower than 0.
@@ -382,15 +371,14 @@ After performing new tests and improving tests from other assignments we achieve
 
 ### ProjectSerializer 
 
-There are 9 mutant that survived the tests developed for the `ProjectSerializer`. 
-
+There are 11 mutants that survived the tests developed for the `ProjectSerializer`. 
 
 #### Mutant 1 
 The mutation exercises the removal of the following line: 
 
 ![](./images/projectSerializer_writeXml_5.png) 
 
-A new test was created in order to kill the mutant test: `writeXmlIndentationTest`. This test writes a project in a file and the output file is expected to match a string which contains identation. 
+A new test was created in order to kill this mutant: `writeXmlIndentationTest`. This test writes a project in a file and the output file is expected to match a string which contains indentation. 
 
 **Inputs**: The project XML path and the path.
 **Outcome**: The test passes successfully and the mutant is killed. 
@@ -398,10 +386,9 @@ A new test was created in order to kill the mutant test: `writeXmlIndentationTes
 ![](./images/projectSerializer_identation.png)
 
 
+#### Mutant 2, 3 and 4
 
-#### Mutant 2
-
-In the function `readXml()`, although the `set` statments are removed from the function, the test still passes: 
+In the function `readXml()`, although the `set` statements are removed from the function, the test still passes: 
 
 ![](./images/projectSerialiazer_readXml.png)
 
@@ -415,7 +402,7 @@ Assertions.assertEquals(10, projectList.get(1).getSecondsOverall());
 Assertions.assertEquals(10, projectList.get(1).getSecondsToday());
 ```
 
-And consequently modifing the second project in the Xml input to:
+And consequently modifying the second project in the Xml input to:
 
 ```xml
 <project>
@@ -438,3 +425,11 @@ With this modifications, the mutant tests are killed.
 
 ![](./images/projectSerialiazer_readXml_KILLED.png) 
 ___ 
+
+## Final Mutation Score
+
+The final report shows a mutation coverage of ?% and a test strength of ?%.
+![](./images/report_final_all.png)
+
+Breaking down the coverage by class, we see that the mutation score as also improved.
+![](./images/report_final_project.png)
