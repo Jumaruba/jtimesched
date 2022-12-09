@@ -1,5 +1,6 @@
 package de.dominik_geyer.jtimesched.project;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -14,6 +15,7 @@ import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -306,6 +308,10 @@ public class ProjectSerializerTest {
     proj.setTitle("New Project");
     proj.setChecked(false);
     proj.setRunning(false);
+    proj.setSecondsOverall(0);
+    proj.setSecondsToday(0);
+    proj.setQuotaOverall(0);
+    proj.setQuotaToday(0);
     projects.add(proj);
 
     // When
@@ -315,6 +321,42 @@ public class ProjectSerializerTest {
       fail("Unexpected exception");
     }
     String expected = getProjectsXml2();
+    Pattern classPattern = Pattern.compile(expected);
+
+    try {
+      // Then
+      String result = readProjectsFile();
+      Matcher m = classPattern.matcher(result);
+      assertTrue(m.matches());
+    } catch (IOException e) {
+      e.printStackTrace();
+      fail("Shouldn't have thrown an exception");
+    }
+  }
+
+  @Test
+  public void timeAndQuota() {
+    // Given
+    ProjectSerializer ps =
+        new ProjectSerializer(outputDir + "zeroProjectsTest");
+    List<Project> projects = new ArrayList<Project>();
+    Project proj = new Project();
+    proj.setTitle("New 𠜎");
+    proj.setChecked(false);
+    proj.setRunning(false);
+    proj.setSecondsOverall(1);
+    proj.setSecondsToday(2);
+    proj.setQuotaOverall(3);
+    proj.setQuotaToday(4);
+    projects.add(proj);
+
+    // When
+    try {
+      ps.writeXml(projects);
+    } catch (Exception e) {
+      fail("Unexpected exception");
+    }
+    String expected = getProjectsXml3();
     Pattern classPattern = Pattern.compile(expected);
 
     try {
@@ -375,6 +417,24 @@ public class ProjectSerializerTest {
     sb.append("<checked>no</checked>");
     sb.append("<time overall=\"0\" today=\"0\"/>");
     sb.append("<quota overall=\"0\" today=\"0\"/>");
+    sb.append("</project>");
+    sb.append("</projects>");
+    return sb.toString();
+  }
+
+  public String getProjectsXml3() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("<\\?xml version=\"1\\.0\" encoding=\"UTF-8\"\\?>");
+    sb.append("<projects version=\"unknown\">");
+    sb.append("<project>");
+    sb.append("<title>New 𠜎</title>");
+    sb.append("<notes/>");
+    sb.append("<created>\\d+</created>");
+    sb.append("<started>\\d+</started>");
+    sb.append("<running>no</running>");
+    sb.append("<checked>no</checked>");
+    sb.append("<time overall=\"1\" today=\"2\"/>");
+    sb.append("<quota overall=\"3\" today=\"4\"/>");
     sb.append("</project>");
     sb.append("</projects>");
     return sb.toString();
@@ -541,38 +601,52 @@ public class ProjectSerializerTest {
   }
 
   @Test
-  public void readXml()
+  public void readXml_1()
       throws ParserConfigurationException, SAXException, IOException {
     String filepath = "docs/05_assignment/inputDir/projectTest";
     ProjectSerializer p = new ProjectSerializer(filepath);
     ArrayList<Project> projectList = p.readXml();
 
     // Then
+    long expectedTime =
+        (new Date().getTime() - projectList.get(0).getTimeStart().getTime())
+            / 1000;
+    String expectedCreatedDate = "Wed Nov 09 14:59:58 WET 2022";
     Assertions.assertEquals(2, projectList.size());
 
     Assertions.assertEquals("", projectList.get(0).getNotes());
     Assertions.assertEquals("", projectList.get(0).getTitle());
     Assertions.assertEquals(
-        "Wed Nov 09 14:59:58 WET 2022",
-        projectList.get(0).getTimeCreated().toString());
+        expectedCreatedDate, projectList.get(0).getTimeCreated().toString());
     Assertions.assertEquals(
-        "Wed Nov 09 14:59:58 WET 2022",
-        projectList.get(0).getTimeStart().toString());
-    Assertions.assertEquals(false, projectList.get(0).isRunning());
+        expectedCreatedDate, projectList.get(0).getTimeStart().toString());
+    Assertions.assertEquals(true, projectList.get(0).isRunning());
     Assertions.assertEquals(false, projectList.get(0).isChecked());
-    Assertions.assertEquals(0, projectList.get(0).getSecondsOverall());
-    Assertions.assertEquals(0, projectList.get(0).getSecondsToday());
+    Assertions.assertEquals(
+        expectedTime, projectList.get(0).getSecondsOverall());
+    Assertions.assertEquals(expectedTime, projectList.get(0).getSecondsToday());
     Assertions.assertEquals(0, projectList.get(0).getQuotaOverall());
     Assertions.assertEquals(0, projectList.get(0).getQuotaToday());
     Assertions.assertEquals(null, projectList.get(0).getColor());
+  }
 
+  @Test
+  public void readXml_2()
+      throws ParserConfigurationException, SAXException, IOException {
+    String filepath = "docs/05_assignment/inputDir/projectTest";
+    ProjectSerializer p = new ProjectSerializer(filepath);
+    ArrayList<Project> projectList = p.readXml();
+
+    // Then
+    Color expectedColor = new Color(122, 194, 229, 255);
     Assertions.assertEquals("New project", projectList.get(1).getTitle());
     Assertions.assertEquals("A nice note", projectList.get(1).getNotes());
-    Assertions.assertEquals(true, projectList.get(1).isRunning());
+    Assertions.assertEquals(false, projectList.get(1).isRunning());
     Assertions.assertEquals(true, projectList.get(1).isChecked());
-    Assertions.assertEquals(0, projectList.get(1).getQuotaOverall());
+    Assertions.assertEquals(800, projectList.get(1).getQuotaOverall());
     Assertions.assertEquals(600, projectList.get(1).getQuotaToday());
-    Assertions.assertEquals(
-        new Color(122, 194, 229, 255), projectList.get(1).getColor());
+    Assertions.assertEquals(expectedColor, projectList.get(1).getColor());
+    Assertions.assertEquals(10, projectList.get(1).getSecondsOverall());
+    Assertions.assertEquals(10, projectList.get(1).getSecondsToday());
   }
 }
