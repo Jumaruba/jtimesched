@@ -355,10 +355,24 @@ public class ProjectSerializerTest {
 
     // Then
     try {
-      String expectedFilename = "identationTestExpected";
+      String endLine = "\n";
+      if (System.getProperty("os.name").startsWith("Windows")) {
+        endLine = "\r" + endLine;
+      }
       String expected =
-          new String(
-              Files.readAllBytes(Paths.get(outputDir + expectedFilename)));
+          "<?xml version=\"1.0\" encoding=\"UTF-8\"?><projects version=\"unknown\">" + endLine
+              + "    <project>" + endLine
+              + "        <title>proj</title>" + endLine
+              + "        <notes/>" + endLine
+              + "        <created>1</created>" + endLine
+              + "        <started>1</started>" + endLine
+              + "        <running>no</running>" + endLine
+              + "        <checked>no</checked>" + endLine
+              + "        <time overall=\"0\" today=\"0\"/>" + endLine
+              + "        <quota overall=\"0\" today=\"0\"/>" + endLine
+              + "    </project>" + endLine
+              + "</projects>" + endLine
+              + "";
       String result =
           new String(Files.readAllBytes(Paths.get(outputDir + filename)));
       assertEquals(expected, result);
