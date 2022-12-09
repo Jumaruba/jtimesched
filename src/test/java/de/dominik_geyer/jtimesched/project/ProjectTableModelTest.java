@@ -5,10 +5,13 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Handler;
 import java.util.logging.Level;
+import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 import java.util.Date;
@@ -19,6 +22,7 @@ import de.dominik_geyer.jtimesched.JTimeSchedApp;
 
 public class ProjectTableModelTest {
   public static ProjectTableModel projectTableModel;
+  Logger l;
 
   @BeforeEach
   public void initProjectTableModel()
@@ -29,7 +33,7 @@ public class ProjectTableModelTest {
     Field reader = JTimeSchedApp.class.getDeclaredField("LOGGER");
     reader.setAccessible(true);
     JTimeSchedApp mainClass = new JTimeSchedApp();
-    Logger l = Logger.getLogger("JTimeSched");
+    l = Logger.getLogger("JTimeSched");
     l.setLevel(Level.ALL);
     reader.set(mainClass, l);
 
@@ -93,19 +97,13 @@ public class ProjectTableModelTest {
   }
 
   public void testRowParameter(int row) {
-    try {
-      // Given
-      // row
+    // Given the `row` parameter
 
-      // When
-      projectTableModel.isCellEditable(row, 0);
+    // When
+    boolean actual = projectTableModel.isCellEditable(row, 0);
 
-      // Then
-      // accept
-    } catch (IndexOutOfBoundsException e) {
-      System.out.println(e.getClass());
-      Assertions.fail("This test should not return this kind of exception");
-    }
+    // Then
+    Assertions.assertEquals(false, actual);
   }
 
   @ParameterizedTest
@@ -195,27 +193,31 @@ public class ProjectTableModelTest {
   @Test
   public void testAddProject() {
     // Given
+    ProjectTableModel projectTableModelSpy = Mockito.spy(projectTableModel);
     Project p = new Project("Project1");
     // When
-    projectTableModel.addProject(p);
-    String projectName = projectTableModel.getProjectAt(1).getTitle();
-    int projectCount = projectTableModel.getRowCount();
+    projectTableModelSpy.addProject(p);
+    String projectName = projectTableModelSpy.getProjectAt(1).getTitle();
+    int projectCount = projectTableModelSpy.getRowCount();
 
     // Then
     Assertions.assertEquals("Project1", projectName);
     Assertions.assertEquals(2, projectCount);
+    Mockito.verify(projectTableModelSpy).fireTableRowsInserted(1, 1);
   }
 
   @Test
   public void testRemoveProject() {
     // Given
+    ProjectTableModel projectTableModelSpy = Mockito.spy(projectTableModel);
 
     // When
-    projectTableModel.removeProject(0);
-    int projectCount = projectTableModel.getRowCount();
+    projectTableModelSpy.removeProject(0);
+    int projectCount = projectTableModelSpy.getRowCount();
 
     // Then
     Assertions.assertEquals(0, projectCount);
+    Mockito.verify(projectTableModelSpy).fireTableRowsDeleted(0, 0);
   }
 
   @ParameterizedTest
@@ -262,8 +264,123 @@ public class ProjectTableModelTest {
     // When
     projectTableModel.setValueAt(value, row, column);
     Object actualValue = projectTableModel.getValueAt(row, column);
-
     // Then
     Assertions.assertEquals(value, actualValue);
+  }
+
+  @Test
+  public void testSetTimeTodayColumn() {
+    LogHandler handler = new LogHandler();
+    l.addHandler(handler);
+    l.setLevel(Level.INFO);
+
+    // Given
+    int row = 0;
+    int col = ProjectTableModel.COLUMN_TIMETODAY;
+    projectTableModel.getProjectAt(0).setSecondsToday(5);
+    projectTableModel.getProjectAt(row).setSecondsOverall(10);
+
+    // When
+    projectTableModel.setValueAt(15, row, col);
+
+    // Then
+    String expected =
+        "Manually set time today for project 'project' from 0:00:05 to 0:00:15";
+    Object actualValue = projectTableModel.getValueAt(row, col);
+    Assertions.assertEquals(15, actualValue);
+    Assertions.assertEquals(expected, handler.getMessage());
+  }
+
+  @Test
+  public void testSetTimeOverallColumn() {
+    LogHandler handler = new LogHandler();
+    l.addHandler(handler);
+    l.setLevel(Level.INFO);
+
+    // Given
+    int row = 0;
+    int col = ProjectTableModel.COLUMN_TIMEOVERALL;
+    projectTableModel.getProjectAt(0).setSecondsToday(5);
+    projectTableModel.getProjectAt(row).setSecondsOverall(10);
+
+    // When
+    projectTableModel.setValueAt(15, row, col);
+
+    // Then
+    String expected =
+        "Manually set time overall for project 'project' from 0:00:10 to 0:00:15";
+    Object actualValue = projectTableModel.getValueAt(row, col);
+    Assertions.assertEquals(15, actualValue);
+    Assertions.assertEquals(expected, handler.getMessage());
+  }
+
+  @Test
+  public void testCheckProject() {
+    LogHandler handler = new LogHandler();
+    l.addHandler(handler);
+    l.setLevel(Level.INFO);
+
+    // Given
+    int row = 0;
+    int col = ProjectTableModel.COLUMN_CHECK;
+    boolean check = true;
+
+    // When
+    projectTableModel.setValueAt(check, row, col);
+
+    // Then
+    String expected = "Set check for project 'project'";
+    Assertions.assertEquals(expected, handler.getMessage());
+  }
+
+  @Test
+  public void testUncheckProject() {
+    LogHandler handler = new LogHandler();
+    l.addHandler(handler);
+    l.setLevel(Level.INFO);
+
+    // Given
+    int row = 0;
+    int col = ProjectTableModel.COLUMN_CHECK;
+    boolean check = false;
+
+    // When
+    projectTableModel.setValueAt(check, row, col);
+
+    // Then
+    String expected = "Unset check for project 'project'";
+    Assertions.assertEquals(expected, handler.getMessage());
+  }
+
+  @Test
+  public void testFireTableRowsUpdated() {
+    // Given
+    int row = 0;
+    int col = ProjectTableModel.COLUMN_TITLE;
+
+    ProjectTableModel projectTableModelSpy = Mockito.spy(projectTableModel);
+
+    // When
+    projectTableModelSpy.setValueAt("test", row, col);
+
+    // Then
+    Mockito.verify(projectTableModelSpy).fireTableRowsUpdated(row, row);
+  }
+}
+
+class LogHandler extends Handler {
+  private String lastMessage = "";
+
+  public String getMessage() {
+    return lastMessage;
+  }
+
+  public void close() {}
+
+  public void flush() {}
+
+  @Override
+  public void publish(LogRecord record) {
+    lastMessage = record.getMessage();
   }
 }
